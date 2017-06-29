@@ -96,6 +96,11 @@ The most essential classes of the library are:
 * ```com.pkrete.xrd4j.client.SOAPClientImpl``` : SOAP client that offers two methods that can be used for sending SOAPMessage objects and ServiceRequest objects.
 * ```com.pkrete.xrd4j.server.AbstractAdapterServlet``` : abstract base class for Servlets that implement SOAP message processing. Can be used as a base class for Adapter Server implementations.
 
+Additional documentation
+* [Setting up development environment](documentation/Setting-up-Development-Environment.md)
+* [Import a certificate as a trusted certificate](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md)
+* [Setting up SSL on Tomcat](documentation/Setting-up-SSL-on-Tomcat.md)
+
 ##### Development environment
 
 Setting up development environment is explained in [wiki](https://github.com/petkivim/xrd4j/wiki/Setting-up-Development-Environment).
