@@ -83,6 +83,8 @@ Declare the following depencies in a POM:
 
 ### Documentation
 
+[Instructions](documentation/Setting-up-Development-Environment.md) for setting up development environment.
+
 The most essential classes of the library are:
 
 * ```com.pkrete.xrd4j.common.member.ConsumerMember``` : represents X-Road consumer member that acts as a client that initiates service call by sending a ServiceRequest.
@@ -95,15 +97,6 @@ The most essential classes of the library are:
 * ```com.pkrete.xrd4j.client.deserializer.AbstractResponseDeserializer<?, ?>``` : abstract base class for service response deserializers.
 * ```com.pkrete.xrd4j.client.SOAPClientImpl``` : SOAP client that offers two methods that can be used for sending SOAPMessage objects and ServiceRequest objects.
 * ```com.pkrete.xrd4j.server.AbstractAdapterServlet``` : abstract base class for Servlets that implement SOAP message processing. Can be used as a base class for Adapter Server implementations.
-
-Additional documentation
-* [Setting up development environment](documentation/Setting-up-Development-Environment.md)
-* [Import a certificate as a trusted certificate](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md)
-* [Setting up SSL on Tomcat](documentation/Setting-up-SSL-on-Tomcat.md)
-
-##### Development environment
-
-Setting up development environment is explained in [wiki](https://github.com/petkivim/xrd4j/wiki/Setting-up-Development-Environment).
 
 ##### Client
 
@@ -121,7 +114,7 @@ Client application must implement two classes:
   * used through ```ServiceResponseSerializer``` interface
   * must implement ```deserializeRequestData``` and ```deserializeResponseData``` methods
 
-**N.B.** If HTTPS is used between the client and the Security Server, the public key certificate of the Security Server MUST be imported into "cacerts" keystore. Detailed [instructions](https://github.com/petkivim/xrd4j/wiki/Import-a-Certificate-as-a-Trusted-Certificate) can be found from wiki.
+**N.B.** If HTTPS is used between the client and the Security Server, the public key certificate of the Security Server MUST be imported into "cacerts" keystore. [Detailed instructions here](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md).
 
 Main class (generated [request](examples/request1.xml), received [response](examples/response1.xml)):
 
@@ -310,7 +303,7 @@ Server application must implement three classes:
 
 Working adapter example can be viewed and downloaded [here](https://github.com/petkivim/x-road-adapter-example).
 
-Setting up SSL on Tomcat is explained in [wiki](https://github.com/petkivim/xrd4j/wiki/Setting-up-SSL-on-Tomcat).
+Setting up SSL on Tomcat is explained [here](documentation/Setting-up-SSL-on-Tomcat.md).
 
 Adapter servlet(received [request](examples/request1.xml), generated [response](examples/response1.xml)):
 
