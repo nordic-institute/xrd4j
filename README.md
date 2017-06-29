@@ -481,4 +481,4 @@ response.getSoapMessage().addAttachmentPart(ap);
 
 # Credits
 
-XRd4J library was originally developed by Petteri Kivimäki (https://github.com/petkivim) during 2014-2016. In 2017 it was agreed that Population Register Centre (VRK) takes maintenance responsibility.
+XRd4J library was originally developed by Petteri Kivimäki (https://github.com/petkivim) during 2014-2017. In June 2017 it was agreed that Population Register Centre (VRK) takes maintenance responsibility.
