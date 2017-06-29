@@ -85,6 +85,8 @@ Declare the following depencies in a POM:
 
 [Instructions](documentation/Setting-up-Development-Environment.md) for setting up development environment.
 
+Javadocs can be generated with the included script `generate-javadocs.sh`. The script will create `javadoc` folder with HTML documentation.
+
 The most essential classes of the library are:
 
 * ```com.pkrete.xrd4j.common.member.ConsumerMember``` : represents X-Road consumer member that acts as a client that initiates service call by sending a ServiceRequest.
