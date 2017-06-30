@@ -15,8 +15,6 @@ By default this library is processing SOAP Body elements in compatibility mode w
 
 #### Releases
 
-The version 0.0.17 can be found in the Maven Central [repository](http://search.maven.org/#search%7Cga%7C1%7Ccom.pkrete.xrd4j). Therefore there's no need to specify any third party repositories in POM when using the version 0.0.17.
-
 All the XRd4J versions are available in CSC's Maven Repository: https://maven.csc.fi/repository/internal/
 
 Specify CSC's Maven Repository in a POM:
@@ -32,7 +30,7 @@ Specify CSC's Maven Repository in a POM:
 If running ```mvn clean install``` generates the error presented below, there are two possible solutions.
 
 ```
-[ERROR] Failed to execute goal on project example-adapter: Could not resolve dependencies for project com.pkrete.xrd4j.tools:example-adapter:war:0.0.1-SNAPSHOT: Failed to collect dependencies at com.pkrete.xrd4j:common:jar:0.0.1: Failed to read artifact descriptor for com.pkrete.xrd4j:common:jar:0.0.1: Could not transfer artifact com.pkrete.xrd4j:common:pom:0.0.1 from/to csc-repo (https://maven.csc.fi/repository/internal/): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
+[ERROR] Failed to execute goal on project example-adapter: Could not resolve dependencies for project fi.vrk.xrd4j.tools:example-adapter:war:0.0.1-SNAPSHOT: Failed to collect dependencies at fi.vrk.xrd4j:common:jar:0.0.1: Failed to read artifact descriptor for fi.vrk.xrd4j:common:jar:0.0.1: Could not transfer artifact fi.vrk.xrd4j:common:pom:0.0.1 from/to csc-repo (https://maven.csc.fi/repository/internal/): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
 ```
 
 ##### Solution 1
@@ -45,7 +43,7 @@ mvn install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall
 
 ##### Solution 2
 
-Import CSC's Maven repository's certificate as a trusted certificate into ```cacerts``` keystore. See full [instructions](https://github.com/petkivim/xrd4j/wiki/Import-a-Certificate-as-a-Trusted-Certificate).
+Import CSC's Maven repository's certificate as a trusted certificate into ```cacerts``` keystore. See full [instructions](documentation/Import-a-Certificate-as-a-Trusted-Certificate).
 
 #### Dependency Declaration
 
@@ -54,28 +52,28 @@ Declare the following depencies in a POM:
 ```
 <!-- Module: common-->
 <dependency>
-  <groupId>com.pkrete.xrd4j</groupId>
+  <groupId>fi.vrk.xrd4j</groupId>
   <artifactId>common</artifactId>
   <version>0.0.17</version>
 </dependency>
 
 <!-- Module: client-->
 <dependency>
-  <groupId>com.pkrete.xrd4j</groupId>
+  <groupId>fi.vrk.xrd4j</groupId>
   <artifactId>client</artifactId>
   <version>0.0.17</version>
 </dependency>
 
 <!-- Module: server-->
 <dependency>
-  <groupId>com.pkrete.xrd4j</groupId>
+  <groupId>fi.vrk.xrd4j</groupId>
   <artifactId>server</artifactId>
   <version>0.0.17</version>
 </dependency>
 
 <!-- Module: rest-->
 <dependency>
-  <groupId>com.pkrete.xrd4j</groupId>
+  <groupId>fi.vrk.xrd4j</groupId>
   <artifactId>rest</artifactId>
   <version>0.0.17</version>
 </dependency>
@@ -89,16 +87,16 @@ Javadocs can be generated with the included script `generate-javadocs.sh`. The s
 
 The most essential classes of the library are:
 
-* ```com.pkrete.xrd4j.common.member.ConsumerMember``` : represents X-Road consumer member that acts as a client that initiates service call by sending a ServiceRequest.
-* ```com.pkrete.xrd4j.common.member.ProducerMember``` : represents X-Road producer member that produces services to X-Road.
-* ```com.pkrete.xrd4j.common.message.ServiceRequest<?>``` : represents X-Road service request that is sent by a ConsumerMember and received by a ProviderMember. Contains the SOAP request that is sent.
-* ```com.pkrete.xrd4j.common.message.ServiceResponse<?, ?>``` : represents X-Road service response message that is sent by a ProviderMember and received by a ConsumerMember. Contains the SOAP response.
-* ```com.pkrete.xrd4j.client.serializer.AbstractServiceRequestSerializer``` : abstract base class for service request serializers.
-* ```com.pkrete.xrd4j.server.deserializer.AbstractCustomRequestDeserializer<?>``` : abstract base class for service request deserializers.
-* ```com.pkrete.xrd4j.server.serializer.AbstractServiceResponseSerializer``` : abstract base class for service response serializers.
-* ```com.pkrete.xrd4j.client.deserializer.AbstractResponseDeserializer<?, ?>``` : abstract base class for service response deserializers.
-* ```com.pkrete.xrd4j.client.SOAPClientImpl``` : SOAP client that offers two methods that can be used for sending SOAPMessage objects and ServiceRequest objects.
-* ```com.pkrete.xrd4j.server.AbstractAdapterServlet``` : abstract base class for Servlets that implement SOAP message processing. Can be used as a base class for Adapter Server implementations.
+* ```fi.vrk.xrd4j.common.member.ConsumerMember``` : represents X-Road consumer member that acts as a client that initiates service call by sending a ServiceRequest.
+* ```fi.vrk.xrd4j.common.member.ProducerMember``` : represents X-Road producer member that produces services to X-Road.
+* ```fi.vrk.xrd4j.common.message.ServiceRequest<?>``` : represents X-Road service request that is sent by a ConsumerMember and received by a ProviderMember. Contains the SOAP request that is sent.
+* ```fi.vrk.xrd4j.common.message.ServiceResponse<?, ?>``` : represents X-Road service response message that is sent by a ProviderMember and received by a ConsumerMember. Contains the SOAP response.
+* ```fi.vrk.xrd4j.client.serializer.AbstractServiceRequestSerializer``` : abstract base class for service request serializers.
+* ```fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer<?>``` : abstract base class for service request deserializers.
+* ```fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer``` : abstract base class for service response serializers.
+* ```fi.vrk.xrd4j.client.deserializer.AbstractResponseDeserializer<?, ?>``` : abstract base class for service response deserializers.
+* ```fi.vrk.xrd4j.client.SOAPClientImpl``` : SOAP client that offers two methods that can be used for sending SOAPMessage objects and ServiceRequest objects.
+* ```fi.vrk.xrd4j.server.AbstractAdapterServlet``` : abstract base class for Servlets that implement SOAP message processing. Can be used as a base class for Adapter Server implementations.
 
 ##### Client
 
