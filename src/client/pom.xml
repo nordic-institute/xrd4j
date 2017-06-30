@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>xrd4j</artifactId>
-        <groupId>com.pkrete</groupId>
+        <groupId>fi.vrk</groupId>
         <version>0.0.18-SNAPSHOT</version>
     </parent>
-    <groupId>com.pkrete.xrd4j</groupId>
+    <groupId>fi.vrk.xrd4j</groupId>
     <artifactId>client</artifactId>
     <version>0.0.18-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -16,18 +16,18 @@
         This module provides a SOAP client that generates X-Road v6 SOAP 
         messages that can be sent to X-Road Security Server.
     </description>
-    <url>https://github.com/petkivim/xrd4j</url>
+    <url>https://github.com/vrk-kpa/xrd4j</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>com.pkrete.xrd4j</groupId>
+            <groupId>fi.vrk.xrd4j</groupId>
             <artifactId>common</artifactId>
             <version>0.0.18-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.pkrete.xrd4j</groupId>
+            <groupId>fi.vrk.xrd4j</groupId>
             <artifactId>rest</artifactId>
             <version>0.0.18-SNAPSHOT</version>
         </dependency>
