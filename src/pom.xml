@@ -6,7 +6,7 @@
     <version>0.0.18-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>XRd4J</name>
-    <inceptionYear>2014</inceptionYear>
+    <inceptionYear>2017</inceptionYear>
     <description>
         XRd4J is a Java library for building X-Road v6 Adapter Servers 
         and clients. The library implements X-Road v6 SOAP profile. 
@@ -121,7 +121,31 @@
                     <target>${jdk.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
-            </plugin>          
+            </plugin>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
+                    <properties>
+                        <owner>Population Register Centre (VRK)</owner>
+                    </properties>
+                    <skipExistingHeaders>true</skipExistingHeaders>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>license-headers</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
         <testResources>
             <testResource>
