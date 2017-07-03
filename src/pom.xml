@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>fi.vrk</groupId>
     <artifactId>xrd4j</artifactId>
-    <version>0.0.18-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
     <name>XRd4J</name>
     <inceptionYear>2017</inceptionYear>
@@ -188,24 +188,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                                <configuration>
-                                    <keyname>${gpg.keyname}</keyname>
-                                    <passphraseServerId>${gpg.keyname}</passphraseServerId>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -234,17 +216,17 @@
         </profile>
     </profiles>
     <!-- 
-    Deploy artifacts to the OSSRH Nexus Repository Manager. Deployment must
+    Deploy artifacts to CSC's Maven repository. Deployment must
     be run using "release" profile (mvn clean deploy -P release).
     -->
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>csc.snapshots</id>
+            <url>https://maven.csc.fi/repository/snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>csc.internal</id>
+            <url>https://maven.csc.fi/repository/internal/</url>
         </repository>
     </distributionManagement>
 </project>

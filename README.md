@@ -54,28 +54,28 @@ Declare the following depencies in a POM:
 <dependency>
   <groupId>fi.vrk.xrd4j</groupId>
   <artifactId>common</artifactId>
-  <version>0.0.17</version>
+  <version>0.1.0</version>
 </dependency>
 
 <!-- Module: client-->
 <dependency>
   <groupId>fi.vrk.xrd4j</groupId>
   <artifactId>client</artifactId>
-  <version>0.0.17</version>
+  <version>0.1.0</version>
 </dependency>
 
 <!-- Module: server-->
 <dependency>
   <groupId>fi.vrk.xrd4j</groupId>
   <artifactId>server</artifactId>
-  <version>0.0.17</version>
+  <version>0.1.0</version>
 </dependency>
 
 <!-- Module: rest-->
 <dependency>
   <groupId>fi.vrk.xrd4j</groupId>
   <artifactId>rest</artifactId>
-  <version>0.0.17</version>
+  <version>0.1.0</version>
 </dependency>
 ```
 

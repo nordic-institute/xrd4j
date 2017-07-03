@@ -5,11 +5,11 @@
     <parent>
         <artifactId>xrd4j</artifactId>
         <groupId>fi.vrk</groupId>
-        <version>0.0.18-SNAPSHOT</version>
+        <version>0.1.0</version>
     </parent>
     <groupId>fi.vrk.xrd4j</groupId>
     <artifactId>client</artifactId>
-    <version>0.0.18-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>jar</packaging>
     <name>XRd4J :: Client</name>
     <description>
@@ -24,12 +24,12 @@
         <dependency>
             <groupId>fi.vrk.xrd4j</groupId>
             <artifactId>common</artifactId>
-            <version>0.0.18-SNAPSHOT</version>
+            <version>0.1.0</version>
         </dependency>
         <dependency>
             <groupId>fi.vrk.xrd4j</groupId>
             <artifactId>rest</artifactId>
-            <version>0.0.18-SNAPSHOT</version>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
     <build>
