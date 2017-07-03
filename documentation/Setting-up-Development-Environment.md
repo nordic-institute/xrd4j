@@ -9,10 +9,10 @@ This document describes how a developer's workstation can be setup.
 
 ### Getting the code
 
-There are several of ways to get code, e.g. download it as a [zip](https://github.com/petkivim/xrd4j/archive/master.zip) file or clone the git repository.
+There are several of ways to get code, e.g. download it as a [zip](https://github.com/vrk-kpa/xrd4j/archive/master.zip) file or clone the git repository.
 
 ```
-git clone https://github.com/petkivim/xrd4j.git
+git clone https://github.com/vrk-kpa/xrd4j.git
 ```
 
 The code is located in the ```src``` folder and the application is made up of four modules ```client```, ```common```, ```server``` and ```rest```.
