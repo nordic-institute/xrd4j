@@ -25,7 +25,8 @@ package fi.vrk.xrd4j.client.deserializer;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
+import fi.vrk.xrd4j.common.util.ESOAPHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,8 @@ import org.w3c.dom.NodeList;
 public class ListServicesResponseDeserializer extends AbstractResponseDeserializer<String, List<ProducerMember>> {
 
     private static final Logger logger = LoggerFactory.getLogger(ListServicesResponseDeserializer.class);
-
+    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
+    
     /**
      * Constructs and initializes a new ListServicesResponseDeserializer.
      */
@@ -84,7 +86,7 @@ public class ListServicesResponseDeserializer extends AbstractResponseDeserializ
         for (int i = 0; i < list.getLength(); i++) {
             logger.debug("Deserialize \"{}\".", Constants.NS_XRD_ELEM_SERVICE);
             // Service headers
-            Map<String, String> service = SOAPHelper.nodesToMap(list.item(i).getChildNodes());
+            Map<String, String> service = SOAP_HELPER.nodesToMap(list.item(i).getChildNodes());
             // Service object type
             ObjectType serviceObjectType = this.deserializeObjectType((Node) list.item(i));
             try {

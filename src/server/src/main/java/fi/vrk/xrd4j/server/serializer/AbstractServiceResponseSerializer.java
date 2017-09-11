@@ -28,8 +28,7 @@ import fi.vrk.xrd4j.common.message.ErrorMessageType;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
-import javax.xml.soap.MessageFactory;
+import fi.vrk.xrd4j.common.util.ESOAPHelper;
 import javax.xml.soap.Name;
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPBody;
@@ -54,7 +53,8 @@ import org.w3c.dom.NodeList;
 public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSerializer implements ServiceResponseSerializer {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractServiceResponseSerializer.class);
-
+    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
+    
     /**
      * Serializes the application specific response part to SOAP body's response
      * element. All the children under response element will use provider's
@@ -88,8 +88,8 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
             }
 
             logger.debug("Serialize ServiceResponse message to SOAP.");
-            MessageFactory myMsgFct = MessageFactory.newInstance();
-            SOAPMessage message = myMsgFct.createMessage();
+            
+            SOAPMessage message = createNewMessage();
 
             response.setSoapMessage(message);
 
@@ -113,7 +113,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
                     // generated
                     logger.error(ex.getMessage(), ex);
                     logger.warn("Drop headers and return SOAP Fault.");
-                    message = myMsgFct.createMessage();
+                    message = createNewMessage();
                     response.setSoapMessage(message);
                     ErrorMessage errorMessage = new ErrorMessage("SOAP-ENV:Server", "Internal server error.", "", "");
                     response.setErrorMessage(errorMessage);
@@ -128,6 +128,10 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
         }
         logger.warn("Failed to serialize ServiceResponse message to SOAP.");
         return null;
+    }
+    
+    private SOAPMessage createNewMessage() throws SOAPException {
+    	return SOAP_HELPER.createSOAPMessage();
     }
 
     /**
@@ -194,7 +198,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
             SOAPElement temp = body.addChildElement(envelope.createName("request"));
             if (response.isAddNamespaceToRequest()) {
                 logger.debug("Add provider namespace to request element.");
-                SOAPHelper.addNamespace(temp, response);
+                SOAP_HELPER.addNamespace(temp, response);
             }
         }
     }
@@ -208,7 +212,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
                 body.appendChild(importNode);
                 if (response.isAddNamespaceToRequest()) {
                     logger.debug("Add provider namespace to request element.");
-                    SOAPHelper.addNamespace(importNode, response);
+                    SOAP_HELPER.addNamespace(importNode, response);
                 }
                 return true;
             }
@@ -222,7 +226,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
             // Add namespace to the response element only, children excluded
             if (response.isAddNamespaceToResponse()) {
                 logger.debug("Add provider namespace to response element.");
-                SOAPHelper.addNamespace(soapResponse, response);
+                SOAP_HELPER.addNamespace(soapResponse, response);
             }
             logger.warn("Non-technical SOAP error detected.");
             logger.debug("Generate error message.");
@@ -244,12 +248,12 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
             if (response.isAddNamespaceToResponse()) {
                 logger.debug("Add provider namespace to response element.");
                 if (!response.isForceNamespaceToResponseChildren()) {
-                    SOAPHelper.addNamespace(soapResponse, response);
+                    SOAP_HELPER.addNamespace(soapResponse, response);
                     this.serializeResponse(response, soapResponse, envelope);
                 } else {
                     logger.debug("Add provider namespace to all the response element's child elements.");
                     this.serializeResponse(response, soapResponse, envelope);
-                    SOAPHelper.addNamespace(soapResponse, response);
+                    SOAP_HELPER.addNamespace(soapResponse, response);
                 }
             } else {
                 logger.debug("Don't add provider namespace to response element.");

@@ -22,7 +22,6 @@
  */
 package fi.vrk.xrd4j.rest.converter;
 
-import fi.vrk.xrd4j.common.util.SOAPHelper;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.xpath.XPath;
@@ -33,6 +32,8 @@ import junit.framework.TestCase;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import fi.vrk.xrd4j.common.util.ESOAPHelper;
+
 /**
  * Test cases for JSONToXMLConverter class.
  *
@@ -41,6 +42,7 @@ import org.w3c.dom.NodeList;
 public class JSONToXMLConverterTest extends TestCase {
 
     private Converter converter;
+    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Set up instance variables used in test cases.
@@ -121,7 +123,7 @@ public class JSONToXMLConverterTest extends TestCase {
     public void testNestedElement() throws XPathExpressionException {
         String json = "{\"request\":{\"key1\":\"value1\"}}";
         String xml = this.converter.convert(json);
-        Document xmlConverted = SOAPHelper.xmlStrToDoc(xml);
+        Document xmlConverted = SOAP_HELPER.xmlStrToDoc(xml);
 
         XPath xPath = XPathFactory.newInstance().newXPath();
         assertEquals("value1", xPath.compile("/request/key1").evaluate(xmlConverted));
@@ -133,7 +135,7 @@ public class JSONToXMLConverterTest extends TestCase {
     public void testNestedElements1() throws XPathExpressionException {
         String json = "{\"request\":{\"key1\":\"value1\",\"key2\":true,\"key3\":3}}";
         String xml = this.converter.convert(json);
-        Document xmlConverted = SOAPHelper.xmlStrToDoc(xml);
+        Document xmlConverted = SOAP_HELPER.xmlStrToDoc(xml);
 
         XPath xPath = XPathFactory.newInstance().newXPath();
         assertEquals("value1", xPath.compile("/request/key1").evaluate(xmlConverted));
@@ -148,7 +150,7 @@ public class JSONToXMLConverterTest extends TestCase {
         String json = "{\"menu\": {\"id\": \"file\",\"value\": \"File\",\"popup\": {\"menuitem\": [{\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},{\"value\": \"Open\", \"onclick\": \"OpenDoc()\"},{\"value\": \"Close\", \"onclick\": \"CloseDoc()\"}]}}}";
         String xml = this.converter.convert(json);
 
-        Document xmlConverted = SOAPHelper.xmlStrToDoc(xml);
+        Document xmlConverted = SOAP_HELPER.xmlStrToDoc(xml);
 
         XPath xPath = XPathFactory.newInstance().newXPath();
         assertEquals("file", xPath.compile("/menu/id").evaluate(xmlConverted));

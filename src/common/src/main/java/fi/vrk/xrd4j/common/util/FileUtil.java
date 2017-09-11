@@ -23,8 +23,11 @@
 package fi.vrk.xrd4j.common.util;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Scanner;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,28 +47,35 @@ public class FileUtil {
     }
 
     /**
-     * Reads the contents of the file denoted by the abstract path name. If the
-     * file doesn't exist, an empty string is returned.
+     * Reads the contents of the file denoted by the path name. If the file doesn't
+     * exist, an empty string is returned.
      *
-     * @param path abstract path name
+     * @param filePath
+     *            file path
      * @return contents of the file
      */
-    public static String read(String path) {
-        File file = new File(path);
-        if (!file.exists()) {
-            logger.warn("Reading file failed! File doesn't exist : {}", file.getAbsolutePath());
+    public static String read(String filePath) {
+        try {
+            File file = getFile(filePath);
+            byte[] encoded = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+            return new String(encoded, Charset.forName("UTF-8"));
+        } catch (IOException | IllegalArgumentException e) {
+            logger.error("Could not read file {}.", filePath, e);
             return "";
         }
-        StringBuilder text = new StringBuilder();
-        String lineSeparator = System.getProperty("line.separator");
-        try (Scanner scanner = new Scanner(new FileInputStream(file.getAbsolutePath()), "UTF-8")) {
-            while (scanner.hasNextLine()) {
-                text.append(scanner.nextLine());
-                text.append(lineSeparator);
+    }
+
+    private static File getFile(String filePath) {
+        File file = new File(FileUtil.class.getClassLoader().getResource(filePath).getFile());
+
+        if (!file.exists()) {
+            logger.warn("Resource file is not found!");
+            file = new File(filePath);
+            if (!file.exists()) {
+                throw new IllegalArgumentException("File doesn't exist: " + filePath);
             }
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
         }
-        return text.toString().trim();
+
+        return file;
     }
 }

@@ -35,7 +35,7 @@ import fi.vrk.xrd4j.common.exception.XRd4JRuntimeException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
+import fi.vrk.xrd4j.common.util.ESOAPHelper;
 import fi.vrk.xrd4j.rest.ClientResponse;
 import fi.vrk.xrd4j.rest.client.RESTClient;
 import fi.vrk.xrd4j.rest.client.RESTClientFactory;
@@ -59,6 +59,7 @@ import org.slf4j.LoggerFactory;
 public class SOAPClientImpl implements SOAPClient {
 
     private static final Logger logger = LoggerFactory.getLogger(SOAPClientImpl.class);
+    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
     private final SOAPConnectionFactory connectionFactory;
 
     /**
@@ -92,10 +93,10 @@ public class SOAPClientImpl implements SOAPClient {
         }
         SOAPConnection connection = connectionFactory.createConnection();
         logger.debug("Send SOAP message to \"{}\".", url);
-        logger.trace("Outgoing SOAP request : \"{}\".", SOAPHelper.toString(request));
+        logger.trace("Outgoing SOAP request : \"{}\".", SOAP_HELPER.toString(request));
         SOAPMessage response = connection.call(request, client);
         logger.debug("SOAP response received.");
-        logger.trace("Incoming SOAP response : \"{}\".", SOAPHelper.toString(response));
+        logger.trace("Incoming SOAP response : \"{}\".", SOAP_HELPER.toString(response));
         connection.close();
         return response;
     }

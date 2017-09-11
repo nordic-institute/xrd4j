@@ -24,6 +24,7 @@ package fi.vrk.xrd4j.common.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -58,19 +59,24 @@ import fi.vrk.xrd4j.common.message.AbstractMessage;
 /**
  * This class offers some helper methods for handling SOAPMessage objects.
  *
- * @author Petteri Kivimäki
- * @see ESOAPHelper
- * @deprecated Use ESOAPHelper instead.
+ * @author Jarkko Koistinaho
  */
-class SOAPHelper {
+public enum ESOAPHelper {
+  INSTANCE;
 
   private static final String CHARSET = "UTF-8";
-  private static final Logger logger = LoggerFactory.getLogger(SOAPHelper.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ESOAPHelper.class);
+  private final MessageFactory msgFactory;
 
   /**
    * Constructs and initializes a new SOAPHelper object. Should never be used.
    */
-  private SOAPHelper() {
+  private ESOAPHelper() {
+    try {
+      msgFactory = MessageFactory.newInstance();
+    } catch (SOAPException e) {
+      throw new IllegalStateException(e);
+    }
   }
 
   /**
@@ -84,7 +90,7 @@ class SOAPHelper {
    *          name of the node to be searched
    * @return node with the given name or null
    */
-  public static Node getNode(Node node, String nodeName) {
+  public Node getNode(Node node, String nodeName) {
     for (int i = 0; i < node.getChildNodes().getLength(); i++) {
       if (node.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE
           && node.getChildNodes().item(i).getLocalName().equals(nodeName)) {
@@ -101,13 +107,13 @@ class SOAPHelper {
    *          SOAPMessage object to be converted
    * @return byte array containing the SOAPMessage or null
    */
-  public static byte[] toByteArray(SOAPMessage message) {
+  public byte[] toByteArray(SOAPMessage message) {
     try {
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       message.writeTo(out);
       return out.toByteArray();
     } catch (Exception ex) {
-      logger.error(ex.getMessage(), ex);
+      LOGGER.error(ex.getMessage(), ex);
       return null;
     }
   }
@@ -119,13 +125,13 @@ class SOAPHelper {
    *          SOAPMessage object to be converted
    * @return String presentation of the given SOAPMessage
    */
-  public static String toString(SOAPMessage message) {
+  public String toString(SOAPMessage message) {
     try {
       ByteArrayOutputStream out = new ByteArrayOutputStream();
       message.writeTo(out);
       return new String(out.toByteArray(), CHARSET);
     } catch (Exception ex) {
-      logger.error(ex.getMessage(), ex);
+      LOGGER.error(ex.getMessage(), ex);
       return "";
     }
   }
@@ -137,7 +143,7 @@ class SOAPHelper {
    *          Node object to be converted
    * @return String presentation of the given Node
    */
-  public static String toString(Node node) {
+  public String toString(Node node) {
     StringWriter sw = new StringWriter();
     try {
       Transformer t = TransformerFactory.newInstance().newTransformer();
@@ -145,7 +151,7 @@ class SOAPHelper {
       t.transform(new DOMSource(node), new StreamResult(sw));
       return sw.toString();
     } catch (Exception ex) {
-      logger.error(ex.getMessage(), ex);
+      LOGGER.error(ex.getMessage(), ex);
       return "";
     }
   }
@@ -157,11 +163,11 @@ class SOAPHelper {
    *          attachment part to be converted
    * @return string presentation of the attachment or null
    */
-  public static String toString(AttachmentPart att) {
-    try {
-      return new Scanner(att.getRawContent(), CHARSET).useDelimiter("\\A").next();
+  public String toString(AttachmentPart att) {
+    try (Scanner scanner = new Scanner(att.getRawContent(), CHARSET)) {
+      return scanner.useDelimiter("\\A").next();
     } catch (Exception e) {
-      logger.error(e.getMessage(), e);
+      LOGGER.error(e.getMessage(), e);
     }
     return null;
   }
@@ -174,12 +180,12 @@ class SOAPHelper {
    *          SOAP string to be converted
    * @return SOAPMessage or null
    */
-  public static SOAPMessage toSOAP(String soap) {
+  public SOAPMessage toSOAP(String soap) {
     try {
       InputStream is = new ByteArrayInputStream(soap.getBytes(CHARSET));
-      return SOAPHelper.toSOAP(is);
+      return toSOAP(is);
     } catch (Exception ex) {
-      logger.error(ex.getMessage(), ex);
+      LOGGER.error(ex.getMessage(), ex);
       return null;
     }
   }
@@ -192,11 +198,11 @@ class SOAPHelper {
    *          InputStream to be converted
    * @return SOAPMessage or null
    */
-  public static SOAPMessage toSOAP(InputStream is) {
+  public SOAPMessage toSOAP(InputStream is) {
     try {
-      return MessageFactory.newInstance().createMessage(new MimeHeaders(), is);
+      return createSOAPMessage(new MimeHeaders(), is);
     } catch (Exception ex) {
-      logger.error(ex.getMessage(), ex);
+      LOGGER.error(ex.getMessage(), ex);
       return null;
     }
   }
@@ -211,11 +217,11 @@ class SOAPHelper {
    *          MIME headers of the SOAP request
    * @return SOAPMessage or null
    */
-  public static SOAPMessage toSOAP(InputStream is, MimeHeaders mh) {
+  public SOAPMessage toSOAP(InputStream is, MimeHeaders mh) {
     try {
-      return MessageFactory.newInstance().createMessage(mh, is);
+      return createSOAPMessage(mh, is);
     } catch (Exception ex) {
-      logger.error(ex.getMessage(), ex);
+      LOGGER.error(ex.getMessage(), ex);
       return null;
     }
   }
@@ -229,8 +235,8 @@ class SOAPHelper {
    *          NodeList to be transfered
    * @return Map that contains all the list items as key-value-pairs
    */
-  public static Map<String, String> nodesToMap(NodeList list) {
-    return SOAPHelper.nodesToMap(list, false);
+  public Map<String, String> nodesToMap(NodeList list) {
+    return nodesToMap(list, false);
   }
 
   /**
@@ -244,9 +250,9 @@ class SOAPHelper {
    *          store all keys in upper case
    * @return Map that contains all the list items as key-value-pairs
    */
-  public static Map<String, String> nodesToMap(NodeList list, boolean upperCase) {
+  public Map<String, String> nodesToMap(NodeList list, boolean upperCase) {
     Map<String, String> map = new HashMap<>();
-    SOAPHelper.nodesToMap(list, upperCase, map);
+    nodesToMap(list, upperCase, map);
     return map;
   }
 
@@ -262,7 +268,7 @@ class SOAPHelper {
    * @param map
    *          Map for the results
    */
-  public static void nodesToMap(NodeList list, boolean upperCase, Map<String, String> map) {
+  public void nodesToMap(NodeList list, boolean upperCase, Map<String, String> map) {
     for (int i = 0; i < list.getLength(); i++) {
       if (list.item(i).getNodeType() == javax.xml.soap.Node.ELEMENT_NODE && list.item(i).hasChildNodes()) {
         nodesToMap(list.item(i).getChildNodes(), upperCase, map);
@@ -284,7 +290,7 @@ class SOAPHelper {
    * @param map
    *          Map for the results
    */
-  private static void processMapNode(NodeList list, int index, boolean upperCase, Map<String, String> map) {
+  private void processMapNode(NodeList list, int index, boolean upperCase, Map<String, String> map) {
     if (list.item(index).getNodeType() == javax.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
       String key = list.item(index).getLocalName();
       map.put(upperCase ? key.toUpperCase() : key, "");
@@ -307,9 +313,9 @@ class SOAPHelper {
    *          NodeList to be transfered
    * @return Map that contains all the list items as key - value list pairs
    */
-  public static Map<String, List<String>> nodesToMultiMap(NodeList list) {
+  public Map<String, List<String>> nodesToMultiMap(NodeList list) {
     Map<String, List<String>> map = new HashMap<>();
-    SOAPHelper.nodesToMultiMap(list, map);
+    nodesToMultiMap(list, map);
     return map;
   }
 
@@ -323,7 +329,7 @@ class SOAPHelper {
    * @param map
    *          Map for the results
    */
-  public static void nodesToMultiMap(NodeList list, Map<String, List<String>> map) {
+  public void nodesToMultiMap(NodeList list, Map<String, List<String>> map) {
     for (int i = 0; i < list.getLength(); i++) {
       if (list.item(i).getNodeType() == javax.xml.soap.Node.ELEMENT_NODE && list.item(i).hasChildNodes()) {
         nodesToMultiMap(list.item(i).getChildNodes(), map);
@@ -343,7 +349,7 @@ class SOAPHelper {
    * @param map
    *          Map for the results
    */
-  private static void processMultiMapNode(NodeList list, int index, Map<String, List<String>> map) {
+  private void processMultiMapNode(NodeList list, int index, Map<String, List<String>> map) {
     if (list.item(index).getNodeType() == javax.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
       String key = list.item(index).getLocalName();
       if (!map.containsKey(key)) {
@@ -375,7 +381,7 @@ class SOAPHelper {
    *          Message that contains the ProviderMember which namespace URI and
    *          prefix are used
    */
-  public static void addNamespace(Node node, AbstractMessage message) {
+  public void addNamespace(Node node, AbstractMessage message) {
     if (node.getNodeType() == Node.ELEMENT_NODE) {
       node.getOwnerDocument().renameNode(node, null, node.getLocalName());
       if (message.getProducer().getNamespacePrefix() != null && !message.getProducer().getNamespacePrefix().isEmpty()) {
@@ -389,7 +395,7 @@ class SOAPHelper {
 
     NodeList list = node.getChildNodes();
     for (int i = 0; i < list.getLength(); i++) {
-      SOAPHelper.addNamespace((Node) list.item(i), message);
+      addNamespace((Node) list.item(i), message);
     }
   }
 
@@ -399,13 +405,13 @@ class SOAPHelper {
    * @param node
    *          Node to be modified
    */
-  public static void removeNamespace(Node node) {
+  public void removeNamespace(Node node) {
     if (node.getNodeType() == Node.ELEMENT_NODE) {
       node.getOwnerDocument().renameNode(node, null, node.getLocalName());
     }
     NodeList list = node.getChildNodes();
     for (int i = 0; i < list.getLength(); i++) {
-      SOAPHelper.removeNamespace((Node) list.item(i));
+      removeNamespace((Node) list.item(i));
     }
   }
 
@@ -420,19 +426,19 @@ class SOAPHelper {
    *          list of attachments to be searched
    * @return string value of the attachment or null
    */
-  public static String getStringAttachment(String contentId, Iterator attachments) {
+  public String getStringAttachment(String contentId, Iterator<AttachmentPart> attachments) {
     if (attachments == null) {
       return null;
     }
-    try {
-      while (attachments.hasNext()) {
-        AttachmentPart att = (AttachmentPart) attachments.next();
-        if (att.getContentId().equals(contentId)) {
-          return new Scanner(att.getRawContent(), CHARSET).useDelimiter("\\A").next();
+    while (attachments.hasNext()) {
+      AttachmentPart att = (AttachmentPart) attachments.next();
+      if (att.getContentId().equals(contentId)) {
+        try (Scanner scanner = new Scanner(att.getRawContent(), CHARSET)) {
+          return scanner.useDelimiter("\\A").next();
+        } catch (Exception e) {
+          LOGGER.error(e.getMessage(), e);
         }
       }
-    } catch (Exception e) {
-      logger.error(e.getMessage(), e);
     }
     return null;
   }
@@ -445,7 +451,7 @@ class SOAPHelper {
    *          SOAP message
    * @return content type of the first attachment or null
    */
-  public static String getAttachmentContentType(SOAPMessage message) {
+  public String getAttachmentContentType(SOAPMessage message) {
     if (message.countAttachments() == 0) {
       return null;
     }
@@ -462,7 +468,7 @@ class SOAPHelper {
    *          SOAP message to be checked
    * @return true if and only if the message has attachments; otherwise false
    */
-  public static boolean hasAttachments(SOAPMessage message) {
+  public boolean hasAttachments(SOAPMessage message) {
     if (message == null) {
       return false;
     }
@@ -479,33 +485,32 @@ class SOAPHelper {
    *          XML string
    * @return given XML string as a SOAPElement or null if the conversion failed
    */
-  public static SOAPElement xmlStrToSOAPElement(String xml) {
-    logger.debug("Convert XML string to SOAPElement. XML : \"{}\"", xml);
+  public SOAPElement xmlStrToSOAPElement(String xml) {
+    LOGGER.debug("Convert XML string to SOAPElement. XML : \"{}\"", xml);
     // Try to conver XML string to XML Document
-    Document doc = SOAPHelper.xmlStrToDoc(xml);
+    Document doc = xmlStrToDoc(xml);
     if (doc == null) {
-      logger.warn("Convertin XML string to SOAP element failed.");
+      LOGGER.warn("Convertin XML string to SOAP element failed.");
       return null;
     }
 
     try {
       // Use SAAJ to convert Document to SOAPElement
       // Create SoapMessage
-      MessageFactory msgFactory = MessageFactory.newInstance();
-      SOAPMessage message = msgFactory.createMessage();
+      SOAPMessage message = createSOAPMessage();
       SOAPBody soapBody = message.getSOAPBody();
       // This returns the SOAPBodyElement
       // that contains ONLY the Payload
       SOAPElement payload = soapBody.addDocument(doc);
       if (payload == null) {
-        logger.warn("Converting XML string to SOAPElement failed.");
+        LOGGER.warn("Converting XML string to SOAPElement failed.");
       } else {
-        logger.debug("Converting XML string to SOAPElement succeeded.");
+        LOGGER.debug("Converting XML string to SOAPElement succeeded.");
       }
       return payload;
     } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-      logger.warn("Converting XML document to SOAPElement failed.");
+      LOGGER.error(e.getMessage(), e);
+      LOGGER.warn("Converting XML document to SOAPElement failed.");
       return null;
     }
   }
@@ -518,8 +523,8 @@ class SOAPHelper {
    *          XML string to be converted
    * @return XML document
    */
-  public static Document xmlStrToDoc(String xml) {
-    logger.debug("Convert XML string to XML document.");
+  public Document xmlStrToDoc(String xml) {
+    LOGGER.debug("Convert XML string to XML document.");
     DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
     builderFactory.setNamespaceAware(true);
     InputStream stream = null;
@@ -527,27 +532,27 @@ class SOAPHelper {
     try {
       stream = new ByteArrayInputStream(xml.getBytes());
       doc = builderFactory.newDocumentBuilder().parse(stream);
-      logger.debug("Converting XML string to XML document succeeded.");
+      LOGGER.debug("Converting XML string to XML document succeeded.");
     } catch (Exception e) {
       // If exception starts with "Invalid byte", it means that ISO-8859-1
       // character set is probably used. Try to convert the string to
       // UTF-8.
       if (e.getLocalizedMessage().startsWith("Invalid byte")) {
-        logger.warn("Invalid characters detected.");
+        LOGGER.warn("Invalid characters detected.");
         try {
-          logger.debug("Try to convert XML string from ISO-8859-1 to UTF-8.");
+          LOGGER.debug("Try to convert XML string from ISO-8859-1 to UTF-8.");
           stream = new ByteArrayInputStream(new String(xml.getBytes(), "ISO-8859-1").getBytes(CHARSET));
           doc = builderFactory.newDocumentBuilder().parse(stream);
-          logger.debug("Converting XML string from ISO-8859-1 to UTF-8 succeeded.");
+          LOGGER.debug("Converting XML string from ISO-8859-1 to UTF-8 succeeded.");
         } catch (Exception ex) {
-          logger.error(ex.getMessage());
-          logger.warn("Converting XML string to XML document failed.");
-          logger.warn("Converting XML string from ISO-8859-1 to UTF-8 failed.");
+          LOGGER.error(ex.getMessage());
+          LOGGER.warn("Converting XML string to XML document failed.");
+          LOGGER.warn("Converting XML string from ISO-8859-1 to UTF-8 failed.");
           return null;
         }
       } else {
-        logger.error(e.getMessage());
-        logger.warn("Converting XML string to XML document failed.");
+        LOGGER.error(e.getMessage());
+        LOGGER.warn("Converting XML string to XML document failed.");
         return null;
       }
     }
@@ -560,7 +565,7 @@ class SOAPHelper {
    * @param node
    *          node to be modified
    */
-  public static void removeAllChildren(Node node) {
+  public void removeAllChildren(Node node) {
     while (node.hasChildNodes()) {
       node.removeChild(node.getFirstChild());
     }
@@ -581,8 +586,7 @@ class SOAPHelper {
    * @throws SOAPException
    *           if there's an error
    */
-  public static void moveChildren(SOAPElement from, SOAPElement to, boolean updateNamespaceAndPrefix)
-      throws SOAPException {
+  public void moveChildren(SOAPElement from, SOAPElement to, boolean updateNamespaceAndPrefix) throws SOAPException {
     NodeList children = from.getChildNodes();
     for (int i = 0; i < children.getLength(); i++) {
       Node child = (Node) children.item(i);
@@ -606,7 +610,7 @@ class SOAPHelper {
    * @param prefix
    *          target prefix
    */
-  public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
+  public void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
     for (int i = 0; i < list.getLength(); i++) {
       Node node = (Node) list.item(i);
       if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
@@ -628,7 +632,7 @@ class SOAPHelper {
    *          target prefix
    * @return updated Node
    */
-  public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
+  public Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
     if (node.getNodeType() == javax.xml.soap.Node.ELEMENT_NODE) {
       if (prefix != null && !prefix.isEmpty()) {
         node = (Node) node.getOwnerDocument().renameNode(node, namespace, prefix + ":" + node.getLocalName());
@@ -648,17 +652,17 @@ class SOAPHelper {
    *          monitoring service
    * @return installed X-Road packages as key-value pairs
    */
-  public static Map<String, String> getXRdVersionInfo(NodeList metrics) {
-    logger.trace("Start reading X-Road version info from metrics.");
+  public Map<String, String> getXRdVersionInfo(NodeList metrics) {
+    LOGGER.trace("Start reading X-Road version info from metrics.");
     Map<String, String> results = new HashMap<>();
     // Check for null and empty
     if (metrics == null || metrics.getLength() == 0) {
-      logger.trace("Metrics set is null or empty.");
+      LOGGER.trace("Metrics set is null or empty.");
       return results;
     }
     // Loop through metrics
     for (int i = 0; i < metrics.getLength(); i++) {
-      Node node = SOAPHelper.getNode((Node) metrics.item(i), "name");
+      Node node = getNode((Node) metrics.item(i), "name");
       // Jump to next element if this is not Packages
       if (node == null || !Constants.NS_ENV_MONITORING_ELEM_PACKAGES.equals(node.getTextContent())) {
         continue;
@@ -666,7 +670,7 @@ class SOAPHelper {
       // Loop through packages and add X-Road packages to results
       getXRdPackages(metrics.item(i).getChildNodes(), results);
     }
-    logger.trace("Metrics info read. {} X-Road packages found.", results.size());
+    LOGGER.trace("Metrics info read. {} X-Road packages found.", results.size());
     return results;
   }
 
@@ -680,21 +684,33 @@ class SOAPHelper {
    * @param results
    *          Map object for results
    */
-  private static void getXRdPackages(NodeList packages, Map<String, String> results) {
+  private void getXRdPackages(NodeList packages, Map<String, String> results) {
     // Loop through packages
     for (int j = 0; j < packages.getLength(); j++) {
       // We're looking for "stringMetric" elements
       if (Constants.NS_ENV_MONITORING_ELEM_STRING_METRIC.equals(packages.item(j).getLocalName())) {
         // Get name and value
-        Node name = SOAPHelper.getNode((Node) packages.item(j), "name");
-        Node value = SOAPHelper.getNode((Node) packages.item(j), "value");
+        Node name = getNode((Node) packages.item(j), "name");
+        Node value = getNode((Node) packages.item(j), "value");
         // X-Road packages start with "xroad-prefix"
         if (name != null && value != null && name.getTextContent().startsWith("xroad-")) {
           results.put(name.getTextContent(), value.getTextContent());
-          logger.debug("X-Road package version info found: \"{}\" = \"{}\".", name.getTextContent(),
+          LOGGER.debug("X-Road package version info found: \"{}\" = \"{}\".", name.getTextContent(),
               value.getTextContent());
         }
       }
+    }
+  }
+
+  public SOAPMessage createSOAPMessage() throws SOAPException {
+    synchronized (msgFactory) {
+      return msgFactory.createMessage();
+    }
+  }
+
+  public SOAPMessage createSOAPMessage(MimeHeaders mimeHeaders, InputStream is) throws IOException, SOAPException {
+    synchronized (msgFactory) {
+      return msgFactory.createMessage(mimeHeaders, is);
     }
   }
 }

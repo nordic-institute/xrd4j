@@ -27,7 +27,8 @@ import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.member.SecurityServer;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
+import fi.vrk.xrd4j.common.util.ESOAPHelper;
+
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -41,6 +42,8 @@ import junit.framework.TestCase;
  * @author Petteri Kivimäki
  */
 public class ServiceRequestSerializerTest extends TestCase {
+  
+    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Subsystem level service call. No NS prefix.
@@ -61,7 +64,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -84,7 +87,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -107,7 +110,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -130,7 +133,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -154,7 +157,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -176,7 +179,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -197,7 +200,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -219,7 +222,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -241,7 +244,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer1();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -263,7 +266,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer1();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -286,7 +289,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer1();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -309,7 +312,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer2();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -330,7 +333,7 @@ public class ServiceRequestSerializerTest extends TestCase {
 
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -351,7 +354,7 @@ public class ServiceRequestSerializerTest extends TestCase {
 
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -373,7 +376,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new DefaultServiceRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -392,7 +395,7 @@ public class ServiceRequestSerializerTest extends TestCase {
 
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -415,7 +418,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
         /**
@@ -439,7 +442,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
     
      /**
@@ -464,7 +467,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
 
     /**
@@ -489,7 +492,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new TestRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAPHelper.toString(msg));
+        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
     }
     private class TestRequestSerializer extends AbstractServiceRequestSerializer {
 

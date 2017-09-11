@@ -25,7 +25,7 @@ package fi.vrk.xrd4j.client.serializer;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
+import fi.vrk.xrd4j.common.util.ESOAPHelper;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPBody;
@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSerializer implements ServiceRequestSerializer {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractServiceRequestSerializer.class);
+    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Serializes the application specific request part to SOAP body's request
@@ -135,7 +136,7 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
             this.serializeRequest(request, soapRequest, envelope);
             // Is namespace defined and should it be added to the request?
             if (hasNamespace && request.isAddNamespaceToRequest()) {
-                SOAPHelper.addNamespace(soapRequest, request);
+                SOAP_HELPER.addNamespace(soapRequest, request);
             }
         }
         logger.debug("SOAP body was generated succesfully.");

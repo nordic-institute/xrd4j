@@ -22,32 +22,34 @@
  */
 package fi.vrk.xrd4j.server;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.soap.MimeHeaders;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.util.Constants;
+import fi.vrk.xrd4j.common.util.ESOAPHelper;
 import fi.vrk.xrd4j.common.util.FileUtil;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
 import fi.vrk.xrd4j.server.deserializer.ServiceRequestDeserializer;
 import fi.vrk.xrd4j.server.deserializer.ServiceRequestDeserializerImpl;
 import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import fi.vrk.xrd4j.server.serializer.ServiceResponseSerializer;
 import fi.vrk.xrd4j.server.utils.AdapterUtils;
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-import javax.servlet.http.HttpServlet;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This an abstract base class for Servlets that implement SOAP message
@@ -68,6 +70,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
     private final ErrorMessage errWsdlNotFound = new ErrorMessage(FAULT_CODE_CLIENT, "WSDL not found", null, null);
     private final ErrorMessage errInternalServerErr = new ErrorMessage(FAULT_CODE_CLIENT, "500 Internal Server Error", null, null);
     private final ErrorMessage errUnknownServiceCode = new ErrorMessage(FAULT_CODE_CLIENT, "Unknown service code.", null, null);
+    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Handles and processes the given request and returns a SOAP message as a
@@ -81,9 +84,9 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
     protected abstract ServiceResponse handleRequest(ServiceRequest request) throws SOAPException, XRd4JException;
 
     /**
-     * Must return the aboslute path of the WSDL file.
+     * Must return the path of the WSDL file.
      *
-     * @return absolute path of the WSDL file
+     * @return path of the WSDL file
      */
     protected abstract String getWSDLPath();
 
@@ -96,11 +99,11 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         this.deserializer = new ServiceRequestDeserializerImpl();
         this.serializer = new DummyServiceResponseSerializer();
         logger.debug("Initialize \"errGetNotSupportedStr\" error message.");
-        this.errGetNotSupportedStr = SOAPHelper.toString(this.errorToSOAP(this.errGetNotSupported, null));
+        this.errGetNotSupportedStr = SOAP_HELPER.toString(this.errorToSOAP(this.errGetNotSupported, null));
         logger.debug("Initialize \"errWsdlNotFoundStr\" error message.");
-        this.errWsdlNotFoundStr = SOAPHelper.toString(this.errorToSOAP(this.errWsdlNotFound, null));
+        this.errWsdlNotFoundStr = SOAP_HELPER.toString(this.errorToSOAP(this.errWsdlNotFound, null));
         logger.debug("Initialize \"errInternalServerErrStr\" error message.");
-        this.errInternalServerErrStr = SOAPHelper.toString(this.errorToSOAP(this.errInternalServerErr, null));
+        this.errInternalServerErrStr = SOAP_HELPER.toString(this.errorToSOAP(this.errInternalServerErr, null));
         logger.debug("AbstractServlet initialized.");
     }
 
@@ -130,12 +133,12 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         if (request.getContentType().toLowerCase().startsWith(Constants.TEXT_XML)) {
             // Regular SOAP message without attachments
             logger.info("Request's content type is \"{}\".", Constants.TEXT_XML);
-            soapRequest = SOAPHelper.toSOAP(request.getInputStream());
+            soapRequest = SOAP_HELPER.toSOAP(request.getInputStream());
         } else if (request.getContentType().toLowerCase().startsWith(Constants.MULTIPART_RELATED)) {
             // SOAP message with attachments
             logger.info("Request's content type is \"{}\".", Constants.MULTIPART_RELATED);
             MimeHeaders mh = AdapterUtils.getHeaders(request);
-            soapRequest = SOAPHelper.toSOAP(request.getInputStream(), mh);
+            soapRequest = SOAP_HELPER.toSOAP(request.getInputStream(), mh);
             logger.trace(AdapterUtils.getAttachmentsInfo(soapRequest));
         } else {
             // Invalid content type -> message is not processed
@@ -183,7 +186,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         try {
             logger.debug("Send response.");
             // SOAPMessage to String
-            String responseStr = SOAPHelper.toString(soapResponse);
+            String responseStr = SOAP_HELPER.toString(soapResponse);
             // Set response headers
             if (responseStr != null && soapResponse != null && soapResponse.getAttachments().hasNext()) {
                 // Get MIME boundary from SOAP message
@@ -224,7 +227,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
      * @return ServiceRequest or null
      */
     private ServiceRequest fromSOAPToServiceRequest(SOAPMessage soapRequest) {
-        logger.trace("Incoming SOAP message : \"{}\"", SOAPHelper.toString(soapRequest));
+        logger.trace("Incoming SOAP message : \"{}\"", SOAP_HELPER.toString(soapRequest));
         ServiceRequest serviceRequest = null;
         try {
             // Try to deserialize SOAP Message to ServiceRequest
@@ -283,35 +286,30 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType(Constants.TEXT_XML + ";charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
+
+        try (PrintWriter responseWriter = response.getWriter()) {
             if (request.getParameter("wsdl") != null) {
                 logger.debug("WSDL file request received.");
                 String path = this.getWSDLPath();
-                // If only filename is given, absolute path must be added
-                if (path.matches("^[-_.A-Za-z0-9]+$")) {
-                    path = this.getServletContext().getRealPath("/WEB-INF/classes/") + "/" + path;
-                    logger.debug("Only filename was given. Absolute path is : \"{}\".", path);
-                }
+
                 // Read WSDL file
                 String wsdl = FileUtil.read(path);
+
                 if (!wsdl.isEmpty()) {
-                    out.println(wsdl);
+                    responseWriter.println(wsdl);
                     logger.trace("WSDL file was found and returned to the requester.");
                 } else {
-                    out.println(this.errWsdlNotFoundStr);
+                    responseWriter.println(this.errWsdlNotFoundStr);
                     logger.warn("WSDL file was not found. SOAP Fault was returned.");
                 }
+
                 logger.debug("WSDL file request processed.");
             } else {
                 logger.warn("New GET request received. Not supported. SOAP Fault is returned.");
-                out.println(errGetNotSupportedStr);
+                responseWriter.println(errGetNotSupportedStr);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            out.println(this.errInternalServerErrStr);
-        } finally {
-            out.close();
         }
     }
 

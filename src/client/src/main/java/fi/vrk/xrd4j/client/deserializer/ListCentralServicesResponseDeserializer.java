@@ -27,7 +27,7 @@ import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
+import fi.vrk.xrd4j.common.util.ESOAPHelper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +45,7 @@ import org.w3c.dom.NodeList;
 public class ListCentralServicesResponseDeserializer extends AbstractHeaderDeserializer {
 
     private static final Logger logger = LoggerFactory.getLogger(ListCentralServicesResponseDeserializer.class);
+    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Deserializes a list ProducerMember objects from the given XML. If
@@ -56,7 +57,7 @@ public class ListCentralServicesResponseDeserializer extends AbstractHeaderDeser
     public List<ProducerMember> deserializeProducerList(String xml) {
         logger.debug("Deserialize a list of producers from XML.");
         // Convert XML string to XML Document for deserializing
-        Document doc = SOAPHelper.xmlStrToDoc(xml);
+        Document doc = SOAP_HELPER.xmlStrToDoc(xml);
         try {
             // Get list of consumers
             return this.deserializeCentralServices(doc);
@@ -84,7 +85,7 @@ public class ListCentralServicesResponseDeserializer extends AbstractHeaderDeser
             // Client object type
             ObjectType clientObjectType = super.deserializeObjectType(list.item(i));
             // Client headers
-            Map<String, String> service = SOAPHelper.nodesToMap(list.item(i).getChildNodes());
+            Map<String, String> service = SOAP_HELPER.nodesToMap(list.item(i).getChildNodes());
             logger.trace("Element found : \"{}\"", Constants.NS_XRD_ELEM_CENTRAL_SERVICE);
             results.add(super.getProducerMember(service, clientObjectType));
         }

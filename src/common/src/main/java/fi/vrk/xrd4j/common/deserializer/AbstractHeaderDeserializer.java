@@ -29,7 +29,8 @@ import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.member.SecurityServer;
 import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
+import fi.vrk.xrd4j.common.util.ESOAPHelper;
+
 import java.util.Map;
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPHeader;
@@ -54,6 +55,7 @@ public abstract class AbstractHeaderDeserializer {
     private static final String DESERIALIZE_LOG_PATTERN = "Deserialize \"{}\".";
     private static final String ELEMENT_FOUND_LOG_PATTERN = "Element found : \"{}\"";
     private static final String NOT_FOUND_LOG_PATTERN = "\"{}\" was not found.";
+    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Deserializes the client element of the SOAP header to a ConsumerMember
@@ -75,7 +77,7 @@ public abstract class AbstractHeaderDeserializer {
         NodeList list = header.getElementsByTagNameNS(Constants.NS_XRD_URL, Constants.NS_XRD_ELEM_CLIENT);
         if (list.getLength() == 1) {
             clientObjectType = this.deserializeObjectType((Node) list.item(0));
-            client = SOAPHelper.nodesToMap(list.item(0).getChildNodes());
+            client = SOAP_HELPER.nodesToMap(list.item(0).getChildNodes());
             logger.trace(ELEMENT_FOUND_LOG_PATTERN, Constants.NS_XRD_ELEM_CLIENT);
             return this.getConsumerMember(client, clientObjectType);
         }
@@ -103,7 +105,7 @@ public abstract class AbstractHeaderDeserializer {
         NodeList list = header.getElementsByTagNameNS(Constants.NS_XRD_URL, Constants.NS_XRD_ELEM_SERVICE);
         if (list.getLength() == 1) {
             serviceObjectType = this.deserializeObjectType((Node) list.item(0));
-            service = SOAPHelper.nodesToMap(list.item(0).getChildNodes());
+            service = SOAP_HELPER.nodesToMap(list.item(0).getChildNodes());
             logger.trace(ELEMENT_FOUND_LOG_PATTERN, Constants.NS_XRD_ELEM_SERVICE);
             return this.getProducerMember(service, serviceObjectType);
         }
@@ -127,7 +129,7 @@ public abstract class AbstractHeaderDeserializer {
 
         NodeList list = header.getElementsByTagNameNS(Constants.NS_XRD_URL, Constants.NS_XRD_ELEM_SECURITY_SERVER);
         if (list.getLength() == 1) {
-            server = SOAPHelper.nodesToMap(list.item(0).getChildNodes());
+            server = SOAP_HELPER.nodesToMap(list.item(0).getChildNodes());
             logger.trace(ELEMENT_FOUND_LOG_PATTERN, Constants.NS_XRD_ELEM_SECURITY_SERVER);
             return this.getSecurityServer(server);
         }
