@@ -24,6 +24,7 @@ package fi.vrk.xrd4j.common.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -47,17 +48,17 @@ public class FileUtil {
     }
 
     /**
-     * Reads the contents of the file denoted by the path name. If the file doesn't
+     * Reads the contents of the file denoted by the path name. Prefers reading file
+     * as a resource and secondly as a file in file system. If the file doesn't
      * exist, an empty string is returned.
      *
      * @param filePath
-     *            file path
+     *            resource or file path
      * @return contents of the file
      */
     public static String read(String filePath) {
         try {
-            File file = getFile(filePath);
-            byte[] encoded = Files.readAllBytes(Paths.get(file.getAbsolutePath()));
+            byte[] encoded = readFileAsBytes(filePath);
             return new String(encoded, Charset.forName("UTF-8"));
         } catch (IOException | IllegalArgumentException e) {
             logger.error("Could not read file {}.", filePath, e);
@@ -65,17 +66,20 @@ public class FileUtil {
         }
     }
 
-    private static File getFile(String filePath) {
-        File file = new File(FileUtil.class.getClassLoader().getResource(filePath).getFile());
-
-        if (!file.exists()) {
-            logger.warn("Resource file is not found!");
-            file = new File(filePath);
+    private static byte[] readFileAsBytes(String filePath) throws IOException {
+        try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath)) {
+            byte[] result = new byte[stream.available()];
+            stream.read(result);
+            return result;
+        } catch (Exception e) {
+            logger.warn("Resource was not found! Trying to read '" + filePath + "' as a file.");
+            File file = new File(filePath);
             if (!file.exists()) {
-                throw new IllegalArgumentException("File doesn't exist: " + filePath);
+                throw new IllegalArgumentException("File '" + filePath + "' doesn't exist.");
             }
+            
+            return Files.readAllBytes(Paths.get(file.getAbsolutePath()));
         }
 
-        return file;
     }
 }
