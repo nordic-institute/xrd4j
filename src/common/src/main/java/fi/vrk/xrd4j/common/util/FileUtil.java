@@ -22,6 +22,7 @@
  */
 package fi.vrk.xrd4j.common.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,6 +40,8 @@ import org.slf4j.LoggerFactory;
  */
 public class FileUtil {
 
+    private static final int BUFFER_SIZE = 8192;
+    private static final String UTF_8 = "UTF-8";
     private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
     /**
@@ -58,8 +61,8 @@ public class FileUtil {
      */
     public static String read(String filePath) {
         try {
-            byte[] encoded = readFileAsBytes(filePath);
-            return new String(encoded, Charset.forName("UTF-8"));
+            byte[] content = readFileAsBytes(filePath);
+            return new String(content, Charset.forName(UTF_8));
         } catch (IOException | IllegalArgumentException e) {
             logger.error("Could not read file {}.", filePath, e);
             return "";
@@ -68,9 +71,13 @@ public class FileUtil {
 
     private static byte[] readFileAsBytes(String filePath) throws IOException {
         try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath)) {
-            byte[] result = new byte[stream.available()];
-            stream.read(result);
-            return result;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead;
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            while ((bytesRead = stream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
+            return byteArrayOutputStream.toByteArray();
         } catch (Exception e) {
             logger.warn("Resource was not found! Trying to read '" + filePath + "' as a file.");
             File file = new File(filePath);
