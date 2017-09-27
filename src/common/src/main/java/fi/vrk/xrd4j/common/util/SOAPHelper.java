@@ -64,7 +64,7 @@ import fi.vrk.xrd4j.common.message.AbstractMessage;
 public class SOAPHelper {
 
     private static final String CHARSET = "UTF-8";
-    private static final Logger LOGGER = LoggerFactory.getLogger(SOAPHelper.class);
+    private static final Logger logger = LoggerFactory.getLogger(SOAPHelper.class);
     private static final MessageFactory MSG_FACTORY;
 
     static {
@@ -112,7 +112,7 @@ public class SOAPHelper {
             message.writeTo(out);
             return out.toByteArray();
         } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
             return null;
         }
     }
@@ -129,7 +129,7 @@ public class SOAPHelper {
             message.writeTo(out);
             return new String(out.toByteArray(), CHARSET);
         } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
             return "";
         }
     }
@@ -148,7 +148,7 @@ public class SOAPHelper {
             t.transform(new DOMSource(node), new StreamResult(sw));
             return sw.toString();
         } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
             return "";
         }
     }
@@ -163,7 +163,7 @@ public class SOAPHelper {
         try {
             return new Scanner(att.getRawContent(), CHARSET).useDelimiter("\\A").next();
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -180,7 +180,7 @@ public class SOAPHelper {
             InputStream is = new ByteArrayInputStream(soap.getBytes(CHARSET));
             return SOAPHelper.toSOAP(is);
         } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
             return null;
         }
     }
@@ -196,7 +196,7 @@ public class SOAPHelper {
         try {
             return createSOAPMessage(new MimeHeaders(), is);
         } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
             return null;
         }
     }
@@ -213,7 +213,7 @@ public class SOAPHelper {
         try {
             return createSOAPMessage(mh, is);
         } catch (Exception ex) {
-            LOGGER.error(ex.getMessage(), ex);
+            logger.error(ex.getMessage(), ex);
             return null;
         }
     }
@@ -407,7 +407,7 @@ public class SOAPHelper {
                 }
             }
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -453,11 +453,11 @@ public class SOAPHelper {
      * failed
      */
     public static SOAPElement xmlStrToSOAPElement(String xml) {
-        LOGGER.debug("Convert XML string to SOAPElement. XML : \"{}\"", xml);
+        logger.debug("Convert XML string to SOAPElement. XML : \"{}\"", xml);
         // Try to conver XML string to XML Document
         Document doc = SOAPHelper.xmlStrToDoc(xml);
         if (doc == null) {
-            LOGGER.warn("Convertin XML string to SOAP element failed.");
+            logger.warn("Convertin XML string to SOAP element failed.");
             return null;
         }
 
@@ -470,14 +470,14 @@ public class SOAPHelper {
             // that contains ONLY the Payload
             SOAPElement payload = soapBody.addDocument(doc);
             if (payload == null) {
-                LOGGER.warn("Converting XML string to SOAPElement failed.");
+                logger.warn("Converting XML string to SOAPElement failed.");
             } else {
-                LOGGER.debug("Converting XML string to SOAPElement succeeded.");
+                logger.debug("Converting XML string to SOAPElement succeeded.");
             }
             return payload;
         } catch (Exception e) {
-            LOGGER.error(e.getMessage(), e);
-            LOGGER.warn("Converting XML document to SOAPElement failed.");
+            logger.error(e.getMessage(), e);
+            logger.warn("Converting XML document to SOAPElement failed.");
             return null;
         }
     }
@@ -490,7 +490,7 @@ public class SOAPHelper {
      * @return XML document
      */
     public static Document xmlStrToDoc(String xml) {
-        LOGGER.debug("Convert XML string to XML document.");
+        logger.debug("Convert XML string to XML document.");
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
         InputStream stream = null;
@@ -498,27 +498,27 @@ public class SOAPHelper {
         try {
             stream = new ByteArrayInputStream(xml.getBytes());
             doc = builderFactory.newDocumentBuilder().parse(stream);
-            LOGGER.debug("Converting XML string to XML document succeeded.");
+            logger.debug("Converting XML string to XML document succeeded.");
         } catch (Exception e) {
             // If exception starts with "Invalid byte", it means that ISO-8859-1
             // character set is probably used. Try to convert the string to
             // UTF-8.
             if (e.getLocalizedMessage().startsWith("Invalid byte")) {
-                LOGGER.warn("Invalid characters detected.");
+                logger.warn("Invalid characters detected.");
                 try {
-                    LOGGER.debug("Try to convert XML string from ISO-8859-1 to UTF-8.");
+                    logger.debug("Try to convert XML string from ISO-8859-1 to UTF-8.");
                     stream = new ByteArrayInputStream(new String(xml.getBytes(), "ISO-8859-1").getBytes(CHARSET));
                     doc = builderFactory.newDocumentBuilder().parse(stream);
-                    LOGGER.debug("Converting XML string from ISO-8859-1 to UTF-8 succeeded.");
+                    logger.debug("Converting XML string from ISO-8859-1 to UTF-8 succeeded.");
                 } catch (Exception ex) {
-                    LOGGER.error(ex.getMessage());
-                    LOGGER.warn("Converting XML string to XML document failed.");
-                    LOGGER.warn("Converting XML string from ISO-8859-1 to UTF-8 failed.");
+                    logger.error(ex.getMessage());
+                    logger.warn("Converting XML string to XML document failed.");
+                    logger.warn("Converting XML string from ISO-8859-1 to UTF-8 failed.");
                     return null;
                 }
             } else {
-                LOGGER.error(e.getMessage());
-                LOGGER.warn("Converting XML string to XML document failed.");
+                logger.error(e.getMessage());
+                logger.warn("Converting XML string to XML document failed.");
                 return null;
             }
         }
@@ -609,11 +609,11 @@ public class SOAPHelper {
      * @return installed X-Road packages as key-value pairs
      */
     public static Map<String, String> getXRdVersionInfo(NodeList metrics) {
-        LOGGER.trace("Start reading X-Road version info from metrics.");
+        logger.trace("Start reading X-Road version info from metrics.");
         Map<String, String> results = new HashMap<>();
         // Check for null and empty
         if (metrics == null || metrics.getLength() == 0) {
-            LOGGER.trace("Metrics set is null or empty.");
+            logger.trace("Metrics set is null or empty.");
             return results;
         }
         // Loop through metrics
@@ -626,7 +626,7 @@ public class SOAPHelper {
             // Loop through packages and add X-Road packages to results
             getXRdPackages(metrics.item(i).getChildNodes(), results);
         }
-        LOGGER.trace("Metrics info read. {} X-Road packages found.", results.size());
+        logger.trace("Metrics info read. {} X-Road packages found.", results.size());
         return results;
     }
 
@@ -662,7 +662,8 @@ public class SOAPHelper {
      * Reads installed X-Road packages and their version info from environmental
      * monitoring metrics.
      *
-     * @param packages NodeList containing "metricSet" element which children all the installed packages are
+     * @param packages NodeList containing "metricSet" element which children
+     * all the installed packages are
      * @param results Map object for results
      */
     private static void getXRdPackages(NodeList packages, Map<String, String> results) {
@@ -676,7 +677,7 @@ public class SOAPHelper {
                 // X-Road packages start with "xroad-prefix"
                 if (name != null && value != null && name.getTextContent().startsWith("xroad-")) {
                     results.put(name.getTextContent(), value.getTextContent());
-                    LOGGER.debug("X-Road package version info found: \"{}\" = \"{}\".", name.getTextContent(),
+                    logger.debug("X-Road package version info found: \"{}\" = \"{}\".", name.getTextContent(),
                             value.getTextContent());
                 }
             }
