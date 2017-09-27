@@ -22,17 +22,17 @@
  */
 package fi.vrk.xrd4j.client.serializer;
 
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.member.SecurityServer;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.ESOAPHelper;
 import fi.vrk.xrd4j.common.util.MessageHelper;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-import static junit.framework.Assert.assertEquals;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 import junit.framework.TestCase;
 
 /**
@@ -41,8 +41,6 @@ import junit.framework.TestCase;
  * @author Petteri Kivimäki
  */
 public class DefaultServiceRequestSerializerTest extends TestCase {
-  
-    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
     
     /**
      * allowedMethos : member - member level service call.
@@ -64,7 +62,7 @@ public class DefaultServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new DefaultServiceRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
+        assertEquals(correctRequest, SOAPHelper.toString(msg));
     }
 
     /**
@@ -86,7 +84,7 @@ public class DefaultServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new DefaultServiceRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
+        assertEquals(correctRequest, SOAPHelper.toString(msg));
     }
 
     /**
@@ -110,7 +108,7 @@ public class DefaultServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new DefaultServiceRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
+        assertEquals(correctRequest, SOAPHelper.toString(msg));
     }
 
     /**
@@ -132,7 +130,7 @@ public class DefaultServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new DefaultServiceRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
+        assertEquals(correctRequest, SOAPHelper.toString(msg));
     }
 
     /**
@@ -156,6 +154,6 @@ public class DefaultServiceRequestSerializerTest extends TestCase {
         ServiceRequestSerializer serializer = new DefaultServiceRequestSerializer();
         SOAPMessage msg = serializer.serialize(request);
 
-        assertEquals(correctRequest, SOAP_HELPER.toString(msg));
+        assertEquals(correctRequest, SOAPHelper.toString(msg));
     }
 }

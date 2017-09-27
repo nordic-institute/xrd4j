@@ -22,19 +22,21 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 import fi.vrk.xrd4j.common.deserializer.AbstractHeaderDeserializer;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.ESOAPHelper;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 
 /**
  * This class implements a deserializer for deserializing the response of the
@@ -45,7 +47,6 @@ import org.w3c.dom.NodeList;
 public class ListClientsResponseDeserializer extends AbstractHeaderDeserializer {
 
     private static final Logger logger = LoggerFactory.getLogger(ListClientsResponseDeserializer.class);
-    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
     
     /**
      * Deserializes a list of ConsumerMember objects from the given XML. If
@@ -57,7 +58,7 @@ public class ListClientsResponseDeserializer extends AbstractHeaderDeserializer 
     public List<ConsumerMember> deserializeConsumerList(String xml) {
         logger.debug("Deserialize a list of consumers from XML.");
         // Convert XML string to XML Document for deserializing
-        Document doc = SOAP_HELPER.xmlStrToDoc(xml);
+        Document doc = SOAPHelper.xmlStrToDoc(xml);
         try {
             // Get list of consumers
             return this.deserializeMembers(doc);
@@ -85,7 +86,7 @@ public class ListClientsResponseDeserializer extends AbstractHeaderDeserializer 
             // Client object type
             ObjectType clientObjectType = super.deserializeObjectType(list.item(i));
             // Client headers
-            Map<String, String> client = SOAP_HELPER.nodesToMap(list.item(i).getChildNodes());
+            Map<String, String> client = SOAPHelper.nodesToMap(list.item(i).getChildNodes());
             logger.trace("Element found : \"{}\"", Constants.NS_XRD_ELEM_ID);
             results.add(super.getConsumerMember(client, clientObjectType));
         }

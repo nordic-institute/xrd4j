@@ -22,10 +22,6 @@
  */
 package fi.vrk.xrd4j.client.serializer;
 
-import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
-import fi.vrk.xrd4j.common.util.ESOAPHelper;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPBody;
@@ -34,8 +30,14 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import fi.vrk.xrd4j.common.exception.XRd4JException;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 
 /**
  * This abstract class serves as base class for serializer classes that
@@ -49,7 +51,6 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSerializer implements ServiceRequestSerializer {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractServiceRequestSerializer.class);
-    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Serializes the application specific request part to SOAP body's request
@@ -136,7 +137,7 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
             this.serializeRequest(request, soapRequest, envelope);
             // Is namespace defined and should it be added to the request?
             if (hasNamespace && request.isAddNamespaceToRequest()) {
-                SOAP_HELPER.addNamespace(soapRequest, request);
+                SOAPHelper.addNamespace(soapRequest, request);
             }
         }
         logger.debug("SOAP body was generated succesfully.");

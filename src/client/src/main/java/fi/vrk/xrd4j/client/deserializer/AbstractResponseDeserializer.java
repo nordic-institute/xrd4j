@@ -22,6 +22,20 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
+import java.util.Map;
+
+import javax.xml.soap.Node;
+import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPHeader;
+import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPPart;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
+
 import fi.vrk.xrd4j.common.deserializer.AbstractHeaderDeserializer;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.exception.XRd4JMissingMemberException;
@@ -31,18 +45,7 @@ import fi.vrk.xrd4j.common.member.SecurityServer;
 import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.ESOAPHelper;
-import java.util.Map;
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.soap.SOAPPart;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 
 /**
  * This abstract class serves as a base class for response deserializers. This
@@ -62,7 +65,6 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
     protected boolean isMetaServiceResponse = false;
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractResponseDeserializer.class);
-    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Deserializes SOAP body's request element.
@@ -242,8 +244,8 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
             // Check if it is needed to process "request" and "response" wrappers
             if (response.isProcessingWrappers()) {
                 logger.debug("Processing \"request\" and \"response\" wrappers in response message.");
-                requestNode = SOAP_HELPER.getNode((Node) list.item(0), "request");
-                responseNode = SOAP_HELPER.getNode((Node) list.item(0), "response");
+                requestNode = SOAPHelper.getNode((Node) list.item(0), "request");
+                responseNode = SOAPHelper.getNode((Node) list.item(0), "response");
 
                 logger.debug("Deserialize request element.");
                 T1 requestData = this.deserializeRequestData(requestNode);
@@ -291,11 +293,11 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
         SOAPBody body = response.getSoapMessage().getSOAPBody();
         NodeList list = body.getElementsByTagNameNS("*", "Fault");
         if (list.getLength() == 1) {
-            fault = SOAP_HELPER.nodesToMap(list.item(0).getChildNodes(), true);
+            fault = SOAPHelper.nodesToMap(list.item(0).getChildNodes(), true);
             String faultCode = fault.get("FAULTCODE");
             String faultString = fault.get("FAULTSTRING");
             String faultActor = fault.get("FAULTACTOR");
-            Object detail = this.deserializeFaultDetail(SOAP_HELPER.getNode((Node) list.item(0), "detail"));
+            Object detail = this.deserializeFaultDetail(SOAPHelper.getNode((Node) list.item(0), "detail"));
             response.setErrorMessage(new ErrorMessage(faultCode, faultString, faultActor, detail));
             logger.info("SOAP fault was succesfully deserialized.");
             return true;

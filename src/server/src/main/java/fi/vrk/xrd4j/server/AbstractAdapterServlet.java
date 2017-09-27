@@ -43,8 +43,8 @@ import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.ESOAPHelper;
 import fi.vrk.xrd4j.common.util.FileUtil;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 import fi.vrk.xrd4j.server.deserializer.ServiceRequestDeserializer;
 import fi.vrk.xrd4j.server.deserializer.ServiceRequestDeserializerImpl;
 import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
@@ -70,7 +70,6 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
     private final ErrorMessage errWsdlNotFound = new ErrorMessage(FAULT_CODE_CLIENT, "WSDL not found", null, null);
     private final ErrorMessage errInternalServerErr = new ErrorMessage(FAULT_CODE_CLIENT, "500 Internal Server Error", null, null);
     private final ErrorMessage errUnknownServiceCode = new ErrorMessage(FAULT_CODE_CLIENT, "Unknown service code.", null, null);
-    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Handles and processes the given request and returns a SOAP message as a
@@ -99,11 +98,11 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         this.deserializer = new ServiceRequestDeserializerImpl();
         this.serializer = new DummyServiceResponseSerializer();
         logger.debug("Initialize \"errGetNotSupportedStr\" error message.");
-        this.errGetNotSupportedStr = SOAP_HELPER.toString(this.errorToSOAP(this.errGetNotSupported, null));
+        this.errGetNotSupportedStr = SOAPHelper.toString(this.errorToSOAP(this.errGetNotSupported, null));
         logger.debug("Initialize \"errWsdlNotFoundStr\" error message.");
-        this.errWsdlNotFoundStr = SOAP_HELPER.toString(this.errorToSOAP(this.errWsdlNotFound, null));
+        this.errWsdlNotFoundStr = SOAPHelper.toString(this.errorToSOAP(this.errWsdlNotFound, null));
         logger.debug("Initialize \"errInternalServerErrStr\" error message.");
-        this.errInternalServerErrStr = SOAP_HELPER.toString(this.errorToSOAP(this.errInternalServerErr, null));
+        this.errInternalServerErrStr = SOAPHelper.toString(this.errorToSOAP(this.errInternalServerErr, null));
         logger.debug("AbstractServlet initialized.");
     }
 
@@ -133,12 +132,12 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         if (request.getContentType().toLowerCase().startsWith(Constants.TEXT_XML)) {
             // Regular SOAP message without attachments
             logger.info("Request's content type is \"{}\".", Constants.TEXT_XML);
-            soapRequest = SOAP_HELPER.toSOAP(request.getInputStream());
+            soapRequest = SOAPHelper.toSOAP(request.getInputStream());
         } else if (request.getContentType().toLowerCase().startsWith(Constants.MULTIPART_RELATED)) {
             // SOAP message with attachments
             logger.info("Request's content type is \"{}\".", Constants.MULTIPART_RELATED);
             MimeHeaders mh = AdapterUtils.getHeaders(request);
-            soapRequest = SOAP_HELPER.toSOAP(request.getInputStream(), mh);
+            soapRequest = SOAPHelper.toSOAP(request.getInputStream(), mh);
             logger.trace(AdapterUtils.getAttachmentsInfo(soapRequest));
         } else {
             // Invalid content type -> message is not processed
@@ -186,7 +185,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         try {
             logger.debug("Send response.");
             // SOAPMessage to String
-            String responseStr = SOAP_HELPER.toString(soapResponse);
+            String responseStr = SOAPHelper.toString(soapResponse);
             // Set response headers
             if (responseStr != null && soapResponse != null && soapResponse.getAttachments().hasNext()) {
                 // Get MIME boundary from SOAP message
@@ -227,7 +226,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
      * @return ServiceRequest or null
      */
     private ServiceRequest fromSOAPToServiceRequest(SOAPMessage soapRequest) {
-        logger.trace("Incoming SOAP message : \"{}\"", SOAP_HELPER.toString(soapRequest));
+        logger.trace("Incoming SOAP message : \"{}\"", SOAPHelper.toString(soapRequest));
         ServiceRequest serviceRequest = null;
         try {
             // Try to deserialize SOAP Message to ServiceRequest

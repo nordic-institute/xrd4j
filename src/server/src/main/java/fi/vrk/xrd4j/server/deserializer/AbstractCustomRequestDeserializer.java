@@ -22,19 +22,21 @@
  */
 package fi.vrk.xrd4j.server.deserializer;
 
-import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.message.ErrorMessage;
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.util.ESOAPHelper;
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
+
+import fi.vrk.xrd4j.common.exception.XRd4JException;
+import fi.vrk.xrd4j.common.message.ErrorMessage;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 
 /**
  * This abstract class serves as a base class for all the application specific
@@ -51,7 +53,6 @@ import org.w3c.dom.NodeList;
 public abstract class AbstractCustomRequestDeserializer<T> implements CustomRequestDeserializer {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractCustomRequestDeserializer.class);
-    private static final ESOAPHelper SOAP_HELPER = ESOAPHelper.INSTANCE;
 
     /**
      * Deserializes SOAP body's request element to application specific
@@ -100,7 +101,7 @@ public abstract class AbstractCustomRequestDeserializer<T> implements CustomRequ
             // Check if it is needed to process "request" and "response" wrappers
             if(request.isProcessingWrappers()) {
                 logger.debug("Processing \"request\" wrapper in request message.");
-                requestNode = SOAP_HELPER.getNode((Node) list.item(0), "request");
+                requestNode = SOAPHelper.getNode((Node) list.item(0), "request");
             } else {
                 logger.debug("Skipping procession of \"request\" wrapper in request message.");
                 requestNode = (Node) list.item(0);
