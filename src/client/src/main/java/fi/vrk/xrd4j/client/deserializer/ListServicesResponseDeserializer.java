@@ -22,19 +22,22 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.xml.soap.Node;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
+
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.util.Constants;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
 
 /**
  * This class is used for deserializing responses of listMethods and
@@ -45,7 +48,7 @@ import org.w3c.dom.NodeList;
 public class ListServicesResponseDeserializer extends AbstractResponseDeserializer<String, List<ProducerMember>> {
 
     private static final Logger logger = LoggerFactory.getLogger(ListServicesResponseDeserializer.class);
-
+    
     /**
      * Constructs and initializes a new ListServicesResponseDeserializer.
      */

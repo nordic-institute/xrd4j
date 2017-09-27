@@ -22,9 +22,14 @@
  */
 package fi.vrk.xrd4j.common.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.util.Scanner;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +40,8 @@ import org.slf4j.LoggerFactory;
  */
 public class FileUtil {
 
+    private static final int BUFFER_SIZE = 8192;
+    private static final String UTF_8 = "UTF-8";
     private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
     /**
@@ -44,28 +51,42 @@ public class FileUtil {
     }
 
     /**
-     * Reads the contents of the file denoted by the abstract path name. If the
-     * file doesn't exist, an empty string is returned.
+     * Reads the contents of the file denoted by the path name. Prefers reading file
+     * as a resource and secondly as a file in file system. If the file doesn't
+     * exist, an empty string is returned.
      *
-     * @param path abstract path name
+     * @param filePath
+     *            resource or file path
      * @return contents of the file
      */
-    public static String read(String path) {
-        File file = new File(path);
-        if (!file.exists()) {
-            logger.warn("Reading file failed! File doesn't exist : {}", file.getAbsolutePath());
+    public static String read(String filePath) {
+        try {
+            byte[] content = readFileAsBytes(filePath);
+            return new String(content, Charset.forName(UTF_8));
+        } catch (IOException | IllegalArgumentException e) {
+            logger.error("Could not read file {}.", filePath, e);
             return "";
         }
-        StringBuilder text = new StringBuilder();
-        String lineSeparator = System.getProperty("line.separator");
-        try (Scanner scanner = new Scanner(new FileInputStream(file.getAbsolutePath()), "UTF-8")) {
-            while (scanner.hasNextLine()) {
-                text.append(scanner.nextLine());
-                text.append(lineSeparator);
+    }
+
+    private static byte[] readFileAsBytes(String filePath) throws IOException {
+        try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath)) {
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bytesRead;
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            while ((bytesRead = stream.read(buffer)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
             }
+            return byteArrayOutputStream.toByteArray();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.warn("Resource was not found! Trying to read '" + filePath + "' as a file.");
+            File file = new File(filePath);
+            if (!file.exists()) {
+                throw new IllegalArgumentException("File '" + filePath + "' doesn't exist.");
+            }
+            
+            return Files.readAllBytes(Paths.get(file.getAbsolutePath()));
         }
-        return text.toString().trim();
+
     }
 }

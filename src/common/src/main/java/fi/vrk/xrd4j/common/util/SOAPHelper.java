@@ -22,9 +22,9 @@
  */
 package fi.vrk.xrd4j.common.util;
 
-import fi.vrk.xrd4j.common.message.AbstractMessage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MessageFactory;
@@ -47,10 +48,13 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+
+import fi.vrk.xrd4j.common.message.AbstractMessage;
 
 /**
  * This class offers some helper methods for handling SOAPMessage objects.
@@ -61,6 +65,15 @@ public class SOAPHelper {
 
     private static final String CHARSET = "UTF-8";
     private static final Logger logger = LoggerFactory.getLogger(SOAPHelper.class);
+    private static final MessageFactory MSG_FACTORY;
+
+    static {
+        try {
+            MSG_FACTORY = MessageFactory.newInstance();
+        } catch (SOAPException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
     /**
      * Constructs and initializes a new SOAPHelper object. Should never be used.
@@ -181,7 +194,7 @@ public class SOAPHelper {
      */
     public static SOAPMessage toSOAP(InputStream is) {
         try {
-            return MessageFactory.newInstance().createMessage(new MimeHeaders(), is);
+            return createSOAPMessage(new MimeHeaders(), is);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             return null;
@@ -198,7 +211,7 @@ public class SOAPHelper {
      */
     public static SOAPMessage toSOAP(InputStream is, MimeHeaders mh) {
         try {
-            return MessageFactory.newInstance().createMessage(mh, is);
+            return createSOAPMessage(mh, is);
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
             return null;
@@ -451,8 +464,7 @@ public class SOAPHelper {
         try {
             // Use SAAJ to convert Document to SOAPElement
             // Create SoapMessage
-            MessageFactory msgFactory = MessageFactory.newInstance();
-            SOAPMessage message = msgFactory.createMessage();
+            SOAPMessage message = createSOAPMessage();
             SOAPBody soapBody = message.getSOAPBody();
             // This returns the SOAPBodyElement
             // that contains ONLY the Payload
@@ -619,6 +631,34 @@ public class SOAPHelper {
     }
 
     /**
+     * Helper function for creating new SOAP messages
+     * 
+     * @return New SOAP message
+     * @throws SOAPException
+     */
+    public static SOAPMessage createSOAPMessage() throws SOAPException {
+        synchronized (MSG_FACTORY) {
+            return MSG_FACTORY.createMessage();
+        }
+    }
+
+    /**
+     * Helper function for creating new SOAP messages
+     * 
+     * @param mimeHeaders needed for creating SOAP message
+     * @param is needed for creating SOAP message
+     * @return New SOAP message
+     * @throws IOException
+     * @throws SOAPException
+     */
+    public static SOAPMessage createSOAPMessage(MimeHeaders mimeHeaders, InputStream is)
+            throws IOException, SOAPException {
+        synchronized (MSG_FACTORY) {
+            return MSG_FACTORY.createMessage(mimeHeaders, is);
+        }
+    }
+
+    /**
      * Reads installed X-Road packages and their version info from environmental
      * monitoring metrics.
      *
@@ -637,9 +677,12 @@ public class SOAPHelper {
                 // X-Road packages start with "xroad-prefix"
                 if (name != null && value != null && name.getTextContent().startsWith("xroad-")) {
                     results.put(name.getTextContent(), value.getTextContent());
-                    logger.debug("X-Road package version info found: \"{}\" = \"{}\".", name.getTextContent(), value.getTextContent());
+                    logger.debug("X-Road package version info found: \"{}\" = \"{}\".", name.getTextContent(),
+                            value.getTextContent());
                 }
             }
         }
     }
+
+
 }

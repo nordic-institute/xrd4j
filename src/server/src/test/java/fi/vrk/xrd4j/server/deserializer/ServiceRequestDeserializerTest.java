@@ -22,12 +22,13 @@
  */
 package fi.vrk.xrd4j.server.deserializer;
 
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 import junit.framework.TestCase;
 
 /**

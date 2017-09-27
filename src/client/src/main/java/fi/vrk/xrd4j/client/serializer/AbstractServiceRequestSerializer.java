@@ -22,10 +22,6 @@
  */
 package fi.vrk.xrd4j.client.serializer;
 
-import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPBody;
@@ -34,8 +30,14 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import fi.vrk.xrd4j.common.exception.XRd4JException;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 
 /**
  * This abstract class serves as base class for serializer classes that

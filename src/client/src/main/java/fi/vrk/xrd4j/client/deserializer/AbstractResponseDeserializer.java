@@ -22,6 +22,20 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
+import java.util.Map;
+
+import javax.xml.soap.Node;
+import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPHeader;
+import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPPart;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
+
 import fi.vrk.xrd4j.common.deserializer.AbstractHeaderDeserializer;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.exception.XRd4JMissingMemberException;
@@ -32,17 +46,6 @@ import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.util.Constants;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
-import java.util.Map;
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.soap.SOAPPart;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
 
 /**
  * This abstract class serves as a base class for response deserializers. This

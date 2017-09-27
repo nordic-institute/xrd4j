@@ -22,14 +22,6 @@
  */
 package fi.vrk.xrd4j.server.serializer;
 
-import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.message.ErrorMessage;
-import fi.vrk.xrd4j.common.message.ErrorMessageType;
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.message.ServiceResponse;
-import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
-import javax.xml.soap.MessageFactory;
 import javax.xml.soap.Name;
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPBody;
@@ -38,9 +30,18 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
+
+import fi.vrk.xrd4j.common.exception.XRd4JException;
+import fi.vrk.xrd4j.common.message.ErrorMessage;
+import fi.vrk.xrd4j.common.message.ErrorMessageType;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.message.ServiceResponse;
+import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 
 /**
  * This abstract class serves as base class for serializer classes that
@@ -54,7 +55,7 @@ import org.w3c.dom.NodeList;
 public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSerializer implements ServiceResponseSerializer {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractServiceResponseSerializer.class);
-
+    
     /**
      * Serializes the application specific response part to SOAP body's response
      * element. All the children under response element will use provider's
@@ -88,8 +89,8 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
             }
 
             logger.debug("Serialize ServiceResponse message to SOAP.");
-            MessageFactory myMsgFct = MessageFactory.newInstance();
-            SOAPMessage message = myMsgFct.createMessage();
+            
+            SOAPMessage message = createNewMessage();
 
             response.setSoapMessage(message);
 
@@ -113,7 +114,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
                     // generated
                     logger.error(ex.getMessage(), ex);
                     logger.warn("Drop headers and return SOAP Fault.");
-                    message = myMsgFct.createMessage();
+                    message = createNewMessage();
                     response.setSoapMessage(message);
                     ErrorMessage errorMessage = new ErrorMessage("SOAP-ENV:Server", "Internal server error.", "", "");
                     response.setErrorMessage(errorMessage);
@@ -128,6 +129,10 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
         }
         logger.warn("Failed to serialize ServiceResponse message to SOAP.");
         return null;
+    }
+    
+    private SOAPMessage createNewMessage() throws SOAPException {
+        return SOAPHelper.createSOAPMessage();
     }
 
     /**

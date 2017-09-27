@@ -22,19 +22,21 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 import fi.vrk.xrd4j.common.deserializer.AbstractHeaderDeserializer;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.util.Constants;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 /**
  * This class implements a deserializer for deserializing the response of the

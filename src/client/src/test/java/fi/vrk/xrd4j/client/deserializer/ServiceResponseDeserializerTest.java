@@ -22,15 +22,17 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
+import java.util.Map;
+
+import javax.xml.soap.Node;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.message.ErrorMessageType;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
-import java.util.Map;
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 import junit.framework.TestCase;
 
 /**
@@ -39,7 +41,7 @@ import junit.framework.TestCase;
  * @author Petteri Kivimäki
  */
 public class ServiceResponseDeserializerTest extends TestCase {
-
+  
     /**
      * Response to subsystem -> service level service call
      *

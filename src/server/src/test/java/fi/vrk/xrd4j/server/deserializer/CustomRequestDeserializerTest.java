@@ -22,14 +22,16 @@
  */
 package fi.vrk.xrd4j.server.deserializer;
 
+import java.util.Map;
+
+import javax.xml.soap.Node;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
-import java.util.Map;
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 import junit.framework.TestCase;
 
 /**
@@ -38,7 +40,7 @@ import junit.framework.TestCase;
  * @author Petteri Kivimäki
  */
 public class CustomRequestDeserializerTest extends TestCase {
-
+  
     /**
      * Request from subsystem to service with service version included.
      * @throws XRd4JException

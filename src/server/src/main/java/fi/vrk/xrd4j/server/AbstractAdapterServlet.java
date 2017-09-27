@@ -22,6 +22,22 @@
  */
 package fi.vrk.xrd4j.server;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.soap.MimeHeaders;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
@@ -34,20 +50,6 @@ import fi.vrk.xrd4j.server.deserializer.ServiceRequestDeserializerImpl;
 import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import fi.vrk.xrd4j.server.serializer.ServiceResponseSerializer;
 import fi.vrk.xrd4j.server.utils.AdapterUtils;
-import java.io.IOException;
-import java.io.PrintWriter;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-import javax.servlet.http.HttpServlet;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This an abstract base class for Servlets that implement SOAP message
@@ -81,9 +83,9 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
     protected abstract ServiceResponse handleRequest(ServiceRequest request) throws SOAPException, XRd4JException;
 
     /**
-     * Must return the aboslute path of the WSDL file.
+     * Must return the path of the WSDL file.
      *
-     * @return absolute path of the WSDL file
+     * @return path of the WSDL file
      */
     protected abstract String getWSDLPath();
 
@@ -283,35 +285,30 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType(Constants.TEXT_XML + ";charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        try {
+
+        try (PrintWriter responseWriter = response.getWriter()) {
             if (request.getParameter("wsdl") != null) {
                 logger.debug("WSDL file request received.");
                 String path = this.getWSDLPath();
-                // If only filename is given, absolute path must be added
-                if (path.matches("^[-_.A-Za-z0-9]+$")) {
-                    path = this.getServletContext().getRealPath("/WEB-INF/classes/") + "/" + path;
-                    logger.debug("Only filename was given. Absolute path is : \"{}\".", path);
-                }
+
                 // Read WSDL file
                 String wsdl = FileUtil.read(path);
+
                 if (!wsdl.isEmpty()) {
-                    out.println(wsdl);
+                    responseWriter.println(wsdl);
                     logger.trace("WSDL file was found and returned to the requester.");
                 } else {
-                    out.println(this.errWsdlNotFoundStr);
+                    responseWriter.println(this.errWsdlNotFoundStr);
                     logger.warn("WSDL file was not found. SOAP Fault was returned.");
                 }
+
                 logger.debug("WSDL file request processed.");
             } else {
                 logger.warn("New GET request received. Not supported. SOAP Fault is returned.");
-                out.println(errGetNotSupportedStr);
+                responseWriter.println(errGetNotSupportedStr);
             }
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            out.println(this.errInternalServerErrStr);
-        } finally {
-            out.close();
         }
     }
 

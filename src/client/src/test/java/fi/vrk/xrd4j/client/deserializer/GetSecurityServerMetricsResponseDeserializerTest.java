@@ -22,16 +22,18 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
+import java.util.Map;
+
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import org.w3c.dom.NodeList;
+
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
-import java.util.Map;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-import static junit.framework.Assert.assertEquals;
 import junit.framework.TestCase;
-import org.w3c.dom.NodeList;
 
 /**
  * Test cases for GetSecurityServerMetricsResponseDeserializer class.

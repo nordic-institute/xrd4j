@@ -22,6 +22,14 @@
  */
 package fi.vrk.xrd4j.server.serializer;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
@@ -30,12 +38,6 @@ import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 import junit.framework.TestCase;
 
 /**
@@ -44,7 +46,7 @@ import junit.framework.TestCase;
  * @author Petteri Kivimäki
  */
 public class ServiceResponseSerializerTest extends TestCase {
-
+  
     /**
      * Subsystem level service call. No NS on request. NS prefix on response.
      * @throws XRd4JException
@@ -505,7 +507,8 @@ public class ServiceResponseSerializerTest extends TestCase {
         request.getProducer().setNamespaceUrl("http://foobar.x-road.ee/producer");
 
         ServiceResponse<String, SOAPElement> response = new ServiceResponse<String, SOAPElement>(request.getConsumer(), request.getProducer(), request.getId());
-        response.setResponseData(SOAPHelper.xmlStrToSOAPElement("<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
+        response.setResponseData(SOAPHelper.xmlStrToSOAPElement(
+                "<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
         response.setForceNamespaceToResponseChildren(false);
 
         ServiceResponseSerializer serializer = new XMLServiceResponseSerializer();
@@ -534,7 +537,8 @@ public class ServiceResponseSerializerTest extends TestCase {
         request.getProducer().setNamespaceUrl("http://foobar.x-road.ee/producer");
 
         ServiceResponse<String, SOAPElement> response = new ServiceResponse<String, SOAPElement>(request.getConsumer(), request.getProducer(), request.getId());
-        response.setResponseData(SOAPHelper.xmlStrToSOAPElement("<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
+        response.setResponseData(SOAPHelper.xmlStrToSOAPElement(
+                "<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
         response.setAddNamespaceToResponse(false);
         response.setForceNamespaceToResponseChildren(false);
 
@@ -564,7 +568,8 @@ public class ServiceResponseSerializerTest extends TestCase {
         request.getProducer().setNamespaceUrl("http://foobar.x-road.ee/producer");
 
         ServiceResponse<String, SOAPElement> response = new ServiceResponse<String, SOAPElement>(request.getConsumer(), request.getProducer(), request.getId());
-        response.setResponseData(SOAPHelper.xmlStrToSOAPElement("<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
+        response.setResponseData(SOAPHelper.xmlStrToSOAPElement(
+                "<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
         response.setAddNamespaceToServiceResponse(false);
         response.setAddNamespaceToResponse(false);
         response.setForceNamespaceToResponseChildren(false);
@@ -596,7 +601,8 @@ public class ServiceResponseSerializerTest extends TestCase {
         request.getProducer().setNamespaceUrl("http://foobar.x-road.ee/producer");
 
         ServiceResponse<String, SOAPElement> response = new ServiceResponse<String, SOAPElement>(request.getConsumer(), request.getProducer(), request.getId());
-        response.setResponseData(SOAPHelper.xmlStrToSOAPElement("<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
+        response.setResponseData(SOAPHelper.xmlStrToSOAPElement(
+                "<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
         response.setAddNamespaceToServiceResponse(false);
         response.setAddNamespaceToRequest(false);
         response.setAddNamespaceToResponse(false);
@@ -629,7 +635,8 @@ public class ServiceResponseSerializerTest extends TestCase {
         request.getProducer().setNamespaceUrl("http://foobar.x-road.ee/producer");
 
         ServiceResponse<String, SOAPElement> response = new ServiceResponse<String, SOAPElement>(request.getConsumer(), request.getProducer(), request.getId());
-        response.setResponseData(SOAPHelper.xmlStrToSOAPElement("<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
+        response.setResponseData(SOAPHelper.xmlStrToSOAPElement(
+                "<ns1:responseData xmlns:ns1=\"http://ns1.com\" xmlns:ns2=\"http://ns2.com\"><ns1:data>Response data</ns1:data><ns2:data2>Response data 2</ns2:data2></ns1:responseData>"));
         response.setAddNamespaceToServiceResponse(false);
         response.setAddNamespaceToRequest(false);
         response.setAddNamespaceToResponse(false);

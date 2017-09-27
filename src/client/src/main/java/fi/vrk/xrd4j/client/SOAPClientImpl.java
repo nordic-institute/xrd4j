@@ -22,26 +22,10 @@
  */
 package fi.vrk.xrd4j.client;
 
-import fi.vrk.xrd4j.client.deserializer.ListCentralServicesResponseDeserializer;
-import fi.vrk.xrd4j.client.deserializer.ListClientsResponseDeserializer;
-import fi.vrk.xrd4j.client.deserializer.ListServicesResponseDeserializer;
-import fi.vrk.xrd4j.client.deserializer.ServiceResponseDeserializer;
-import fi.vrk.xrd4j.client.deserializer.GetSecurityServerMetricsResponseDeserializer;
-import fi.vrk.xrd4j.client.serializer.DefaultServiceRequestSerializer;
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.message.ServiceResponse;
-import fi.vrk.xrd4j.client.serializer.ServiceRequestSerializer;
-import fi.vrk.xrd4j.common.exception.XRd4JRuntimeException;
-import fi.vrk.xrd4j.common.member.ConsumerMember;
-import fi.vrk.xrd4j.common.member.ProducerMember;
-import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
-import fi.vrk.xrd4j.rest.ClientResponse;
-import fi.vrk.xrd4j.rest.client.RESTClient;
-import fi.vrk.xrd4j.rest.client.RESTClientFactory;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPException;
@@ -49,6 +33,24 @@ import javax.xml.soap.SOAPMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import fi.vrk.xrd4j.client.deserializer.GetSecurityServerMetricsResponseDeserializer;
+import fi.vrk.xrd4j.client.deserializer.ListCentralServicesResponseDeserializer;
+import fi.vrk.xrd4j.client.deserializer.ListClientsResponseDeserializer;
+import fi.vrk.xrd4j.client.deserializer.ListServicesResponseDeserializer;
+import fi.vrk.xrd4j.client.deserializer.ServiceResponseDeserializer;
+import fi.vrk.xrd4j.client.serializer.DefaultServiceRequestSerializer;
+import fi.vrk.xrd4j.client.serializer.ServiceRequestSerializer;
+import fi.vrk.xrd4j.common.exception.XRd4JRuntimeException;
+import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ProducerMember;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.message.ServiceResponse;
+import fi.vrk.xrd4j.common.util.Constants;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
+import fi.vrk.xrd4j.rest.ClientResponse;
+import fi.vrk.xrd4j.rest.client.RESTClient;
+import fi.vrk.xrd4j.rest.client.RESTClientFactory;
 
 /**
  * This class represents a SOAP client that can be used for sending SOAPMessage
