@@ -97,7 +97,7 @@ This section provides examples for calling the service after it is deployed and 
 
 #### getRandom
 
-An example [SOAP request](https://github.com/vrk-kpa/xrd4j/blob/master/example-adapter/examples/xroad-6.4/getRandomRequest.xml) (available in the `examples` directory).
+An example [SOAP request](examples/xroad-6.4/getRandomRequest.xml) (available in the `examples` directory).
 
 Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `getRandom` service: 
 
@@ -105,11 +105,11 @@ Be sure to replace `x.x.x` in the command with the actual version. If at the pro
 curl -d @examples/xroad-6.4/getRandomRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
 ```
 
-An example of the corresponding [SOAP response](https://github.com/vrk-kpa/xrd4j/blob/master/example-adapter/examples/xroad-6.4/getRandomResponse.xml) (available in the `examples` directory).
+An example of the corresponding [SOAP response](examples/xroad-6.4/getRandomResponse.xml) (available in the `examples` directory).
 
 #### helloService
 
-An example [SOAP request](https://github.com/vrk-kpa/xrd4j/blob/master/example-adapter/examples/xroad-6.4/helloServiceRequest.xml) (available in the `examples` directory).
+An example [SOAP request](examples/xroad-6.4/helloServiceRequest.xml) (available in the `examples` directory).
 
 Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `helloService`:
 
@@ -117,4 +117,4 @@ Be sure to replace `x.x.x` in the command with the actual version. If at the pro
 curl -d @examples/xroad-6.4/helloServiceRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
 ```
 
-An example of the corresponding [SOAP response](https://github.com/vrk-kpa/xrd4j/blob/master/example-adapter/examples/xroad-6.4/helloServiceResponse.xml) (available in the `examples` directory).
+An example of the corresponding [SOAP response](examples/xroad-6.4/helloServiceResponse.xml) (available in the `examples` directory).

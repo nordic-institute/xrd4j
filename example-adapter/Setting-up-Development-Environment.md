@@ -51,7 +51,7 @@ mvn install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall
 
 ##### Solution 2
 
-Import CSC's Maven repository's certificate as a trusted certificate into `cacerts` keystore. See full [instructions](https://github.com/vrk-kpa/xrd4j/blob/master/documentation/Import-a-Certificate-as-a-Trusted-Certificate.md). CSC's Maven repository's URL is  `https://maven.csc.fi`.
+Import CSC's Maven repository's certificate as a trusted certificate into `cacerts` keystore. See full [instructions](../documentation/Import-a-Certificate-as-a-Trusted-Certificate.md). CSC's Maven repository's URL is  `https://maven.csc.fi`.
 
 ### IDE Setup
 
