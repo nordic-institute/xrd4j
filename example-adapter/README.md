@@ -61,7 +61,7 @@ Setting up an environment for example-related development is explained [here](Se
 
 **N.B.** If you intend to connect the services to an X-Road Security Server you must update your server's IP address / host name to the WSDL file. Look for the below line and replace the default URL with your server's IP / host name.
 
-```
+```XML
 <soap:address location="http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint" />
 ```
 

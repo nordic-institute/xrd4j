@@ -19,7 +19,7 @@ All XRd4J versions are available through [CSC's Maven Repository](https://maven.
 
 Specify CSC's Maven Repository in a POM:
 
-```
+```XML
 <repository>
   <id>csc-repo</id>
   <name>CSC's Maven repository</name>
@@ -51,7 +51,7 @@ Import CSC's Maven repository's certificate as a trusted certificate into ```cac
 
 Declare the following dependencies in your POM-file:
 
-```
+```XML
 <!-- Module: common-->
 <dependency>
   <groupId>fi.vrk.xrd4j</groupId>
@@ -120,7 +120,7 @@ Client application must implement two classes:
 
 Main class (generated [request](examples/request1.xml), received [response](examples/response1.xml)):
 
-```
+```Java
   // Security server URL
   // N.B. If you want to use HTTPS, the public key certificate of the Security Server
   // MUST be imported into "cacerts" keystore
@@ -175,7 +175,7 @@ Main class (generated [request](examples/request1.xml), received [response](exam
 ```
 
 HelloServiceRequestSerializer (serialized [request](examples/request1.xml)):
-```
+```Java
   /**
    * This class is responsible for serialiazing request data to SOAP. Request data is wrapped
    * inside "request" element in SOAP body.
@@ -198,13 +198,13 @@ HelloServiceRequestSerializer (serialized [request](examples/request1.xml)):
 ```
 HelloServiceRequestSerializer generates ```name``` element and sets request data ("Test message") as its value.
 
-```
+```XML
   <ts:request>
     <ts:name>Test message</ts:name>
   </ts:request>
 ```
 HelloServiceResponseDeserializer ([response](examples/response1.xml) to be deserialized):
-```
+```Java
   /**
    * This class is responsible for deserializing "request" and "response" elements of the SOAP response message
    * returned by the Security Server. The type declaration "<String, String>" defines the type of request and
@@ -255,7 +255,7 @@ HelloServiceResponseDeserializer ([response](examples/response1.xml) to be deser
 
 HelloServiceResponseDeserializer's ```deserializeRequestData``` method reads ```name``` elements's value ("Test message") under ```request``` element, and ```deserializeResponseData``` method reads ```message``` element's value ("Hello Test message! Greetings from adapter server!") under ```response``` element.
 
-```
+```XML
   <ts:request>
     <ts:name>Test message</ts:name>
   </ts:request>
@@ -268,7 +268,7 @@ _Receiving an Image From Server_
 
 The server returns images as base64 coded strings that are placed in SOAP attachments. Before being able to use the image the client must convert the base64 coded string to some other format. For example:
 
-```
+```Java
 // Get the attached base64 coded image string
 AttachmentPart attachment = (AttachmentPart) soapResponse.getAttachments().next();
 // Get content-type of the attachment - if jpeg image, the content type is "image/jpeg"
@@ -303,13 +303,13 @@ Server application must implement three classes:
   * used through ```ServiceResponseSerializer``` interface
   * must implement ```serializeResponse``` method that serializes the ```response``` element to SOAP
 
-Working adapter example can be viewed and downloaded [here](https://github.com/petkivim/x-road-adapter-example).
+A working adapter example can be found under directory `example-adapter` ([documentation](example-adapter/README.md)).
 
 Setting up SSL on Tomcat is explained [here](documentation/Setting-up-SSL-on-Tomcat.md).
 
-Adapter servlet(received [request](examples/request1.xml), generated [response](examples/response1.xml)):
+Adapter servlet (received [request](examples/request1.xml), generated [response](examples/response1.xml)):
 
-```
+```Java
 /**
  * This class implements one simple X-Road v6 compatible service: "helloService".
  * Service description is defined in "example.wsdl" file
@@ -465,7 +465,7 @@ _Returning an Image From Server_
 
 If the server needs to return images, this can be done converting images to base64 coded strings and returning them as SOAP attachments. For example:
 
-```
+```Java
 // "img" can be BufferedImage or InputStream
 // Image is converted to a base64 coded string, image type must be given
 String imgstr = MessageHelper.encodeImg2String(img, "jpg");
