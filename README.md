@@ -1,13 +1,13 @@
 # XRd4J
 
-XRd4J is a Java library for building X-Road v6 Adapter Servers and clients. The library implements X-Road v6 [SOAP profile](https://confluence.csc.fi/download/attachments/50873043/X-Road_protocol_for_adapter_server_messaging_4.0.0.pdf) v4.0 and [Service Metadata Protocol](https://confluence.csc.fi/download/attachments/51887396/x-road_service_metadata_protocol_0.6_Y-743-14.pdf?version=1&modificationDate=1435640765463&api=v2). The library takes care of serialization and deserialization of SOAP messages: built-in support for standard X-Road SOAP headers, only processing of application specific ```request``` and ```response``` elements must be implemented.
+XRd4J is a Java library for building X-Road v6 Adapter Servers and clients. The library implements X-Road v6 [SOAP profile](https://github.com/vrk-kpa/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/vrk-kpa/X-Road/blob/develop/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages: built-in support for standard X-Road SOAP headers, only processing of application specific ```request``` and ```response``` elements must be implemented.
 
-By default this library is processing SOAP Body elements in compatibility mode with older versions of X-Road protocol. This means that request messages must contain ```request``` wrapper and response messages must contain ```request``` and ```response``` wrappers. To skip automatic procession of ```request``` and ```response``` wrappers it is needed to call method ```request.setProcessingWrappers(false)``` before serialization or deserialization of messages is performed. The usage of ```setProcessingWrappers``` method is demonstrated in the examples below.
+By default this library is processing SOAP Body elements in compatibility mode with older versions of X-Road protocol. This means that request messages must contain ```request``` wrapper and response messages must contain ```request``` and ```response``` wrappers. To skip automatic procession of ```request``` and ```response``` wrappers, method ```request.setProcessingWrappers(false)``` must be called before serialization or deserialization of messages is performed. The usage of ```setProcessingWrappers``` method is demonstrated in the examples below.
 
 ##### Modules:
 
 * ```client``` : SOAP client that generates X-Road v6 SOAP messages that can be sent to X-Road Security Server. Includes request serializer and response deserializer.
-* ```server``` : Provides abstract servlet that can be use as a base class for Adapter Server implementation. Includes request deserializer and response serializer.
+* ```server``` : Provides an abstract servlet that can be used as a base class for Adapter Server implementations. Includes a request deserializer and a response serializer.
 * ```common``` : General purpose utilities for processing SOAP messages and X-Road v6 message data models.
 * ```rest``` : HTTP clients that can be used for sending requests to web services from Adapter Server.
 
@@ -15,7 +15,7 @@ By default this library is processing SOAP Body elements in compatibility mode w
 
 #### Releases
 
-All the XRd4J versions are available in CSC's Maven Repository: https://maven.csc.fi/repository/internal/
+All XRd4J versions are available through [CSC's Maven Repository](https://maven.csc.fi/repository/internal/).
 
 Specify CSC's Maven Repository in a POM:
 
@@ -27,11 +27,13 @@ Specify CSC's Maven Repository in a POM:
 </repository>
 ```
 
-If running ```mvn clean install``` generates the error presented below, there are two possible solutions.
+If running ```mvn clean install``` generates the error
 
 ```
 [ERROR] Failed to execute goal on project example-adapter: Could not resolve dependencies for project fi.vrk.xrd4j.tools:example-adapter:war:0.0.1-SNAPSHOT: Failed to collect dependencies at fi.vrk.xrd4j:common:jar:0.0.1: Failed to read artifact descriptor for fi.vrk.xrd4j:common:jar:0.0.1: Could not transfer artifact fi.vrk.xrd4j:common:pom:0.0.1 from/to csc-repo (https://maven.csc.fi/repository/internal/): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
 ```
+try one of the two solutions below:
+
 
 ##### Solution 1
 
@@ -47,7 +49,7 @@ Import CSC's Maven repository's certificate as a trusted certificate into ```cac
 
 #### Dependency Declaration
 
-Declare the following depencies in a POM:
+Declare the following dependencies in your POM-file:
 
 ```
 <!-- Module: common-->
@@ -81,22 +83,22 @@ Declare the following depencies in a POM:
 
 ### Documentation
 
-[Instructions](documentation/Setting-up-Development-Environment.md) for setting up development environment.
+Instructions for setting up an environment for XRd4J-related development can be found [here](documentation/Setting-up-Development-Environment.md).
 
 Javadocs can be generated with the included script `generate-javadocs.sh`. The script will create `javadoc` folder with HTML documentation.
 
 The most essential classes of the library are:
 
-* ```fi.vrk.xrd4j.common.member.ConsumerMember``` : represents X-Road consumer member that acts as a client that initiates service call by sending a ServiceRequest.
-* ```fi.vrk.xrd4j.common.member.ProducerMember``` : represents X-Road producer member that produces services to X-Road.
-* ```fi.vrk.xrd4j.common.message.ServiceRequest<?>``` : represents X-Road service request that is sent by a ConsumerMember and received by a ProviderMember. Contains the SOAP request that is sent.
-* ```fi.vrk.xrd4j.common.message.ServiceResponse<?, ?>``` : represents X-Road service response message that is sent by a ProviderMember and received by a ConsumerMember. Contains the SOAP response.
-* ```fi.vrk.xrd4j.client.serializer.AbstractServiceRequestSerializer``` : abstract base class for service request serializers.
-* ```fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer<?>``` : abstract base class for service request deserializers.
-* ```fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer``` : abstract base class for service response serializers.
-* ```fi.vrk.xrd4j.client.deserializer.AbstractResponseDeserializer<?, ?>``` : abstract base class for service response deserializers.
-* ```fi.vrk.xrd4j.client.SOAPClientImpl``` : SOAP client that offers two methods that can be used for sending SOAPMessage objects and ServiceRequest objects.
-* ```fi.vrk.xrd4j.server.AbstractAdapterServlet``` : abstract base class for Servlets that implement SOAP message processing. Can be used as a base class for Adapter Server implementations.
+* ```fi.vrk.xrd4j.common.member.ConsumerMember``` : represents an X-Road consumer member that acts as a client that initiates a service call by sending a ServiceRequest.
+* ```fi.vrk.xrd4j.common.member.ProducerMember``` : represents an X-Road producer member that produces services to X-Road.
+* ```fi.vrk.xrd4j.common.message.ServiceRequest<?>``` : represents an X-Road service request that is sent by a ConsumerMember and received by a ProviderMember. Contains the sent SOAP request.
+* ```fi.vrk.xrd4j.common.message.ServiceResponse<?, ?>``` : represents an X-Road service response message that is sent by a ProviderMember and received by a ConsumerMember. Contains the SOAP response.
+* ```fi.vrk.xrd4j.client.serializer.AbstractServiceRequestSerializer``` : an abstract base class for service request serializers.
+* ```fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer<?>``` : an abstract base class for service request deserializers.
+* ```fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer``` : an abstract base class for service response serializers.
+* ```fi.vrk.xrd4j.client.deserializer.AbstractResponseDeserializer<?, ?>``` : an abstract base class for service response deserializers.
+* ```fi.vrk.xrd4j.client.SOAPClientImpl``` : a SOAP client that offers two methods for sending SOAPMessage and ServiceRequest objects.
+* ```fi.vrk.xrd4j.server.AbstractAdapterServlet``` : an abstract base class for Servlets that implement SOAP message processing. Can be used as a base class for Adapter Server implementations.
 
 ##### Client
 
@@ -114,7 +116,7 @@ Client application must implement two classes:
   * used through ```ServiceResponseSerializer``` interface
   * must implement ```deserializeRequestData``` and ```deserializeResponseData``` methods
 
-**N.B.** If HTTPS is used between the client and the Security Server, the public key certificate of the Security Server MUST be imported into "cacerts" keystore. [Detailed instructions here](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md).
+**N.B.** If HTTPS is used between the client and the Security Server, the public key certificate of the Security Server MUST be imported into `cacerts` keystore. [Detailed instructions here](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md).
 
 Main class (generated [request](examples/request1.xml), received [response](examples/response1.xml)):
 
