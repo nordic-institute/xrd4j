@@ -2,6 +2,7 @@
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+example-adapter/.mtj.tmp
 
 # Package Files #
 *.jar
@@ -17,7 +18,8 @@ src/common/target/
 src/rest/target/
 src/server/target/
 /src/target/
+example-adapter/target/
 
 # IntelliJ Idea
-src/.idea
+.idea/
 *.iml
