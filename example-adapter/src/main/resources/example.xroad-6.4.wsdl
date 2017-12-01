@@ -120,7 +120,7 @@
         <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
         <wsdl:operation name="getRandom">
             <soap:operation soapAction="" style="document" />
-            <id:version>v1</id:version>
+            <xrd:version>v1</xrd:version>
             <wsdl:input>
                 <soap:body parts="body" use="literal"/>
                 <soap:header message="tns:requestheader" part="client" use="literal"/>
@@ -143,7 +143,7 @@
 
         <wsdl:operation name="helloService">
             <soap:operation soapAction="" style="document" />
-            <id:version>v1</id:version>
+            <xrd:version>v1</xrd:version>
             <wsdl:input>
                 <soap:body parts="body" use="literal"/>
                 <soap:header message="tns:requestheader" part="client" use="literal"/>
