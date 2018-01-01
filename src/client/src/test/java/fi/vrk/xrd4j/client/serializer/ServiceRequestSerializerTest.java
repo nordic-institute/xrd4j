@@ -41,7 +41,7 @@ import junit.framework.TestCase;
  * @author Petteri Kivimäki
  */
 public class ServiceRequestSerializerTest extends TestCase {
-  
+
     /**
      * Subsystem level service call. No NS prefix.
      *
@@ -418,7 +418,7 @@ public class ServiceRequestSerializerTest extends TestCase {
         assertEquals(correctRequest, SOAPHelper.toString(msg));
     }
 
-        /**
+    /**
      * Subsystem level service call. No NS prefix.
      *
      * @throws XRd4JException
@@ -441,8 +441,8 @@ public class ServiceRequestSerializerTest extends TestCase {
 
         assertEquals(correctRequest, SOAPHelper.toString(msg));
     }
-    
-     /**
+
+    /**
      * Subsystem level service call. No NS prefix.
      *
      * @throws XRd4JException
@@ -491,6 +491,82 @@ public class ServiceRequestSerializerTest extends TestCase {
 
         assertEquals(correctRequest, SOAPHelper.toString(msg));
     }
+
+    /**
+     * Subsystem level service call with security token and token type.
+     *
+     * @throws XRd4JException
+     * @throws SOAPException
+     */
+    public void test17() throws XRd4JException, SOAPException {
+        String correctRequest = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:extsec=\"http://x-road.eu/xsd/security-token.xsd\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>getRandom</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>1234567890</xrd:id><extsec:securityToken extsec:tokenType=\"urn:ietf:params:oauth:token-type:jwt\">eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw</extsec:securityToken><xrd:protocolVersion>4.0</xrd:protocolVersion></SOAP-ENV:Header><SOAP-ENV:Body><ns1:getRandom xmlns:ns1=\"http://consumer.x-road.ee\"><ns1:data>1234567890</ns1:data></ns1:getRandom></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+        ConsumerMember consumer = new ConsumerMember("FI", "GOV", "MEMBER1", "subsystem");
+        ProducerMember producer = new ProducerMember("FI", "COM", "MEMBER2", "subsystem", "getRandom", "v1");
+        producer.setNamespacePrefix("ns1");
+        producer.setNamespaceUrl("http://consumer.x-road.ee");
+        ServiceRequest<String> request = new ServiceRequest<String>(consumer, producer, "1234567890");
+        request.setUserId("EE1234567890");
+        request.setRequestData("1234567890");
+        request.setSecurityToken("eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw");
+        request.setSecurityTokenType("urn:ietf:params:oauth:token-type:jwt");
+
+        request.setProcessingWrappers(false);
+        ServiceRequestSerializer serializer = new TestRequestSerializer1();
+        SOAPMessage msg = serializer.serialize(request);
+
+        assertEquals(correctRequest, SOAPHelper.toString(msg));
+    }
+
+    /**
+     * Subsystem level service call with security token and without token type.
+     *
+     * @throws XRd4JException
+     * @throws SOAPException
+     */
+    public void test18() throws XRd4JException, SOAPException {
+        String correctRequest = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:extsec=\"http://x-road.eu/xsd/security-token.xsd\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>getRandom</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>1234567890</xrd:id><extsec:securityToken>eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw</extsec:securityToken><xrd:protocolVersion>4.0</xrd:protocolVersion></SOAP-ENV:Header><SOAP-ENV:Body><ns1:getRandom xmlns:ns1=\"http://consumer.x-road.ee\"><ns1:data>1234567890</ns1:data></ns1:getRandom></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+        ConsumerMember consumer = new ConsumerMember("FI", "GOV", "MEMBER1", "subsystem");
+        ProducerMember producer = new ProducerMember("FI", "COM", "MEMBER2", "subsystem", "getRandom", "v1");
+        producer.setNamespacePrefix("ns1");
+        producer.setNamespaceUrl("http://consumer.x-road.ee");
+        ServiceRequest<String> request = new ServiceRequest<String>(consumer, producer, "1234567890");
+        request.setUserId("EE1234567890");
+        request.setRequestData("1234567890");
+        request.setSecurityToken("eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw");
+
+        request.setProcessingWrappers(false);
+        ServiceRequestSerializer serializer = new TestRequestSerializer1();
+        SOAPMessage msg = serializer.serialize(request);
+
+        assertEquals(correctRequest, SOAPHelper.toString(msg));
+    }
+
+    /**
+     * Subsystem level service call with security token and with empty token
+     * type.
+     *
+     * @throws XRd4JException
+     * @throws SOAPException
+     */
+    public void test19() throws XRd4JException, SOAPException {
+        String correctRequest = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:extsec=\"http://x-road.eu/xsd/security-token.xsd\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>getRandom</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>1234567890</xrd:id><extsec:securityToken>eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw</extsec:securityToken><xrd:protocolVersion>4.0</xrd:protocolVersion></SOAP-ENV:Header><SOAP-ENV:Body><ns1:getRandom xmlns:ns1=\"http://consumer.x-road.ee\"><ns1:data>1234567890</ns1:data></ns1:getRandom></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+        ConsumerMember consumer = new ConsumerMember("FI", "GOV", "MEMBER1", "subsystem");
+        ProducerMember producer = new ProducerMember("FI", "COM", "MEMBER2", "subsystem", "getRandom", "v1");
+        producer.setNamespacePrefix("ns1");
+        producer.setNamespaceUrl("http://consumer.x-road.ee");
+        ServiceRequest<String> request = new ServiceRequest<String>(consumer, producer, "1234567890");
+        request.setUserId("EE1234567890");
+        request.setRequestData("1234567890");
+        request.setSecurityToken("eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw");
+        request.setSecurityTokenType("");
+
+        request.setProcessingWrappers(false);
+        ServiceRequestSerializer serializer = new TestRequestSerializer1();
+        SOAPMessage msg = serializer.serialize(request);
+
+        assertEquals(correctRequest, SOAPHelper.toString(msg));
+    }
+
     private class TestRequestSerializer extends AbstractServiceRequestSerializer {
 
         protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {

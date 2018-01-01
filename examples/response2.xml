@@ -1,0 +1,27 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:id="http://x-road.eu/xsd/identifiers" xmlns:xrd="http://x-road.eu/xsd/xroad.xsd" xmlns:extsec="http://x-road.eu/xsd/security-token.xsd">
+    <SOAP-ENV:Header>
+        <xrd:client id:objectType="SUBSYSTEM">
+            <id:xRoadInstance>FI_TEST</id:xRoadInstance>
+            <id:memberClass>GOV</id:memberClass>
+            <id:memberCode>1234567-8</id:memberCode>
+            <id:subsystemCode>TestClient</id:subsystemCode>
+        </xrd:client>
+        <xrd:service id:objectType="SERVICE">
+            <id:xRoadInstance>FI_TEST</id:xRoadInstance>
+            <id:memberClass>GOV</id:memberClass>
+            <id:memberCode>9876543-1</id:memberCode>
+            <id:subsystemCode>DemoService</id:subsystemCode>
+            <id:serviceCode>helloService</id:serviceCode>
+            <id:serviceVersion>v1</id:serviceVersion>
+        </xrd:service>
+        <xrd:userId>jdoe</xrd:userId>
+        <xrd:id>f833878f-2d25-4b49-9c62-a0dfcc732f68</xrd:id>
+        <extsec:securityToken extsec:tokenType="urn:ietf:params:oauth:token-type:jwt">eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw</extsec:securityToken>
+        <xrd:protocolVersion>4.0</xrd:protocolVersion>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <ts:helloServiceResponse xmlns:ts="http://test.x-road.fi/producer">
+            <ts:message>Hello Test message! Greetings from adapter server!</ts:message>
+        </ts:helloServiceResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

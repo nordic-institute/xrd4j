@@ -237,6 +237,46 @@ public abstract class AbstractHeaderDeserializer {
     }
 
     /**
+     * Deserializes the security token element of the SOAP header to a String.
+     *
+     * @param header SOAP header to be deserialized
+     * @return security token represented as a String
+     */
+    protected final String deserializeSecurityToken(final SOAPHeader header) {
+        logger.debug(DESERIALIZE_LOG_PATTERN, Constants.NS_EXT_ELEM_SECURITY_TOKEN);
+        String securityToken = null;
+        NodeList list = header.getElementsByTagNameNS(Constants.NS_EXT_SECURITY_TOKEN_URL, Constants.NS_EXT_ELEM_SECURITY_TOKEN);
+        if (list.getLength() == 1) {
+            securityToken = list.item(0).getTextContent();
+            logger.trace(ELEMENT_FOUND_LOG_PATTERN, Constants.NS_EXT_ELEM_SECURITY_TOKEN);
+        }
+        return securityToken;
+    }
+
+    /**
+     * Deserializes the tokenType element from the given Node to a String.
+     *
+     * @param header SOAP header to be deserialized
+     * @return security token represented as a String
+     */
+    protected String deserializeTokenType(final SOAPHeader header) {
+        logger.debug(DESERIALIZE_LOG_PATTERN, Constants.NS_EXT_ATTR_TOKEN_TYPE);
+        String securityTokenType = null;
+        NodeList list = header.getElementsByTagNameNS(Constants.NS_EXT_SECURITY_TOKEN_URL, Constants.NS_EXT_ELEM_SECURITY_TOKEN);
+        if (list.getLength() == 1) {
+            NamedNodeMap attrs = list.item(0).getAttributes();
+            // Try to get token type without namespace.
+            org.w3c.dom.Node tokenType = attrs.getNamedItem(Constants.NS_EXT_ATTR_TOKEN_TYPE);
+            // If toke type is null, try with namespace.
+            if (tokenType == null) {
+                tokenType = attrs.getNamedItemNS(Constants.NS_EXT_SECURITY_TOKEN_URL, Constants.NS_EXT_ATTR_TOKEN_TYPE);
+            }
+            securityTokenType = tokenType != null ? tokenType.getNodeValue() : null;
+        }
+        return securityTokenType;
+    }
+
+    /**
      * Deserializes the objectType element from the given Node to an ObjectType
      * object.
      *

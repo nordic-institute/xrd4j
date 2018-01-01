@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  * @author Petteri Kivimäki
  */
 public class ServiceRequestDeserializerImpl extends AbstractHeaderDeserializer implements ServiceRequestDeserializer {
-
+    
     private static final Logger logger = LoggerFactory.getLogger(ServiceRequestDeserializerImpl.class);
 
     /**
@@ -76,7 +76,7 @@ public class ServiceRequestDeserializerImpl extends AbstractHeaderDeserializer i
         // Desearialize header
         ServiceRequest request = this.deserializeHeader(envelope.getHeader());
         request.setSoapMessage(message);
-
+        
         logger.debug("SOAP message header was succesfully deserialized.");
         return request;
     }
@@ -101,6 +101,8 @@ public class ServiceRequestDeserializerImpl extends AbstractHeaderDeserializer i
         String userId = super.deserializeUserId(header);
         String issue = super.deserializeIssue(header);
         String protocolVersion = super.deserializeProtocolVersion(header);
+        String securityToken = super.deserializeSecurityToken(header);
+        String securityTokenType = super.deserializeTokenType(header);
 
         // Create objects
         ConsumerMember consumer = null;
@@ -127,7 +129,9 @@ public class ServiceRequestDeserializerImpl extends AbstractHeaderDeserializer i
         request.setUserId(userId);
         request.setIssue(issue);
         request.setProtocolVersion(protocolVersion);
-
+        request.setSecurityToken(securityToken);
+        request.setSecurityTokenType(securityTokenType);
+        
         logger.debug("SOAP header was succesfully deserialized.");
         // Return request
         return request;

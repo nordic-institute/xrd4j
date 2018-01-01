@@ -91,6 +91,16 @@ public abstract class AbstractHeaderSerializer {
             issue.addTextNode(message.getIssue());
             logger.debug("\"{}\" element was succesfully generated.", Constants.NS_XRD_ELEM_ISSUE);
         }
+        if (message.getSecurityToken() != null && !message.getSecurityToken().isEmpty()) {
+            envelope.addNamespaceDeclaration(Constants.NS_EXT_SECURITY_TOKEN_PREFIX, Constants.NS_EXT_SECURITY_TOKEN_URL);
+            logger.debug("Generate \"{}\" element.", Constants.NS_EXT_ELEM_SECURITY_TOKEN);
+            SOAPElement securityToken = header.addChildElement(Constants.NS_EXT_ELEM_SECURITY_TOKEN, Constants.NS_EXT_SECURITY_TOKEN_PREFIX);
+            if (message.getSecurityTokenType() != null && !message.getSecurityTokenType().isEmpty()) {
+                securityToken.addAttribute(envelope.createQName(Constants.NS_EXT_ATTR_TOKEN_TYPE, Constants.NS_EXT_SECURITY_TOKEN_PREFIX), message.getSecurityTokenType());
+            }
+            securityToken.addTextNode(message.getSecurityToken());
+            logger.debug("\"{}\" element was succesfully generated.", Constants.NS_EXT_ELEM_SECURITY_TOKEN);
+        }
         logger.debug("Generate \"{}\" element.", Constants.NS_XRD_ELEM_PROTOCOL_VERSION);
         SOAPElement protocolVersion = header.addChildElement(Constants.NS_XRD_ELEM_PROTOCOL_VERSION, Constants.NS_XRD_PREFIX);
         protocolVersion.addTextNode(message.getProtocolVersion());

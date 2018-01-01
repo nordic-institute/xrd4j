@@ -48,13 +48,21 @@ public class Constants {
      */
     public static final String NS_XRD_URL = "http://x-road.eu/xsd/xroad.xsd";
     /**
-     * Environmental monitoring namespace prefix.
+     * Environmental monitoring schema namespace prefix.
      */
     public static final String NS_ENV_MONITORING_PREFIX = "m";
     /**
-     * Environmental monitoring namespace URI.
+     * Environmental monitoring schema namespace URI.
      */
     public static final String NS_ENV_MONITORING_URL = "http://x-road.eu/xsd/monitoring";
+    /**
+     * Security token schema namespace prefix.
+     */
+    public static final String NS_EXT_SECURITY_TOKEN_PREFIX = "extsec";
+    /**
+     * Security token schema namespace URI.
+     */
+    public static final String NS_EXT_SECURITY_TOKEN_URL = "http://x-road.eu/xsd/security-token.xsd";
     // Attributes
     /**
      * Object type attribute name.
@@ -64,6 +72,10 @@ public class Constants {
      * Algorithm id attribute name.
      */
     public static final String ATTR_ALGORITHM_ID = "algorithmId";
+    /**
+     * Token type attribute name.
+     */
+    public static final String NS_EXT_ATTR_TOKEN_TYPE = "tokenType";
     // Elements
     /**
      * Client element name.
@@ -154,6 +166,10 @@ public class Constants {
      * stringMetric element name.
      */
     public static final String NS_ENV_MONITORING_ELEM_STRING_METRIC = "stringMetric";
+    /**
+     * SecurityToken element name.
+     */
+    public static final String NS_EXT_ELEM_SECURITY_TOKEN = "securityToken";
     // Meta services
     /**
      * listClients meta service.
