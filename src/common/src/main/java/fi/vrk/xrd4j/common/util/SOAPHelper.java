@@ -632,7 +632,7 @@ public class SOAPHelper {
 
     /**
      * Helper function for creating new SOAP messages
-     * 
+     *
      * @return New SOAP message
      * @throws SOAPException
      */
@@ -644,7 +644,7 @@ public class SOAPHelper {
 
     /**
      * Helper function for creating new SOAP messages
-     * 
+     *
      * @param mimeHeaders needed for creating SOAP message
      * @param is needed for creating SOAP message
      * @return New SOAP message
@@ -684,5 +684,23 @@ public class SOAPHelper {
         }
     }
 
+    /**
+     * Clones the given SOAP message and removes all the elements from SOAP
+     * body. All the SOAP header elements are left as they are. This method can
+     * be used for copying SOAP headers from another message.
+     *
+     * @param source SOAP message to be cloned
+     * @return cloned SOAP message with empty SOAP body
+     */
+    public static SOAPMessage cloneSOAPMsgWithoutBody(SOAPMessage source) {
+        SOAPMessage target = toSOAP(toString(source));
+        try {
+            target.getSOAPBody().removeContents();
+            return target;
+        } catch (SOAPException ex) {
+            logger.error(ex.getMessage(), ex);
+            return null;
+        }
+    }
 
 }
