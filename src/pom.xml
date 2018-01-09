@@ -29,6 +29,7 @@
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
+        <sonar.junit.reportPaths>common/target/surefire-reports,client/target/surefire-reports,rest/target/surefire-reports,server/target/surefire-reports</sonar.junit.reportPaths>
     </properties>
     <dependencies>
         <!-- Logging API: SLF4J -->
@@ -142,6 +143,19 @@
                         <phase>process-sources</phase>
                         <goals>
                             <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.9</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                 </executions>
