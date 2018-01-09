@@ -118,4 +118,3 @@ curl -d @examples/xroad-6.4/helloServiceRequest.xml --header "Content-Type: text
 ```
 
 An example of the corresponding [SOAP response](examples/xroad-6.4/helloServiceResponse.xml) (available in the `examples` directory).
-
