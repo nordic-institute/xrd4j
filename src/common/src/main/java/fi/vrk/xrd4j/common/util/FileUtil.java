@@ -22,6 +22,9 @@
  */
 package fi.vrk.xrd4j.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -30,19 +33,16 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * This class offers helper methods for handling files.
  *
  * @author Petteri Kivimäki
  */
-public class FileUtil {
+public final class FileUtil {
 
     private static final int BUFFER_SIZE = 8192;
     private static final String UTF_8 = "UTF-8";
-    private static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FileUtil.class);
 
     /**
      * Constructs and initializes a new FileUtil object. Should never be used.
@@ -64,7 +64,7 @@ public class FileUtil {
             byte[] content = readFileAsBytes(filePath);
             return new String(content, Charset.forName(UTF_8));
         } catch (IOException | IllegalArgumentException e) {
-            logger.error("Could not read file {}.", filePath, e);
+            LOGGER.error("Could not read file {}.", filePath, e);
             return "";
         }
     }
@@ -79,7 +79,7 @@ public class FileUtil {
             }
             return byteArrayOutputStream.toByteArray();
         } catch (Exception e) {
-            logger.warn("Resource was not found! Trying to read '" + filePath + "' as a file.");
+            LOGGER.warn("Resource was not found! Trying to read '" + filePath + "' as a file.");
             File file = new File(filePath);
             if (!file.exists()) {
                 throw new IllegalArgumentException("File '" + filePath + "' doesn't exist.");

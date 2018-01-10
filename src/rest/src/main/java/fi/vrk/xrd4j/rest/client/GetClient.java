@@ -22,11 +22,12 @@
  */
 package fi.vrk.xrd4j.rest.client;
 
-import java.util.Map;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * This class offers a REST client for HTTP GET requests.
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class GetClient extends AbstractClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(GetClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetClient.class);
 
     /**
      * Builds a new HTTP GET request with the given URL. Request body and
@@ -48,7 +49,7 @@ public class GetClient extends AbstractClient {
      */
     @Override
     protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers) {
-        logger.debug("Build new HTTP GET request.");
+        LOGGER.debug("Build new HTTP GET request.");
         // Create a new post request
         return RequestBuilder.get().setUri(url).build();
     }

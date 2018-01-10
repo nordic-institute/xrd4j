@@ -24,6 +24,7 @@ package fi.vrk.xrd4j.server.deserializer;
 
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
+
 import javax.xml.soap.SOAPException;
 
 /**

@@ -22,12 +22,12 @@
  */
 package fi.vrk.xrd4j.rest.converter;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import junit.framework.TestCase;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import junit.framework.TestCase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Test cases for JSONToXMLConverter class.

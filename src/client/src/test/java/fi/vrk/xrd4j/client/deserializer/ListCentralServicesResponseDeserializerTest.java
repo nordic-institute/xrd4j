@@ -25,10 +25,12 @@ package fi.vrk.xrd4j.client.deserializer;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.member.ProducerMember;
-import java.util.List;
-import javax.xml.soap.SOAPException;
-import static junit.framework.Assert.assertEquals;
+
 import junit.framework.TestCase;
+
+import javax.xml.soap.SOAPException;
+
+import java.util.List;
 
 /**
  * Test cases for ListCentralServicesResponseDeserializer class.

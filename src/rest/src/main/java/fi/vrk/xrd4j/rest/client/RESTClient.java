@@ -23,6 +23,7 @@
 package fi.vrk.xrd4j.rest.client;
 
 import fi.vrk.xrd4j.rest.ClientResponse;
+
 import java.util.Map;
 
 /**
@@ -46,5 +47,5 @@ public interface RESTClient {
      * @param headers HTTP headers to be added to the request
      * @return response as string
      */
-    public ClientResponse send(String url, String requestBody, Map<String, ?> params, Map<String, String> headers);
+    ClientResponse send(String url, String requestBody, Map<String, ?> params, Map<String, String> headers);
 }

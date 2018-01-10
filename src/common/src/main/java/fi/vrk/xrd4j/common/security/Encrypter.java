@@ -36,5 +36,5 @@ public interface Encrypter {
      * @param plainText string to be encrypted
      * @return encrypted string
      */
-    public String encrypt(String plainText);
+    String encrypt(String plainText);
 }

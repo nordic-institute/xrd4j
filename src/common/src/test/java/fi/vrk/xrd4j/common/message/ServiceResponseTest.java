@@ -26,6 +26,7 @@ import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.util.MessageHelper;
+
 import junit.framework.TestCase;
 
 /**

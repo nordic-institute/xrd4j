@@ -22,15 +22,17 @@
  */
 package fi.vrk.xrd4j.common.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This abstract class serves as a base class for symmetric and asymmetric
@@ -42,9 +44,10 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractEncrypter {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractEncrypter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractEncrypter.class);
 
-    protected abstract byte[] encrypt(byte[] plaintext) throws NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException;
+    protected abstract byte[] encrypt(byte[] plaintext) throws NoSuchAlgorithmException, InvalidKeyException,
+        InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException;
 
     /**
      * Encrypts the given string and returns it as a base 64 encoded string.
@@ -57,8 +60,9 @@ public abstract class AbstractEncrypter {
             byte[] decrypted = plainText.getBytes(StandardCharsets.UTF_8);
             byte[] encrypted = encrypt(decrypted);
             return CryptoHelper.encodeBase64(encrypted);
-        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
-            logger.error(ex.getMessage(), ex);
+        } catch (NoSuchAlgorithmException | InvalidKeyException | InvalidAlgorithmParameterException
+            | NoSuchPaddingException | IllegalBlockSizeException | BadPaddingException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             return null;
         }
     }

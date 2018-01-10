@@ -23,6 +23,7 @@
 package fi.vrk.xrd4j.client.serializer;
 
 import fi.vrk.xrd4j.common.message.ServiceRequest;
+
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;

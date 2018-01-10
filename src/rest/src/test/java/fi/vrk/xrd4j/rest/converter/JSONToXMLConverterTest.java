@@ -22,19 +22,19 @@
  */
 package fi.vrk.xrd4j.rest.converter;
 
-import java.util.ArrayList;
-import java.util.List;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
+
+import junit.framework.TestCase;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import fi.vrk.xrd4j.common.util.SOAPHelper;
-import junit.framework.TestCase;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Test cases for JSONToXMLConverter class.

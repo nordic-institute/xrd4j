@@ -22,7 +22,11 @@
  */
 package fi.vrk.xrd4j.common.security;
 
-import java.io.FileNotFoundException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -31,10 +35,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 /**
  * This class implements asymmetric decryption. The decryption should be made
@@ -72,7 +72,8 @@ public class AsymmetricDecrypter extends AbstractDecrypter implements Decrypter 
      * @throws CertificateException if there's an error
      * @throws UnrecoverableEntryException if there's an error
      */
-    public AsymmetricDecrypter(String path, String storePassword, String privateKeyAlias, String keyPassword) throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
+    public AsymmetricDecrypter(String path, String storePassword, String privateKeyAlias, String keyPassword)
+        throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
         this.privateKey = CryptoHelper.getPrivateKey(path, storePassword, privateKeyAlias, keyPassword);
         this.transformation = "RSA/ECB/PKCS1Padding";
     }
@@ -95,7 +96,9 @@ public class AsymmetricDecrypter extends AbstractDecrypter implements Decrypter 
      * @throws CertificateException if there's an error
      * @throws UnrecoverableEntryException if there's an error
      */
-    public AsymmetricDecrypter(String path, String storePassword, String privateKeyAlias, String keyPassword, String transformation) throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
+    public AsymmetricDecrypter(String path, String storePassword, String privateKeyAlias, String keyPassword,
+                               String transformation) throws KeyStoreException, IOException, NoSuchAlgorithmException,
+        CertificateException, UnrecoverableEntryException {
         this(path, storePassword, privateKeyAlias, keyPassword);
         this.transformation = transformation;
     }
@@ -113,7 +116,8 @@ public class AsymmetricDecrypter extends AbstractDecrypter implements Decrypter 
      * @throws BadPaddingException if there's an error
      */
     @Override
-    protected byte[] decrypt(byte[] cipherText) throws NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+    protected byte[] decrypt(byte[] cipherText) throws NoSuchAlgorithmException, InvalidKeyException,
+        InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(this.transformation);
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
         return cipher.doFinal(cipherText);

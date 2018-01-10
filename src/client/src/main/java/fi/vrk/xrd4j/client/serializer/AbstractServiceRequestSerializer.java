@@ -22,6 +22,14 @@
  */
 package fi.vrk.xrd4j.client.serializer;
 
+import fi.vrk.xrd4j.common.exception.XRd4JException;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.Name;
 import javax.xml.soap.SOAPBody;
@@ -30,14 +38,6 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.serializer.AbstractHeaderSerializer;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
 
 /**
  * This abstract class serves as base class for serializer classes that
@@ -50,7 +50,7 @@ import fi.vrk.xrd4j.common.util.SOAPHelper;
  */
 public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSerializer implements ServiceRequestSerializer {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractServiceRequestSerializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractServiceRequestSerializer.class);
 
     /**
      * Serializes the application specific request part to SOAP body's request
@@ -76,7 +76,7 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
     @Override
     public final SOAPMessage serialize(final ServiceRequest request) {
         try {
-            logger.debug("Serialize ServiceRequest message to SOAP.");
+            LOGGER.debug("Serialize ServiceRequest message to SOAP.");
             MessageFactory myMsgFct = MessageFactory.newInstance();
             SOAPMessage message = myMsgFct.createMessage();
 
@@ -88,12 +88,12 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
             // Generate body
             this.serializeBody(request);
 
-            logger.debug("ServiceRequest message was serialized succesfully.");
+            LOGGER.debug("ServiceRequest message was serialized succesfully.");
             return message;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
-        logger.warn("Failed to serialize ServiceRequest message to SOAP.");
+        LOGGER.warn("Failed to serialize ServiceRequest message to SOAP.");
         return null;
     }
 
@@ -105,8 +105,8 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
      * @throws XRd4JException if there's a XRd4J error
      */
     private void serializeBody(final ServiceRequest request) throws SOAPException, XRd4JException {
-        logger.debug("Generate SOAP body.");
-        logger.debug("Use producer namespace \"{}\".", request.getProducer().getNamespaceUrl());
+        LOGGER.debug("Generate SOAP body.");
+        LOGGER.debug("Use producer namespace \"{}\".", request.getProducer().getNamespaceUrl());
         // Body - Start
         SOAPEnvelope envelope = request.getSoapMessage().getSOAPPart().getEnvelope();
         SOAPBody body = request.getSoapMessage().getSOAPBody();
@@ -115,7 +115,8 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
         
         // Is namespace defined?
         if (request.getProducer().getNamespaceUrl() != null && !request.getProducer().getNamespaceUrl().isEmpty()) {
-            bodyName = envelope.createName(request.getProducer().getServiceCode(), request.getProducer().getNamespacePrefix(), request.getProducer().getNamespaceUrl());
+            bodyName = envelope.createName(request.getProducer().getServiceCode(),
+                request.getProducer().getNamespacePrefix(), request.getProducer().getNamespaceUrl());
             hasNamespace = true;
         } else {
             bodyName = envelope.createName(request.getProducer().getServiceCode());
@@ -126,13 +127,13 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
             SOAPElement soapRequest;
             // Check if it is needed to process "request" and "response" wrappers
             if (request.isProcessingWrappers()) {
-                logger.debug("Adding \"request\" wrapper to request message.");
+                LOGGER.debug("Adding \"request\" wrapper to request message.");
                 soapRequest = gltp.addChildElement(envelope.createName("request"));
             } else {
-                logger.debug("Skipping addition of \"request\" wrapper to request message.");
+                LOGGER.debug("Skipping addition of \"request\" wrapper to request message.");
                 soapRequest = gltp;
             }
-            logger.trace("Passing processing to subclass implementing \"serializeRequest\" method.");
+            LOGGER.trace("Passing processing to subclass implementing \"serializeRequest\" method.");
             // Generate request
             this.serializeRequest(request, soapRequest, envelope);
             // Is namespace defined and should it be added to the request?
@@ -140,6 +141,6 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
                 SOAPHelper.addNamespace(soapRequest, request);
             }
         }
-        logger.debug("SOAP body was generated succesfully.");
+        LOGGER.debug("SOAP body was generated succesfully.");
     }
 }

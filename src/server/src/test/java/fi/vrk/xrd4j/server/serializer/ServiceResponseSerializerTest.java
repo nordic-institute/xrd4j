@@ -22,14 +22,6 @@
  */
 package fi.vrk.xrd4j.server.serializer;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
@@ -38,7 +30,16 @@ import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
+
 import junit.framework.TestCase;
+
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Test cases for ServiceResponseSerializer class.
@@ -405,7 +406,7 @@ public class ServiceResponseSerializerTest extends TestCase {
 
     /**
      * Subsystem level service call. No NS on request. NS prefix on response.
-     * Request element with no children (<request></request>).
+     * Request element with no children
      * @throws XRd4JException
      * @throws SOAPException
      */

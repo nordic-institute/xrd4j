@@ -29,9 +29,10 @@ import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 
-import java.util.List;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
+
+import java.util.List;
 
 /**
  * This class defines an interface for load balanced SOAP client that can be
@@ -52,7 +53,7 @@ public interface LoadBalancedSOAPClient {
      * message that was sent.
      * @throws SOAPException if there's a SOAP error
      */
-    public SOAPMessage send(final SOAPMessage request) throws SOAPException;
+    SOAPMessage send(SOAPMessage request) throws SOAPException;
 
     /**
      * Sends the given message to one of the defined endpoints and blocks until
@@ -69,7 +70,8 @@ public interface LoadBalancedSOAPClient {
      * that was sent.
      * @throws SOAPException if there's a SOAP error
      */
-    public ServiceResponse send(final ServiceRequest request, final ServiceRequestSerializer serializer, final ServiceResponseDeserializer deserializer) throws SOAPException;
+    ServiceResponse send(ServiceRequest request, ServiceRequestSerializer serializer,
+                         ServiceResponseDeserializer deserializer) throws SOAPException;
 
     /**
      * Calls listClients meta service and retrieves list of all the potential
@@ -78,7 +80,7 @@ public interface LoadBalancedSOAPClient {
      *
      * @return list of ConsumerMembers
      */
-    public List<ConsumerMember> listClients();
+    List<ConsumerMember> listClients();
 
     /**
      * Calls listCentralServices meta service and retrieves list of all central
@@ -87,7 +89,7 @@ public interface LoadBalancedSOAPClient {
      *
      * @return list of ProducerMembers
      */
-    public List<ProducerMember> listCentralServices();
+    List<ProducerMember> listCentralServices();
 
     /**
      * Calls listMethods meta service that lists all the services offered by a
@@ -98,7 +100,7 @@ public interface LoadBalancedSOAPClient {
      * @return ServiceResponse that holds a list of ProducerMember objects
      * @throws SOAPException if there's a SOAP error
      */
-    public ServiceResponse listMethods(final ServiceRequest request) throws SOAPException;
+    ServiceResponse listMethods(ServiceRequest request) throws SOAPException;
 
     /**
      * Calls allowedMethods meta service that lists all the services by a
@@ -110,7 +112,7 @@ public interface LoadBalancedSOAPClient {
      * @return ServiceResponse that holds a list of ProducerMember objects
      * @throws SOAPException if there's a SOAP error
      */
-    public ServiceResponse allowedMethods(final ServiceRequest request) throws SOAPException;
+    ServiceResponse allowedMethods(ServiceRequest request) throws SOAPException;
 
     /**
      * Calls getSecurityServerMetrics monitoring service that returns a data set
@@ -122,6 +124,6 @@ public interface LoadBalancedSOAPClient {
      * data
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse getSecurityServerMetrics(final ServiceRequest request, final String url) throws SOAPException;
+    ServiceResponse getSecurityServerMetrics(ServiceRequest request, String url) throws SOAPException;
 
 }

@@ -22,15 +22,16 @@
  */
 package fi.vrk.xrd4j.common.security;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
+
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * This class implements symmetric decryption. The same key and initialization
@@ -88,7 +89,8 @@ public class SymmetricDecrypter extends AbstractDecrypter implements Decrypter {
      * @throws BadPaddingException if there's an error
      */
     @Override
-    protected byte[] decrypt(byte[] cipherText) throws NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+    protected byte[] decrypt(byte[] cipherText) throws NoSuchAlgorithmException, InvalidKeyException,
+        InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(this.transformation);
         cipher.init(Cipher.DECRYPT_MODE, this.key, new IvParameterSpec(this.iv));
         return cipher.doFinal(cipherText);

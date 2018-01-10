@@ -22,21 +22,21 @@
  */
 package fi.vrk.xrd4j.server.deserializer;
 
+import fi.vrk.xrd4j.common.exception.XRd4JException;
+import fi.vrk.xrd4j.common.message.ErrorMessage;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
+
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
-
-import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.message.ErrorMessage;
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
 
 /**
  * This abstract class serves as a base class for all the application specific
@@ -52,7 +52,7 @@ import fi.vrk.xrd4j.common.util.SOAPHelper;
  */
 public abstract class AbstractCustomRequestDeserializer<T> implements CustomRequestDeserializer {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractCustomRequestDeserializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCustomRequestDeserializer.class);
 
     /**
      * Deserializes SOAP body's request element to application specific
@@ -88,7 +88,7 @@ public abstract class AbstractCustomRequestDeserializer<T> implements CustomRequ
      */
     @Override
     public final void deserialize(final ServiceRequest request, final String producerNamespaceURI) throws SOAPException, XRd4JException {
-        logger.debug("Deserialize SOAP body. Use \"{}\" namespace URI.", producerNamespaceURI);
+        LOGGER.debug("Deserialize SOAP body. Use \"{}\" namespace URI.", producerNamespaceURI);
 
         SOAPPart mySPart = request.getSoapMessage().getSOAPPart();
         SOAPEnvelope envelope = mySPart.getEnvelope();
@@ -97,33 +97,33 @@ public abstract class AbstractCustomRequestDeserializer<T> implements CustomRequ
         NodeList list = body.getElementsByTagNameNS(producerNamespaceURI, request.getProducer().getServiceCode());
         if (list.getLength() == 1) {
             Node requestNode;
-            logger.debug("Found service request element.");
+            LOGGER.debug("Found service request element.");
             // Check if it is needed to process "request" and "response" wrappers
-            if(request.isProcessingWrappers()) {
-                logger.debug("Processing \"request\" wrapper in request message.");
+            if (request.isProcessingWrappers()) {
+                LOGGER.debug("Processing \"request\" wrapper in request message.");
                 requestNode = SOAPHelper.getNode((Node) list.item(0), "request");
             } else {
-                logger.debug("Skipping procession of \"request\" wrapper in request message.");
+                LOGGER.debug("Skipping procession of \"request\" wrapper in request message.");
                 requestNode = (Node) list.item(0);
             }
-            logger.debug("Deserialize request element.");
+            LOGGER.debug("Deserialize request element.");
             T requestData = this.deserializeRequest(requestNode, request.getSoapMessage());
             request.setRequestData(requestData);
-            logger.debug("Request element was succesfully deserialized.");
+            LOGGER.debug("Request element was succesfully deserialized.");
             request.getProducer().setNamespaceUrl(list.item(0).getNamespaceURI());
             request.getProducer().setNamespacePrefix(list.item(0).getPrefix());
-            logger.debug("SOAP body was succesfully deserialized.");
+            LOGGER.debug("SOAP body was succesfully deserialized.");
         } else {
             String msg = "Request body is missing.";
             if (!"*".equals(producerNamespaceURI)) {
-                logger.debug("No service request element was found. Try again without namepsace URI.");
+                LOGGER.debug("No service request element was found. Try again without namepsace URI.");
                 list = body.getElementsByTagNameNS("*", request.getProducer().getServiceCode());
                 if (list.getLength() == 1) {
-                    logger.warn("Service request element was found, but with wrong namespace URI : \"{}\".", list.item(0).getNamespaceURI());
+                    LOGGER.warn("Service request element was found, but with wrong namespace URI : \"{}\".", list.item(0).getNamespaceURI());
                     msg = "Wrong namespace URI.";
                 }
             }
-            logger.warn("Service request element was not deserialized. SOAP Fault is set.");
+            LOGGER.warn("Service request element was not deserialized. SOAP Fault is set.");
             ErrorMessage errorMessage = new ErrorMessage("SOAP-ENV:Client", msg, null, null);
             request.setErrorMessage(errorMessage);
             throw new XRd4JException("Request body was not found.");

@@ -22,24 +22,25 @@
  */
 package fi.vrk.xrd4j.rest.util;
 
+import org.apache.http.HttpEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
-import org.apache.http.HttpEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class contains utility methods for REST clients.
  *
  * @author Petteri Kivimäki
  */
-public class ClientUtil {
+public final class ClientUtil {
 
     private static final String REMOVE_WHITE_SPACE_PATTERN = "\\r\\n|\\r|\\n";
-    private static final Logger logger = LoggerFactory.getLogger(ClientUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientUtil.class);
 
     /**
      * Constructs and initializes a new ClientUtil object. Should never be used.
@@ -62,7 +63,7 @@ public class ClientUtil {
                     builder.append(inputLine);
                 }
             } catch (IOException e) {
-                logger.error(e.getMessage(), e);
+                LOGGER.error(e.getMessage(), e);
                 return null;
             }
 
@@ -79,9 +80,9 @@ public class ClientUtil {
      * appended
      */
     public static String buildTargetURL(String url, Map<String, ?> params) {
-        logger.debug("Target URL : \"{}\".", url);
+        LOGGER.debug("Target URL : \"{}\".", url);
         if (params == null || params.isEmpty()) {
-            logger.debug("URL parameters list is null or empty. Nothing to do here. Return target URL.");
+            LOGGER.debug("URL parameters list is null or empty. Nothing to do here. Return target URL.");
             return url;
         }
         // Process resource id
@@ -94,7 +95,7 @@ public class ClientUtil {
         }
         // Add query string to URL
         String finalUrl = processedUrl + buildQueryString(params);
-        logger.debug("Request parameters added to URL : \"{}\".", finalUrl);
+        LOGGER.debug("Request parameters added to URL : \"{}\".", finalUrl);
         return finalUrl;
     }
 
@@ -110,14 +111,14 @@ public class ClientUtil {
             }
             // Remove line breaks and omit leading and trailing whitespaces
             resourceId = resourceId.replaceAll(REMOVE_WHITE_SPACE_PATTERN, "").trim();
-            logger.debug("Resource ID found from parameters map. Resource ID value : \"{}\".", resourceId);
+            LOGGER.debug("Resource ID found from parameters map. Resource ID value : \"{}\".", resourceId);
             if (!url.endsWith("/")) {
                 url += "/";
             }
             // Add resource id
             url += resourceId;
             params.remove(resourceIdStr);
-            logger.debug("Resource ID added to URL : \"{}\".", url);
+            LOGGER.debug("Resource ID added to URL : \"{}\".", url);
         }
         return url;
     }
@@ -143,6 +144,6 @@ public class ClientUtil {
         // Remove line breaks and omit leading and trailing whitespace
         value = value.replaceAll(REMOVE_WHITE_SPACE_PATTERN, "").trim();
         paramsString.append(name).append("=").append(value);
-        logger.debug("Parameter : \"{}\"=\"{}\"", name, value);
+        LOGGER.debug("Parameter : \"{}\"=\"{}\"", name, value);
     }
 }

@@ -24,6 +24,7 @@ package fi.vrk.xrd4j.common.util;
 
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,9 +34,25 @@ import org.slf4j.LoggerFactory;
  *
  * @author Petteri Kivimäki
  */
-public class ConfigurationHelper {
+public final class ConfigurationHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(ConfigurationHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigurationHelper.class);
+
+    private static final int IDX_INSTANCE = 0;
+    private static final int IDX_MEMBERCLASS = 1;
+    private static final int IDX_MEMBERCODE = 2;
+    private static final int IDX_SUBSYSTEM = 3;
+    private static final int IDX_SERVICE_WITHOUT_SUBSYSTEM = 3;
+    private static final int IDX_SERVICE = 4;
+    private static final int IDX_VERSION_WITHOUT_SUBSYSTEM = 4;
+    private static final int IDX_VERSION = 5;
+
+    private static final int MIN_LENGTH_CLIENT_ID = 3;
+    private static final int MAX_LENGTH_CLIENT_ID = 4;
+
+    private static final int MIN_LENGTH_SERVICE_ID = 4;
+    private static final int MID_LENGTH_SERVICE_ID = 5;
+    private static final int MAX_LENGTH_SERVICE_ID = 6;
 
     /**
      * Constructs and initializes a new ConfigurationHelper object. Should never
@@ -45,8 +62,7 @@ public class ConfigurationHelper {
     }
 
     /**
-     * Copies the client id string into an array. [0] = instance, [1] =
-     * memberClass, [2] = memberCode, [3] = subsystem. If the structure of the
+     * Copies the client id string into an array. If the structure of the
      * string is not correct, null is returned.
      *
      * @param clientId client id string
@@ -57,7 +73,7 @@ public class ConfigurationHelper {
             return null;
         }
         String[] clientArr = clientId.split("\\.");
-        if (clientArr.length == 3 || clientArr.length == 4) {
+        if (clientArr.length == MIN_LENGTH_CLIENT_ID || clientArr.length == MAX_LENGTH_CLIENT_ID) {
             return clientArr;
         }
         return null;
@@ -74,34 +90,32 @@ public class ConfigurationHelper {
     public static ConsumerMember parseConsumerMember(String clientId) {
         String[] clientIdArr = ConfigurationHelper.clientIdToArr(clientId);
         if (clientIdArr == null) {
-            logger.warn("Client can not be null.");
+            LOGGER.warn("Client can not be null.");
             return null;
         } else {
             try {
                 ConsumerMember consumer = null;
-                String instance = clientIdArr[0];
-                String memberClass = clientIdArr[1];
-                String memberCode = clientIdArr[2];
-                if (clientIdArr.length == 3) {
+                String instance = clientIdArr[IDX_INSTANCE];
+                String memberClass = clientIdArr[IDX_MEMBERCLASS];
+                String memberCode = clientIdArr[IDX_MEMBERCODE];
+                if (clientIdArr.length == MIN_LENGTH_CLIENT_ID) {
                     consumer = new ConsumerMember(instance, memberClass, memberCode);
-                    logger.debug("Consumer member succesfully created. Identifier format : \"instance.memberClass.memberCode\".");
-                } else if (clientIdArr.length == 4) {
-                    String subsystem = clientIdArr[3];
+                    LOGGER.debug("Consumer member succesfully created. Identifier format : \"instance.memberClass.memberCode\".");
+                } else if (clientIdArr.length == MAX_LENGTH_CLIENT_ID) {
+                    String subsystem = clientIdArr[IDX_SUBSYSTEM];
                     consumer = new ConsumerMember(instance, memberClass, memberCode, subsystem);
-                    logger.debug("Consumer member succesfully created. Identifier format : \"instance.memberClass.memberCode.subsystem\".");
+                    LOGGER.debug("Consumer member succesfully created. Identifier format : \"instance.memberClass.memberCode.subsystem\".");
                 }
                 return consumer;
             } catch (Exception ex) {
-                logger.warn("Creating consumer member failed.");
+                LOGGER.warn("Creating consumer member failed.");
                 return null;
             }
         }
     }
 
     /**
-     * Copies the client id string into an array. [0] = instance, [1] =
-     * memberClass, [2] = memberCode, [3] = subsystem, [4] = service, [5] =
-     * version. If the structure of the string is not correct, null is returned.
+     * Copies the client id string into an array. If the structure of the string is not correct, null is returned.
      *
      * @param serviceId service id string
      * @return service id in an array
@@ -111,7 +125,7 @@ public class ConfigurationHelper {
             return null;
         }
         String[] serviceArr = serviceId.split("\\.");
-        if (serviceArr.length >= 4 && serviceArr.length <= 6) {
+        if (serviceArr.length >= MIN_LENGTH_SERVICE_ID && serviceArr.length <= MAX_LENGTH_SERVICE_ID) {
             return serviceArr;
         }
         return null;
@@ -128,7 +142,7 @@ public class ConfigurationHelper {
     public static ProducerMember parseProducerMember(String serviceId) {
         String[] serviceIdArr = ConfigurationHelper.serviceIdToArr(serviceId);
         if (serviceIdArr == null) {
-            logger.warn("Service can not be null.");
+            LOGGER.warn("Service can not be null.");
             return null;
         } else {
             return parseProducerMember(serviceIdArr);
@@ -145,40 +159,40 @@ public class ConfigurationHelper {
     private static ProducerMember parseProducerMember(String[] serviceIdArr) {
         try {
             ProducerMember producer = null;
-            String instance = serviceIdArr[0];
-            String memberClass = serviceIdArr[1];
-            String memberCode = serviceIdArr[2];
-            if (serviceIdArr.length == 4) {
-                String service = serviceIdArr[3];
+            String instance = serviceIdArr[IDX_INSTANCE];
+            String memberClass = serviceIdArr[IDX_MEMBERCLASS];
+            String memberCode = serviceIdArr[IDX_MEMBERCODE];
+            if (serviceIdArr.length == MIN_LENGTH_SERVICE_ID) {
+                String service = serviceIdArr[IDX_SERVICE_WITHOUT_SUBSYSTEM];
                 producer = new ProducerMember(instance, memberClass, memberCode, service);
-                logger.debug("Producer member succesfully created. Identifier format : \"instance.memberClass.memberCode.service\".");
-            } else if (serviceIdArr.length == 5) {
+                LOGGER.debug("Producer member succesfully created. Identifier format : \"instance.memberClass.memberCode.service\".");
+            } else if (serviceIdArr.length == MID_LENGTH_SERVICE_ID) {
                 // Last element is considered as version number if it
                 // starts with the letters [vV] and besides that contains
                 // only numbers, or if the element contains only numbers.
                 // Also characters [-_] are allowed.
-                if (serviceIdArr[4].matches("(v|V|)[\\d_-]+")) {
-                    String service = serviceIdArr[3];
-                    String version = serviceIdArr[4];
+                if (serviceIdArr[MID_LENGTH_SERVICE_ID - 1].matches("(v|V|)[\\d_-]+")) {
+                    String service = serviceIdArr[IDX_SERVICE_WITHOUT_SUBSYSTEM];
+                    String version = serviceIdArr[IDX_VERSION_WITHOUT_SUBSYSTEM];
                     producer = new ProducerMember(instance, memberClass, memberCode, "subsystem", service, version);
                     producer.setSubsystemCode(null);
-                    logger.debug("Producer member succesfully created. Identifier format : \"instance.memberClass.memberCode.service.version\".");
+                    LOGGER.debug("Producer member succesfully created. Identifier format : \"instance.memberClass.memberCode.service.version\".");
                 } else {
-                    String subsystem = serviceIdArr[3];
-                    String service = serviceIdArr[4];
+                    String subsystem = serviceIdArr[IDX_SUBSYSTEM];
+                    String service = serviceIdArr[IDX_SERVICE];
                     producer = new ProducerMember(instance, memberClass, memberCode, subsystem, service);
-                    logger.debug("Producer member succesfully created. Identifier format : \"instance.memberClass.memberCode.subsystem.service\".");
+                    LOGGER.debug("Producer member succesfully created. Identifier format : \"instance.memberClass.memberCode.subsystem.service\".");
                 }
-            } else if (serviceIdArr.length == 6) {
-                String subsystem = serviceIdArr[3];
-                String service = serviceIdArr[4];
-                String version = serviceIdArr[5];
+            } else if (serviceIdArr.length == MAX_LENGTH_SERVICE_ID) {
+                String subsystem = serviceIdArr[IDX_SUBSYSTEM];
+                String service = serviceIdArr[IDX_SERVICE];
+                String version = serviceIdArr[IDX_VERSION];
                 producer = new ProducerMember(instance, memberClass, memberCode, subsystem, service, version);
-                logger.debug("Producer member succesfully created. Identifier format : \"instance.memberClass.memberCode.subsystem.service.version\".");
+                LOGGER.debug("Producer member succesfully created. Identifier format : \"instance.memberClass.memberCode.subsystem.service.version\".");
             }
             return producer;
         } catch (Exception ex) {
-            logger.warn("Creating producer member failed.");
+            LOGGER.warn("Creating producer member failed.");
             return null;
         }
     }
