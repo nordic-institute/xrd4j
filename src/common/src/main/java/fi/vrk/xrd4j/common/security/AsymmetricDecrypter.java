@@ -65,7 +65,6 @@ public class AsymmetricDecrypter extends AbstractDecrypter implements Decrypter 
      * @param storePassword password of the key store
      * @param privateKeyAlias alias of the private key in the key store
      * @param keyPassword password of the private key
-     * @throws FileNotFoundException if there's an error
      * @throws KeyStoreException if there's an error
      * @throws IOException if there's an error
      * @throws NoSuchAlgorithmException if there's an error
@@ -89,7 +88,6 @@ public class AsymmetricDecrypter extends AbstractDecrypter implements Decrypter 
      * @param privateKeyAlias alias of the private key in the key store
      * @param keyPassword password of the private key
      * @param transformation transformation that the cipher uses
-     * @throws FileNotFoundException if there's an error
      * @throws KeyStoreException if there's an error
      * @throws IOException if there's an error
      * @throws NoSuchAlgorithmException if there's an error
