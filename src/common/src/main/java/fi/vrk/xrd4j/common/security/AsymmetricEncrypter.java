@@ -27,7 +27,6 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -63,7 +62,6 @@ public class AsymmetricEncrypter extends AbstractEncrypter implements Encrypter 
      * @param path absolute path of the trust store file
      * @param password trust store password
      * @param publicKeyAlias alias of the public key in the trust store
-     * @throws FileNotFoundException if there's an error
      * @throws KeyStoreException if there's an error
      * @throws IOException if there's an error
      * @throws NoSuchAlgorithmException if there's an error
@@ -86,7 +84,6 @@ public class AsymmetricEncrypter extends AbstractEncrypter implements Encrypter 
      * @param password trust store password
      * @param publicKeyAlias alias of the public key in the trust store
      * @param transformation transformation that the cipher uses
-     * @throws FileNotFoundException if there's an error
      * @throws KeyStoreException if there's an error
      * @throws IOException if there's an error
      * @throws NoSuchAlgorithmException if there's an error
