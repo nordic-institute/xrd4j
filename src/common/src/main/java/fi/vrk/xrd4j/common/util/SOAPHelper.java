@@ -635,9 +635,9 @@ public final class SOAPHelper {
 
     /**
      * Helper function for creating new SOAP messages
-     * 
+     *
      * @return New SOAP message
-     * @throws SOAPException
+     * @throws SOAPException on soap error
      */
     public static SOAPMessage createSOAPMessage() throws SOAPException {
         synchronized (MSG_FACTORY) {
@@ -651,8 +651,8 @@ public final class SOAPHelper {
      * @param mimeHeaders needed for creating SOAP message
      * @param is needed for creating SOAP message
      * @return New SOAP message
-     * @throws IOException
-     * @throws SOAPException
+     * @throws IOException on IO error
+     * @throws SOAPException on soap error
      */
     public static SOAPMessage createSOAPMessage(MimeHeaders mimeHeaders, InputStream is)
             throws IOException, SOAPException {
