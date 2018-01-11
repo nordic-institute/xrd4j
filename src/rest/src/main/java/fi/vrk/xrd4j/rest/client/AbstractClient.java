@@ -24,8 +24,7 @@ package fi.vrk.xrd4j.rest.client;
 
 import fi.vrk.xrd4j.rest.ClientResponse;
 import fi.vrk.xrd4j.rest.util.ClientUtil;
-import java.io.IOException;
-import java.util.Map;
+
 import org.apache.http.Header;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -33,6 +32,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Map;
 
 /**
  * This is an abstract base class for classes implementing GET, POST, PUT and
@@ -42,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractClient implements RESTClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractClient.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractClient.class);
 
     protected abstract HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers);
 
@@ -69,12 +71,12 @@ public abstract class AbstractClient implements RESTClient {
         // Build request
         HttpUriRequest request = this.buildtHttpRequest(url, requestBody, headers);
 
-        logger.info("Starting HTTP {} operation.", request.getMethod());
+        LOGGER.info("Starting HTTP {} operation.", request.getMethod());
 
         // Add headers
         if (headers != null && !headers.isEmpty()) {
             for (Map.Entry<String, String> entry : headers.entrySet()) {
-                logger.debug("Add header : \"{}\" = \"{}\"", entry.getKey(), entry.getValue());
+                LOGGER.debug("Add header : \"{}\" = \"{}\"", entry.getKey(), entry.getValue());
                 request.setHeader(entry.getKey(), entry.getValue());
             }
         }
@@ -99,15 +101,15 @@ public abstract class AbstractClient implements RESTClient {
 
             response.close();
             httpClient.close();
-            logger.debug("REST response content type: \"{}\".", contentType);
-            logger.debug("REST response status code: \"{}\".", statusCode);
-            logger.debug("REST response reason phrase: \"{}\".", reasonPhrase);
-            logger.debug("REST response : \"{}\".", responseStr);
-            logger.info("HTTP {} operation completed.", request.getMethod());
+            LOGGER.debug("REST response content type: \"{}\".", contentType);
+            LOGGER.debug("REST response status code: \"{}\".", statusCode);
+            LOGGER.debug("REST response reason phrase: \"{}\".", reasonPhrase);
+            LOGGER.debug("REST response : \"{}\".", responseStr);
+            LOGGER.info("HTTP {} operation completed.", request.getMethod());
             return new ClientResponse(responseStr, contentType, statusCode, reasonPhrase);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
-            logger.warn("HTTP {} operation failed. An empty string is returned.", request.getMethod());
+            LOGGER.error(e.getMessage(), e);
+            LOGGER.warn("HTTP {} operation failed. An empty string is returned.", request.getMethod());
             return null;
         }
     }

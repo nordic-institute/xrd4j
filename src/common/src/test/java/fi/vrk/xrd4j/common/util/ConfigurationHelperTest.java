@@ -25,7 +25,6 @@ package fi.vrk.xrd4j.common.util;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
-import static junit.framework.Assert.assertEquals;
 
 import junit.framework.TestCase;
 

@@ -23,6 +23,7 @@
 package fi.vrk.xrd4j.common.member;
 
 import fi.vrk.xrd4j.common.exception.XRd4JException;
+
 import junit.framework.TestCase;
 
 /**

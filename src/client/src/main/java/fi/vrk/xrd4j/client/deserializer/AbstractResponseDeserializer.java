@@ -22,20 +22,6 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
-import java.util.Map;
-
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
-import javax.xml.soap.SOAPPart;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
-
 import fi.vrk.xrd4j.common.deserializer.AbstractHeaderDeserializer;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.exception.XRd4JMissingMemberException;
@@ -46,6 +32,20 @@ import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.common.util.Constants;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
+
+import javax.xml.soap.Node;
+import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPHeader;
+import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPPart;
+
+import java.util.Map;
 
 /**
  * This abstract class serves as a base class for response deserializers. This
@@ -64,7 +64,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      */
     protected boolean isMetaServiceResponse = false;
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractResponseDeserializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractResponseDeserializer.class);
 
     /**
      * Deserializes SOAP body's request element.
@@ -129,7 +129,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
     @Override
     public final ServiceResponse deserialize(final SOAPMessage message, final String producerNamespaceURI, boolean processingWrappers) {
         try {
-            logger.debug("Deserialize SOAP message. Producer namespace URI \"{}\".", producerNamespaceURI);
+            LOGGER.debug("Deserialize SOAP message. Producer namespace URI \"{}\".", producerNamespaceURI);
             SOAPPart mySPart = message.getSOAPPart();
             SOAPEnvelope envelope = mySPart.getEnvelope();
 
@@ -144,13 +144,13 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
                 // Deserialize body
                 this.deserializeBody(response, producerNamespaceURI);
             } catch (XRd4JMissingMemberException ex) {
-                logger.warn(ex.getMessage(), ex);
+                LOGGER.warn(ex.getMessage(), ex);
                 this.deserializeSOAPFault(response);
             }
-            logger.debug("SOAP message was succesfully deserialized.");
+            LOGGER.debug("SOAP message was succesfully deserialized.");
             return response;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
         return null;
     }
@@ -165,10 +165,10 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      */
     private ServiceResponse deserializeHeader(final SOAPHeader header) throws SOAPException, XRd4JException {
 
-        logger.debug("Deserialize SOAP header.");
+        LOGGER.debug("Deserialize SOAP header.");
         // Check that SOAP header exists
         if (header == null || header.getChildNodes().getLength() == 0) {
-            logger.warn("No SOAP header or an empty SOAP header was found.");
+            LOGGER.warn("No SOAP header or an empty SOAP header was found.");
             return new ServiceResponse();
         }
         // Client headers
@@ -186,18 +186,18 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
         try {
             consumer = super.deserializeConsumer(header);
         } catch (XRd4JMissingMemberException ex) {
-            logger.warn("Deserializing \"ConsumerMember\" failed.");
+            LOGGER.warn("Deserializing \"ConsumerMember\" failed.");
         }
         try {
             producer = super.deserializeProducer(header);
         } catch (XRd4JMissingMemberException ex) {
-            logger.warn("Deserializing \"ProducerMember\" failed.");
+            LOGGER.warn("Deserializing \"ProducerMember\" failed.");
         }
         try {
             // Not mandatory - can be null
             securityServer = super.deserializeSecurityServer(header);
         } catch (XRd4JException ex) {
-            logger.warn("Deserializing \"ProducerMember\" failed.");
+            LOGGER.warn("Deserializing \"ProducerMember\" failed.");
         }
         ServiceResponse response = new ServiceResponse(consumer, producer, id);
         response.setSecurityServer(securityServer);
@@ -206,7 +206,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
         response.setRequestHashAlgorithm(algorithmId);
         response.setIssue(issue);
         response.setProtocolVersion(protocolVersion);
-        logger.debug("SOAP header was succesfully deserialized.");
+        LOGGER.debug("SOAP header was succesfully deserialized.");
         // Return response
         return response;
     }
@@ -223,7 +223,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * members
      */
     private boolean deserializeBody(final ServiceResponse response, final String producerNamespaceURI) throws SOAPException, XRd4JMissingMemberException {
-        logger.debug("Deserialize SOAP body.");
+        LOGGER.debug("Deserialize SOAP body.");
         // Nodes
         Node requestNode;
         Node responseNode;
@@ -235,46 +235,46 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
         try {
             list = body.getElementsByTagNameNS(producerNamespaceURI, response.getProducer().getServiceCode() + "Response");
         } catch (NullPointerException ex) {
-            logger.warn("Unable to fetch service response element.");
+            LOGGER.warn("Unable to fetch service response element.");
             throw new XRd4JMissingMemberException("Producer is null. SOAP header is probably missing.");
         }
         // Response element found
         if (list.getLength() == 1) {
-            logger.debug("Found service response element.");
+            LOGGER.debug("Found service response element.");
             // Check if it is needed to process "request" and "response" wrappers
             if (response.isProcessingWrappers()) {
-                logger.debug("Processing \"request\" and \"response\" wrappers in response message.");
+                LOGGER.debug("Processing \"request\" and \"response\" wrappers in response message.");
                 requestNode = SOAPHelper.getNode((Node) list.item(0), "request");
                 responseNode = SOAPHelper.getNode((Node) list.item(0), "response");
 
-                logger.debug("Deserialize request element.");
+                LOGGER.debug("Deserialize request element.");
                 T1 requestData = this.deserializeRequestData(requestNode);
                 response.setRequestData(requestData);
-                logger.debug("Request element was succesfully deserialized.");
+                LOGGER.debug("Request element was succesfully deserialized.");
             } else {
-                logger.debug("Skipping procession of \"request\" and \"response\" wrappers in response message.");
+                LOGGER.debug("Skipping procession of \"request\" and \"response\" wrappers in response message.");
                 responseNode = (Node) list.item(0);
             }
 
             // Check if the response contains a non-technical SOAP error message
             if (!this.deserializeResponseError(response, responseNode)) {
-                logger.debug("Deserialize response element.");
+                LOGGER.debug("Deserialize response element.");
                 T2 responseData = this.deserializeResponseData(responseNode, response.getSoapMessage());
                 response.setResponseData(responseData);
-                logger.debug("Response element was succesfully deserialized.");
+                LOGGER.debug("Response element was succesfully deserialized.");
             } else {
-                logger.warn("A non-technical SOAP error message was found instead of response.");
+                LOGGER.warn("A non-technical SOAP error message was found instead of response.");
             }
             response.getProducer().setNamespaceUrl(list.item(0).getNamespaceURI());
             response.getProducer().setNamespacePrefix(list.item(0).getPrefix());
-            logger.debug("SOAP body was succesfully deserialized.");
+            LOGGER.debug("SOAP body was succesfully deserialized.");
             return true;
         } else if (this.deserializeSOAPFault(response)) {
-            logger.warn("Standard SOAP error message found inside SOAP Body.");
+            LOGGER.warn("Standard SOAP error message found inside SOAP Body.");
             // Standard SOAP error message found inside Body
             return true;
         }
-        logger.warn("Service response element was not deserialized.");
+        LOGGER.warn("Service response element was not deserialized.");
         return false;
     }
 
@@ -288,7 +288,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * @throws SOAPException if there's a SOAP error
      */
     private boolean deserializeSOAPFault(final ServiceResponse response) throws SOAPException {
-        logger.debug("Deserialize SOAP fault.");
+        LOGGER.debug("Deserialize SOAP fault.");
         Map<String, String> fault;
         SOAPBody body = response.getSoapMessage().getSOAPBody();
         NodeList list = body.getElementsByTagNameNS("*", "Fault");
@@ -299,10 +299,10 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
             String faultActor = fault.get("FAULTACTOR");
             Object detail = this.deserializeFaultDetail(SOAPHelper.getNode((Node) list.item(0), "detail"));
             response.setErrorMessage(new ErrorMessage(faultCode, faultString, faultActor, detail));
-            logger.info("SOAP fault was succesfully deserialized.");
+            LOGGER.info("SOAP fault was succesfully deserialized.");
             return true;
         }
-        logger.debug("SOAP fault was not found.");
+        LOGGER.debug("SOAP fault was not found.");
         return false;
     }
 
@@ -316,9 +316,9 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * null is returned
      */
     protected Object deserializeFaultDetail(final Node detailNode) {
-        logger.debug("Deserialize fault detail. Default implementation is assuming String value.");
+        LOGGER.debug("Deserialize fault detail. Default implementation is assuming String value.");
         if (detailNode == null) {
-            logger.warn("Detail element is null. Nothing to do here.");
+            LOGGER.warn("Detail element is null. Nothing to do here.");
             return null;
         }
         return detailNode.getTextContent();
@@ -336,9 +336,9 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * @throws SOAPException if there's a SOAP error
      */
     private boolean deserializeResponseError(final ServiceResponse response, final Node responseNode) throws SOAPException {
-        logger.debug("Deserialize a non-technical SOAP error message.");
+        LOGGER.debug("Deserialize a non-technical SOAP error message.");
         if (this.isMetaServiceResponse) {
-            logger.debug("Response being processed is from X-Road meta service. Skip.");
+            LOGGER.debug("Response being processed is from X-Road meta service. Skip.");
             return false;
         }
         String faultCode = null;
@@ -348,20 +348,20 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
             if (responseNode.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE) {
                 // Hanle faultcode and faultstring
                 if ("faultcode".equalsIgnoreCase(responseNode.getChildNodes().item(i).getLocalName())) {
-                    logger.trace("FaultCode found.");
+                    LOGGER.trace("FaultCode found.");
                     faultCode = responseNode.getChildNodes().item(i).getTextContent();
                 } else if ("faultstring".equalsIgnoreCase(responseNode.getChildNodes().item(i).getLocalName())) {
-                    logger.trace("FaultString found.");
+                    LOGGER.trace("FaultString found.");
                     faultString = responseNode.getChildNodes().item(i).getTextContent();
                 }
             }
         }
         if (faultCode != null || faultString != null) {
             response.setErrorMessage(new ErrorMessage(faultCode, faultString));
-            logger.info("Error message was succesfully deserialized.");
+            LOGGER.info("Error message was succesfully deserialized.");
             return true;
         }
-        logger.debug("SOAP error message was not found.");
+        LOGGER.debug("SOAP error message was not found.");
         return false;
     }
 }

@@ -28,12 +28,14 @@ import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
-import java.util.List;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import java.util.List;
 
 /**
  * This class represents a round-robin load balanced SOAP client that can be
@@ -49,7 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LoadBalancedSOAPClientImpl implements LoadBalancedSOAPClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoadBalancedSOAPClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoadBalancedSOAPClientImpl.class);
     private final SOAPClient soapClient;
     private final List<String> endpointUrls;
     private int nextTarget;
@@ -65,9 +67,9 @@ public class LoadBalancedSOAPClientImpl implements LoadBalancedSOAPClient {
         this.endpointUrls = endpointUrls;
         this.soapClient = new SOAPClientImpl();
         this.nextTarget = 0;
-        logger.debug("Create new LoadBalancedSOAPClientImpl with {} endpoint URLs", endpointUrls.size());
+        LOGGER.debug("Create new LoadBalancedSOAPClientImpl with {} endpoint URLs", endpointUrls.size());
         for (String url : this.endpointUrls) {
-            logger.debug("Found URL: \"{}\"", url);
+            LOGGER.debug("Found URL: \"{}\"", url);
         }
     }
 
@@ -102,7 +104,8 @@ public class LoadBalancedSOAPClientImpl implements LoadBalancedSOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse send(final ServiceRequest request, final ServiceRequestSerializer serializer, final ServiceResponseDeserializer deserializer) throws SOAPException {
+    public ServiceResponse send(final ServiceRequest request, final ServiceRequestSerializer serializer,
+                                final ServiceResponseDeserializer deserializer) throws SOAPException {
         return this.soapClient.send(request, this.getTargetUrl(), serializer, deserializer);
     }
 
@@ -183,10 +186,10 @@ public class LoadBalancedSOAPClientImpl implements LoadBalancedSOAPClient {
     protected String getTargetUrl() {
         // Get the next target URL
         String target = this.endpointUrls.get(this.nextTarget);
-        logger.trace("Current nextTarget: \"{}\", targetUrl: \"{}\"", this.nextTarget, target);
+        LOGGER.trace("Current nextTarget: \"{}\", targetUrl: \"{}\"", this.nextTarget, target);
         // Update next pointer
         this.nextTarget = this.nextTarget == this.endpointUrls.size() - 1 ? 0 : this.nextTarget + 1;
-        logger.trace("New nextTarget: \"{}\"", this.nextTarget);
+        LOGGER.trace("New nextTarget: \"{}\"", this.nextTarget);
         return target;
     }
 }

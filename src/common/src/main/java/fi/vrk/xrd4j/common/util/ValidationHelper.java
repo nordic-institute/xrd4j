@@ -29,7 +29,7 @@ import fi.vrk.xrd4j.common.exception.XRd4JException;
  *
  * @author Petteri Kivimäki
  */
-public class ValidationHelper {
+public final class ValidationHelper {
 
     /**
      * Constructs and initializes a new ValidationHelper object. Should never

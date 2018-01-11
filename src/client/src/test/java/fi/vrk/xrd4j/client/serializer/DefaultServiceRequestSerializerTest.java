@@ -22,9 +22,6 @@
  */
 package fi.vrk.xrd4j.client.serializer;
 
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
@@ -33,7 +30,11 @@ import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.util.Constants;
 import fi.vrk.xrd4j.common.util.MessageHelper;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
+
 import junit.framework.TestCase;
+
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
 
 /**
  * Test cases for DefaultServiceRequestSerializer class.

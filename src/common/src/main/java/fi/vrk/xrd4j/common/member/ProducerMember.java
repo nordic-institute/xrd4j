@@ -25,6 +25,7 @@ package fi.vrk.xrd4j.common.member;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.util.Constants;
 import fi.vrk.xrd4j.common.util.ValidationHelper;
+
 import java.io.Serializable;
 
 /**
@@ -114,7 +115,8 @@ public class ProducerMember extends AbstractMember implements Serializable {
      * @param serviceVersion version of the service
      * @throws XRd4JException if there's a XRd4J error
      */
-    public ProducerMember(String xRoadInstance, String memberClass, String memberCode, String subsystemCode, String serviceCode, String serviceVersion) throws XRd4JException {
+    public ProducerMember(String xRoadInstance, String memberClass, String memberCode, String subsystemCode,
+                          String serviceCode, String serviceVersion) throws XRd4JException {
         super(xRoadInstance, memberClass, memberCode, subsystemCode);
         this.serviceCode = serviceCode;
         this.serviceVersion = serviceVersion;

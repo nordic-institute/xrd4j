@@ -24,6 +24,7 @@ package fi.vrk.xrd4j.server.serializer;
 
 import fi.vrk.xrd4j.common.message.ServiceRequest;
 import fi.vrk.xrd4j.common.message.ServiceResponse;
+
 import javax.xml.soap.SOAPMessage;
 
 /**

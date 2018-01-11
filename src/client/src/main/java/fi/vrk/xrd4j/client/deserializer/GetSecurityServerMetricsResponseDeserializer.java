@@ -23,12 +23,14 @@
 package fi.vrk.xrd4j.client.deserializer;
 
 import fi.vrk.xrd4j.common.util.Constants;
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
+
+import javax.xml.soap.Node;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
 
 /**
  * This class is used for deserializing responses of getSecurityServerMetrics
@@ -38,7 +40,7 @@ import org.w3c.dom.NodeList;
  */
 public class GetSecurityServerMetricsResponseDeserializer extends AbstractResponseDeserializer<String, NodeList> {
 
-    private static final Logger logger = LoggerFactory.getLogger(GetSecurityServerMetricsResponseDeserializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetSecurityServerMetricsResponseDeserializer.class);
 
     /**
      * Constructs and initializes a new getSecurityServerMetricsResponseDeserializer.
@@ -72,7 +74,7 @@ public class GetSecurityServerMetricsResponseDeserializer extends AbstractRespon
     protected NodeList deserializeResponseData(Node responseNode, SOAPMessage message) throws SOAPException {
         // Get list of metricSet elements
         NodeList list = message.getSOAPBody().getElementsByTagNameNS(Constants.NS_ENV_MONITORING_URL, Constants.NS_ENV_MONITORING_ELEM_METRIC_SET);
-        logger.debug("Found {} {} elements from SOAP body. ", list.getLength(), Constants.NS_ENV_MONITORING_ELEM_METRIC_SET);
+        LOGGER.debug("Found {} {} elements from SOAP body. ", list.getLength(), Constants.NS_ENV_MONITORING_ELEM_METRIC_SET);
         return list;
     }
 }

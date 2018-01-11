@@ -22,22 +22,22 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+import fi.vrk.xrd4j.common.member.ObjectType;
+import fi.vrk.xrd4j.common.member.ProducerMember;
+import fi.vrk.xrd4j.common.util.Constants;
+import fi.vrk.xrd4j.common.util.SOAPHelper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
 
-import fi.vrk.xrd4j.common.member.ObjectType;
-import fi.vrk.xrd4j.common.member.ProducerMember;
-import fi.vrk.xrd4j.common.util.Constants;
-import fi.vrk.xrd4j.common.util.SOAPHelper;
+import javax.xml.soap.Node;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class is used for deserializing responses of listMethods and
@@ -47,7 +47,7 @@ import fi.vrk.xrd4j.common.util.SOAPHelper;
  */
 public class ListServicesResponseDeserializer extends AbstractResponseDeserializer<String, List<ProducerMember>> {
 
-    private static final Logger logger = LoggerFactory.getLogger(ListServicesResponseDeserializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListServicesResponseDeserializer.class);
     
     /**
      * Constructs and initializes a new ListServicesResponseDeserializer.
@@ -82,10 +82,10 @@ public class ListServicesResponseDeserializer extends AbstractResponseDeserializ
         List<ProducerMember> producers = new ArrayList<>();
         // Get list of services
         NodeList list = message.getSOAPBody().getElementsByTagNameNS(Constants.NS_XRD_URL, Constants.NS_XRD_ELEM_SERVICE);
-        logger.debug("Found {} {} elements from SOAP body. ", list.getLength(), Constants.NS_XRD_ELEM_SERVICE);
+        LOGGER.debug("Found {} {} elements from SOAP body. ", list.getLength(), Constants.NS_XRD_ELEM_SERVICE);
 
         for (int i = 0; i < list.getLength(); i++) {
-            logger.debug("Deserialize \"{}\".", Constants.NS_XRD_ELEM_SERVICE);
+            LOGGER.debug("Deserialize \"{}\".", Constants.NS_XRD_ELEM_SERVICE);
             // Service headers
             Map<String, String> service = SOAPHelper.nodesToMap(list.item(i).getChildNodes());
             // Service object type
@@ -93,8 +93,8 @@ public class ListServicesResponseDeserializer extends AbstractResponseDeserializ
             try {
                 producers.add(super.getProducerMember(service, serviceObjectType));
             } catch (Exception e) {
-                logger.error("Deserializing \"{}\" failed - skip.", Constants.NS_XRD_ELEM_SERVICE);
-                logger.error(e.getMessage(), e);
+                LOGGER.error("Deserializing \"{}\" failed - skip.", Constants.NS_XRD_ELEM_SERVICE);
+                LOGGER.error(e.getMessage(), e);
             }
         }
         return producers;

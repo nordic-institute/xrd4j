@@ -22,7 +22,11 @@
  */
 package fi.vrk.xrd4j.common.security;
 
-import java.io.FileNotFoundException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import java.io.IOException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -30,10 +34,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 /**
  * This class implements asymmetric encryption. The encryption should be made
@@ -68,7 +68,8 @@ public class AsymmetricEncrypter extends AbstractEncrypter implements Encrypter 
      * @throws NoSuchAlgorithmException if there's an error
      * @throws CertificateException if there's an error
      */
-    public AsymmetricEncrypter(String path, String password, String publicKeyAlias) throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
+    public AsymmetricEncrypter(String path, String password, String publicKeyAlias) throws KeyStoreException,
+        IOException, NoSuchAlgorithmException, CertificateException {
         this.publicKey = CryptoHelper.getPublicKey(path, password, publicKeyAlias);
         this.transformation = "RSA/ECB/PKCS1Padding";
     }
@@ -90,7 +91,8 @@ public class AsymmetricEncrypter extends AbstractEncrypter implements Encrypter 
      * @throws NoSuchAlgorithmException if there's an error
      * @throws CertificateException if there's an error
      */
-    public AsymmetricEncrypter(String path, String password, String publicKeyAlias, String transformation) throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
+    public AsymmetricEncrypter(String path, String password, String publicKeyAlias, String transformation)
+        throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException {
         this(path, password, publicKeyAlias);
         this.transformation = transformation;
     }
@@ -108,7 +110,8 @@ public class AsymmetricEncrypter extends AbstractEncrypter implements Encrypter 
      * @throws BadPaddingException if there's an error
      */
     @Override
-    protected byte[] encrypt(byte[] plaintext) throws NoSuchAlgorithmException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+    protected byte[] encrypt(byte[] plaintext) throws NoSuchAlgorithmException, InvalidKeyException,
+        InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(this.transformation);
         cipher.init(Cipher.ENCRYPT_MODE, this.getPublicKey());
         return cipher.doFinal(plaintext);
