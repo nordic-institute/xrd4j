@@ -107,10 +107,10 @@ public abstract class AbstractMember implements Serializable {
 
     /**
      * Sets the X-Road instance of this member.
-     * @param xRoadInstance new value
+     * @param xrdInstance new value
      */
-    public void setXRoadInstance(String xRoadInstance) {
-        this.xRoadInstance = xRoadInstance;
+    public void setXRoadInstance(String xrdInstance) {
+        this.xRoadInstance = xrdInstance;
     }
 
     /**

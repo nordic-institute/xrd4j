@@ -22,22 +22,6 @@
  */
 package fi.vrk.xrd4j.server;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.message.ErrorMessage;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
@@ -51,6 +35,22 @@ import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import fi.vrk.xrd4j.server.serializer.ServiceResponseSerializer;
 import fi.vrk.xrd4j.server.utils.AdapterUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.soap.MimeHeaders;
+import javax.xml.soap.SOAPElement;
+import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * This an abstract base class for Servlets that implement SOAP message
  * processing.
@@ -59,7 +59,7 @@ import fi.vrk.xrd4j.server.utils.AdapterUtils;
  */
 public abstract class AbstractAdapterServlet extends HttpServlet {
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractAdapterServlet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractAdapterServlet.class);
     private static final String FAULT_CODE_CLIENT = "SOAP-ENV:Client";
     private ServiceRequestDeserializer deserializer;
     private ServiceResponseSerializer serializer;
@@ -94,16 +94,16 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
      */
     @Override
     public void init() {
-        logger.debug("Starting to initialize AbstractServlet.");
+        LOGGER.debug("Starting to initialize AbstractServlet.");
         this.deserializer = new ServiceRequestDeserializerImpl();
         this.serializer = new DummyServiceResponseSerializer();
-        logger.debug("Initialize \"errGetNotSupportedStr\" error message.");
+        LOGGER.debug("Initialize \"errGetNotSupportedStr\" error message.");
         this.errGetNotSupportedStr = SOAPHelper.toString(this.errorToSOAP(this.errGetNotSupported, null));
-        logger.debug("Initialize \"errWsdlNotFoundStr\" error message.");
+        LOGGER.debug("Initialize \"errWsdlNotFoundStr\" error message.");
         this.errWsdlNotFoundStr = SOAPHelper.toString(this.errorToSOAP(this.errWsdlNotFound, null));
-        logger.debug("Initialize \"errInternalServerErrStr\" error message.");
+        LOGGER.debug("Initialize \"errInternalServerErrStr\" error message.");
         this.errInternalServerErrStr = SOAPHelper.toString(this.errorToSOAP(this.errInternalServerErr, null));
-        logger.debug("AbstractServlet initialized.");
+        LOGGER.debug("AbstractServlet initialized.");
     }
 
     /**
@@ -118,37 +118,37 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String errString = "Invalid SOAP message.";
-        logger.debug("New request received.");
+        LOGGER.debug("New request received.");
         SOAPMessage soapRequest = null;
         SOAPMessage soapResponse = null;
 
         // Log HTTP headers if debug is enabled
-        if (logger.isDebugEnabled()) {
-            logger.debug(AdapterUtils.getHeaderInfo(request));
-            logger.debug("Request content length {} bytes.", request.getContentLength());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(AdapterUtils.getHeaderInfo(request));
+            LOGGER.debug("Request content length {} bytes.", request.getContentLength());
         }
 
         // Get incoming SOAP message
         if (request.getContentType().toLowerCase().startsWith(Constants.TEXT_XML)) {
             // Regular SOAP message without attachments
-            logger.info("Request's content type is \"{}\".", Constants.TEXT_XML);
+            LOGGER.info("Request's content type is \"{}\".", Constants.TEXT_XML);
             soapRequest = SOAPHelper.toSOAP(request.getInputStream());
         } else if (request.getContentType().toLowerCase().startsWith(Constants.MULTIPART_RELATED)) {
             // SOAP message with attachments
-            logger.info("Request's content type is \"{}\".", Constants.MULTIPART_RELATED);
+            LOGGER.info("Request's content type is \"{}\".", Constants.MULTIPART_RELATED);
             MimeHeaders mh = AdapterUtils.getHeaders(request);
             soapRequest = SOAPHelper.toSOAP(request.getInputStream(), mh);
-            logger.trace(AdapterUtils.getAttachmentsInfo(soapRequest));
+            LOGGER.trace(AdapterUtils.getAttachmentsInfo(soapRequest));
         } else {
             // Invalid content type -> message is not processed
-            logger.warn("Invalid content type : \"{}\".", request.getContentType());
+            LOGGER.warn("Invalid content type : \"{}\".", request.getContentType());
             errString = "Invalid content type : \"" + request.getContentType() + "\".";
         }
 
         // Conversion has failed if soapRequest is null. Return SOAP Fault.
         if (soapRequest == null) {
-            logger.warn("Unable to deserialize the request to SOAP. SOAP Fault is returned.");
-            logger.trace("Incoming message : \"{}\"", request.getInputStream().toString());
+            LOGGER.warn("Unable to deserialize the request to SOAP. SOAP Fault is returned.");
+            LOGGER.trace("Incoming message : \"{}\"", request.getInputStream().toString());
             ErrorMessage errorMessage = new ErrorMessage(FAULT_CODE_CLIENT, errString, "", "");
             soapResponse = this.errorToSOAP(errorMessage, null);
         }
@@ -183,7 +183,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
     private void writeResponse(SOAPMessage soapResponse, HttpServletResponse response) {
         PrintWriter out = null;
         try {
-            logger.debug("Send response.");
+            LOGGER.debug("Send response.");
             // SOAPMessage to String
             String responseStr = SOAPHelper.toString(soapResponse);
             // Set response headers
@@ -194,20 +194,20 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
             } else {
                 response.setContentType(Constants.TEXT_XML + "; charset=UTF-8");
             }
-            logger.debug("Response content type : \"{}\".", response.getContentType());
+            LOGGER.debug("Response content type : \"{}\".", response.getContentType());
             // Get writer
             out = response.getWriter();
             // Send response
             if (responseStr != null) {
                 out.println(responseStr);
-                logger.trace("SOAP response : \"{}\"", responseStr);
+                LOGGER.trace("SOAP response : \"{}\"", responseStr);
             } else {
                 out.println(this.errInternalServerErrStr);
-                logger.warn("Internal serveri error. Message processing failed.");
-                logger.trace("SOAP response : \"{}\"", this.errInternalServerErrStr);
+                LOGGER.warn("Internal serveri error. Message processing failed.");
+                LOGGER.trace("SOAP response : \"{}\"", this.errInternalServerErrStr);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             if (out != null) {
                 out.println(this.errInternalServerErrStr);
             }
@@ -215,7 +215,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
             if (out != null) {
                 out.close();
             }
-            logger.debug("Request was succesfully processed.");
+            LOGGER.debug("Request was succesfully processed.");
         }
     }
 
@@ -226,16 +226,16 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
      * @return ServiceRequest or null
      */
     private ServiceRequest fromSOAPToServiceRequest(SOAPMessage soapRequest) {
-        logger.trace("Incoming SOAP message : \"{}\"", SOAPHelper.toString(soapRequest));
+        LOGGER.trace("Incoming SOAP message : \"{}\"", SOAPHelper.toString(soapRequest));
         ServiceRequest serviceRequest = null;
         try {
             // Try to deserialize SOAP Message to ServiceRequest
             serviceRequest = deserializer.deserialize(soapRequest);
-            logger.debug("SOAP message header was succesfully deserialized to ServiceRequest.");
+            LOGGER.debug("SOAP message header was succesfully deserialized to ServiceRequest.");
         } catch (Exception ex) {
             // If deserializing SOAP Message fails, return SOAP Fault
-            logger.error("Deserializing SOAP message header to ServiceRequest failed. Return SOAP Fault.");
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error("Deserializing SOAP message header to ServiceRequest failed. Return SOAP Fault.");
+            LOGGER.error(ex.getMessage(), ex);
         }
         return serviceRequest;
     }
@@ -250,25 +250,25 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
     private SOAPMessage processServiceRequest(ServiceRequest serviceRequest) {
         try {
             // Process application specific requests
-            logger.debug("Process ServiceRequest.");
+            LOGGER.debug("Process ServiceRequest.");
             ServiceResponse serviceResponse = this.handleRequest(serviceRequest);
             if (serviceResponse == null) {
-                logger.warn("ServiceRequest was not processed. Unknown service code.");
+                LOGGER.warn("ServiceRequest was not processed. Unknown service code.");
                 return this.errorToSOAP(this.errUnknownServiceCode, null);
             } else {
                 SOAPMessage soapResponse = serviceResponse.getSoapMessage();
-                logger.debug("ServiceRequest was processed succesfully.");
+                LOGGER.debug("ServiceRequest was processed succesfully.");
                 return soapResponse;
             }
         } catch (XRd4JException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
             if (serviceRequest.hasError()) {
                 return this.errorToSOAP(this.cloneErrorMessage(serviceRequest.getErrorMessage()), null);
             } else {
                 return this.errorToSOAP(this.errInternalServerErr, null);
             }
         } catch (SOAPException | NullPointerException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
             return this.errorToSOAP(this.errInternalServerErr, null);
         }
     }
@@ -288,7 +288,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
 
         try (PrintWriter responseWriter = response.getWriter()) {
             if (request.getParameter("wsdl") != null) {
-                logger.debug("WSDL file request received.");
+                LOGGER.debug("WSDL file request received.");
                 String path = this.getWSDLPath();
 
                 // Read WSDL file
@@ -296,19 +296,19 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
 
                 if (!wsdl.isEmpty()) {
                     responseWriter.println(wsdl);
-                    logger.trace("WSDL file was found and returned to the requester.");
+                    LOGGER.trace("WSDL file was found and returned to the requester.");
                 } else {
                     responseWriter.println(this.errWsdlNotFoundStr);
-                    logger.warn("WSDL file was not found. SOAP Fault was returned.");
+                    LOGGER.warn("WSDL file was not found. SOAP Fault was returned.");
                 }
 
-                logger.debug("WSDL file request processed.");
+                LOGGER.debug("WSDL file request processed.");
             } else {
-                logger.warn("New GET request received. Not supported. SOAP Fault is returned.");
+                LOGGER.warn("New GET request received. Not supported. SOAP Fault is returned.");
                 responseWriter.println(errGetNotSupportedStr);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

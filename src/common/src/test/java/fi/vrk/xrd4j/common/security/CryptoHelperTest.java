@@ -22,12 +22,13 @@
  */
 package fi.vrk.xrd4j.common.security;
 
+import junit.framework.TestCase;
+
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
-import junit.framework.TestCase;
 
 /**
  * Test cases for CryptoHelper class. The cases cover decryption too.
@@ -37,14 +38,14 @@ import junit.framework.TestCase;
 public class CryptoHelperTest extends TestCase {
 
     // Public key
-    private final static String publicKeyFile = "src/test/resources/mytruststore1.jks";
-    private final static String publicKeyFilePass = "truststore1";
-    private final static String publicKeyAlias = "key2";
+    private static final String PUBLIC_KEY_FILE = "src/test/resources/mytruststore1.jks";
+    private static final String PUBLIC_KEY_FILE_PASS = "truststore1";
+    private static final String PUBLIC_KEY_ALIAS = "key2";
     // Private key
-    private final static String privateKeyFile = "src/test/resources/mykeystore2.jks";
-    private final static String privateKeyFilePass = "storepass2";
-    private final static String privateKeyAlias = "selfsigned";
-    private final static String privateKeyPass = "keypass2";
+    private static final String PRIVATE_KEY_FILE = "src/test/resources/mykeystore2.jks";
+    private static final String PRIVATE_KEY_FILE_PASS = "storepass2";
+    private static final String PRIVATE_KEY_ALIAS = "selfsigned";
+    private static final String PRIVATE_KEY_PASS = "keypass2";
 
     /**
      * Test signature with a simple string.
@@ -94,8 +95,8 @@ public class CryptoHelperTest extends TestCase {
 
     private boolean createAndverifySignature(String signData, String verifyData) {
         try {
-            PrivateKey privateKey = CryptoHelper.getPrivateKey(privateKeyFile, privateKeyFilePass, privateKeyAlias, privateKeyPass);
-            PublicKey publicKey = CryptoHelper.getPublicKey(publicKeyFile, publicKeyFilePass, publicKeyAlias);
+            PrivateKey privateKey = CryptoHelper.getPrivateKey(PRIVATE_KEY_FILE, PRIVATE_KEY_FILE_PASS, PRIVATE_KEY_ALIAS, PRIVATE_KEY_PASS);
+            PublicKey publicKey = CryptoHelper.getPublicKey(PUBLIC_KEY_FILE, PUBLIC_KEY_FILE_PASS, PUBLIC_KEY_ALIAS);
             String signature = CryptoHelper.createSignature(privateKey, signData);
             return CryptoHelper.verifySignature(publicKey, verifyData, signature);
         } catch (Exception e) {

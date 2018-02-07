@@ -23,8 +23,8 @@
 package fi.vrk.xrd4j.common.message;
 
 import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ProducerMember;
 
 /**
  * This class represents X-Road service request message that is sent by a

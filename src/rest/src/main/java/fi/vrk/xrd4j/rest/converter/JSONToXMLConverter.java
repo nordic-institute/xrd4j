@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JSONToXMLConverter implements Converter {
 
-    private static final Logger logger = LoggerFactory.getLogger(JSONToXMLConverter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JSONToXMLConverter.class);
 
     /**
      * Converts the given JSON string to XML string.
@@ -50,13 +50,13 @@ public class JSONToXMLConverter implements Converter {
     public String convert(String data) {
         String asXML;
         try {
-            logger.debug("CONVERTING " + data);
+            LOGGER.debug("CONVERTING " + data);
             if (data.startsWith("{")) {
                 JSONObject asJson = new JSONObject(data);
 
                 // "array" behaves in a special way, best to disallow it
                 if (asJson.has("array")) {
-                    logger.error("Data violation: Invalid key \"array\"");
+                    LOGGER.error("Data violation: Invalid key \"array\"");
                     return "<error>Invalid key \"array\"</error>";
                 }
                 asXML = XML.toString(asJson);
@@ -67,12 +67,12 @@ public class JSONToXMLConverter implements Converter {
             // in XML element names. Replace '@' characters with '__at__' in
             // element names.
             asXML = asXML.replaceAll("<(/{0,1})@", "<$1__at__");
-            logger.debug("RETURN XML " + asXML);
+            LOGGER.debug("RETURN XML " + asXML);
             return asXML;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
-        logger.warn("Converting JSON to XML failed! An empty string is returned.");
+        LOGGER.warn("Converting JSON to XML failed! An empty string is returned.");
         return "";
     }
 }

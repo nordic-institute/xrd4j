@@ -22,13 +22,14 @@
  */
 package fi.vrk.xrd4j.common.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class offers methods for loading properties files. All the loaded files
@@ -36,9 +37,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Petteri Kivimäki
  */
-public class PropertiesUtil {
+public final class PropertiesUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesUtil.class);
     private HashMap<String, Properties> loadedProps;
     private static PropertiesUtil ref;
 
@@ -84,10 +85,10 @@ public class PropertiesUtil {
      * null, if loading the properties fails
      */
     public Properties load(String propsName, boolean fromClasspath) {
-        logger.debug("Load properties from file : \"" + propsName + "\".");
+        LOGGER.debug("Load properties from file : \"" + propsName + "\".");
         // If file is already loaded, return it from cache
         if (loadedProps.containsKey(propsName)) {
-            logger.debug("File already loaded. Use cache.");
+            LOGGER.debug("File already loaded. Use cache.");
             return loadedProps.get(propsName);
         }
 
@@ -95,27 +96,27 @@ public class PropertiesUtil {
         InputStream is = null;
         try {
             if (fromClasspath) {
-                logger.debug("Load properties from classpath.");
+                LOGGER.debug("Load properties from classpath.");
                 is = this.getClass().getResourceAsStream(propsName);
             } else {
-                logger.debug("Load properties from file system.");
+                LOGGER.debug("Load properties from file system.");
                 is = new FileInputStream(propsName);
             }
             props = new Properties();
             props.load(is);
             loadedProps.put(propsName, props);
-            logger.debug("Properties were succesfully loaded.");
+            LOGGER.debug("Properties were succesfully loaded.");
         } catch (Exception e) {
-            logger.error("Loading properties failed.");
-            logger.error(e.getMessage(), e);
+            LOGGER.error("Loading properties failed.");
+            LOGGER.error(e.getMessage(), e);
             return null;
         } finally {
             if (is != null) {
                 try {
                     is.close();
                 } catch (IOException ex) {
-                    logger.error("Closing input stream failed.");
-                    logger.error(ex.getMessage(), ex);
+                    LOGGER.error("Closing input stream failed.");
+                    LOGGER.error(ex.getMessage(), ex);
                 }
             }
         }

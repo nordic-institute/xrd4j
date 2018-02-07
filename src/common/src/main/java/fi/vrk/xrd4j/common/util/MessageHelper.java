@@ -22,9 +22,16 @@
  */
 package fi.vrk.xrd4j.common.util;
 
-import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.member.ProducerMember;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.imageio.ImageIO;
+import javax.xml.bind.DatatypeConverter;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -34,11 +41,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
-import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class offers some helper methods for handling ServiceRequest and
@@ -46,9 +48,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author Petteri Kivimäki
  */
-public class MessageHelper {
+public final class MessageHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(MessageHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageHelper.class);
 
     /**
      * Constructs and initializes a new MessageHelper object. Should never be
@@ -145,7 +147,7 @@ public class MessageHelper {
             // Use Base64 encoding here -->
             return DatatypeConverter.printBase64Binary(hashedByteArray);
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
             return null;
         }
     }
@@ -166,7 +168,7 @@ public class MessageHelper {
             image = ImageIO.read(bis);
             bis.close();
         } catch (Exception ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
         return image;
     }
@@ -188,7 +190,7 @@ public class MessageHelper {
             imageString = DatatypeConverter.printBase64Binary(imageBytes);
             bos.close();
         } catch (IOException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
         return imageString;
     }
@@ -211,7 +213,7 @@ public class MessageHelper {
             imageString = DatatypeConverter.printBase64Binary(imageBytes);
             bos.close();
         } catch (IOException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
         return imageString;
     }

@@ -22,18 +22,6 @@
  */
 package fi.vrk.xrd4j.client;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
-
-import javax.xml.soap.SOAPConnection;
-import javax.xml.soap.SOAPConnectionFactory;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fi.vrk.xrd4j.client.deserializer.GetSecurityServerMetricsResponseDeserializer;
 import fi.vrk.xrd4j.client.deserializer.ListCentralServicesResponseDeserializer;
 import fi.vrk.xrd4j.client.deserializer.ListClientsResponseDeserializer;
@@ -52,6 +40,18 @@ import fi.vrk.xrd4j.rest.ClientResponse;
 import fi.vrk.xrd4j.rest.client.RESTClient;
 import fi.vrk.xrd4j.rest.client.RESTClientFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.xml.soap.SOAPConnection;
+import javax.xml.soap.SOAPConnectionFactory;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+
 /**
  * This class represents a SOAP client that can be used for sending SOAPMessage
  * and ServiceRequest objects to SOAP endpoints.
@@ -60,7 +60,7 @@ import fi.vrk.xrd4j.rest.client.RESTClientFactory;
  */
 public class SOAPClientImpl implements SOAPClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(SOAPClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SOAPClientImpl.class);
     private final SOAPConnectionFactory connectionFactory;
 
     /**
@@ -89,15 +89,15 @@ public class SOAPClientImpl implements SOAPClient {
         try {
             client = new URL(url);
         } catch (MalformedURLException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
             throw new XRd4JRuntimeException(ex.getMessage());
         }
         SOAPConnection connection = connectionFactory.createConnection();
-        logger.debug("Send SOAP message to \"{}\".", url);
-        logger.trace("Outgoing SOAP request : \"{}\".", SOAPHelper.toString(request));
+        LOGGER.debug("Send SOAP message to \"{}\".", url);
+        LOGGER.trace("Outgoing SOAP request : \"{}\".", SOAPHelper.toString(request));
         SOAPMessage response = connection.call(request, client);
-        logger.debug("SOAP response received.");
-        logger.trace("Incoming SOAP response : \"{}\".", SOAPHelper.toString(response));
+        LOGGER.debug("SOAP response received.");
+        LOGGER.trace("Incoming SOAP response : \"{}\".", SOAPHelper.toString(response));
         connection.close();
         return response;
     }
@@ -119,15 +119,18 @@ public class SOAPClientImpl implements SOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse send(final ServiceRequest request, final String url, final ServiceRequestSerializer serializer, final ServiceResponseDeserializer deserializer) throws SOAPException {
+    public ServiceResponse send(final ServiceRequest request, final String url,
+                                final ServiceRequestSerializer serializer,
+                                final ServiceResponseDeserializer deserializer) throws SOAPException {
         SOAPMessage soapRequest = serializer.serialize(request);
-        logger.info("Send ServiceRequest to \"{}\". Request id : \"{}\"", url, request.getId());
-        logger.debug("Consumer : {}", request.getConsumer().toString());
-        logger.debug("Producer : {}", request.getProducer().toString());
+        LOGGER.info("Send ServiceRequest to \"{}\". Request id : \"{}\"", url, request.getId());
+        LOGGER.debug("Consumer : {}", request.getConsumer().toString());
+        LOGGER.debug("Producer : {}", request.getProducer().toString());
         SOAPMessage soapResponse = this.send(soapRequest, url);
-        String producerNamespaceURI = request.getProducer().getNamespaceUrl() == null || request.getProducer().getNamespaceUrl().isEmpty() ? "*" : request.getProducer().getNamespaceUrl();
+        String producerNamespaceURI = request.getProducer().getNamespaceUrl() == null
+                || request.getProducer().getNamespaceUrl().isEmpty() ? "*" : request.getProducer().getNamespaceUrl();
         ServiceResponse response = deserializer.deserialize(soapResponse, producerNamespaceURI, request.isProcessingWrappers());
-        logger.info("ServiceResponse received. Request id : \"{}\"", request.getId());
+        LOGGER.info("ServiceResponse received. Request id : \"{}\"", request.getId());
         return response;
     }
 
@@ -141,15 +144,15 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public List<ConsumerMember> listClients(String url) {
-        logger.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_CLIENTS);
+        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_CLIENTS);
         if (!url.endsWith("/")) {
             url += "/";
         }
-        logger.debug("Send SOAP message to \"{}\".", url);
+        LOGGER.debug("Send SOAP message to \"{}\".", url);
         RESTClient client = RESTClientFactory.createRESTClient("get");
         ClientResponse response = client.send(url + Constants.META_SERVICE_LIST_CLIENTS, null, null, null);
         List<ConsumerMember> list = new ListClientsResponseDeserializer().deserializeConsumerList(response.getData());
-        logger.debug("Received \"{}\" clients from the security server.", list.size());
+        LOGGER.debug("Received \"{}\" clients from the security server.", list.size());
         return list;
     }
 
@@ -163,15 +166,15 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public List<ProducerMember> listCentralServices(String url) {
-        logger.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_CENTRAL_SERVICES);
+        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_CENTRAL_SERVICES);
         if (!url.endsWith("/")) {
             url += "/";
         }
-        logger.debug("Send SOAP message to \"{}\".", url);
+        LOGGER.debug("Send SOAP message to \"{}\".", url);
         RESTClient client = RESTClientFactory.createRESTClient("get");
         ClientResponse response = client.send(url + Constants.META_SERVICE_LIST_CENTRAL_SERVICES, null, null, null);
         List<ProducerMember> list = new ListCentralServicesResponseDeserializer().deserializeProducerList(response.getData());
-        logger.debug("Received \"{}\" clients from the security server.", list.size());
+        LOGGER.debug("Received \"{}\" clients from the security server.", list.size());
         return list;
     }
 
@@ -187,7 +190,7 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public ServiceResponse listMethods(final ServiceRequest request, final String url) throws SOAPException {
-        logger.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_METHODS);
+        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_METHODS);
         return this.listServices(request, url, Constants.META_SERVICE_LIST_METHODS);
     }
 
@@ -204,7 +207,7 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public ServiceResponse allowedMethods(final ServiceRequest request, final String url) throws SOAPException {
-        logger.info("Call \"{}\" meta service.", Constants.META_SERVICE_ALLOWED_METHODS);
+        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_ALLOWED_METHODS);
         return this.listServices(request, url, Constants.META_SERVICE_ALLOWED_METHODS);
     }
 

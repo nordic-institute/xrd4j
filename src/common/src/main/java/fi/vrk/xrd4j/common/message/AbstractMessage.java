@@ -23,8 +23,8 @@
 package fi.vrk.xrd4j.common.message;
 
 import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
+import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.member.SecurityServer;
 import fi.vrk.xrd4j.common.util.Constants;
 import fi.vrk.xrd4j.common.util.ValidationHelper;

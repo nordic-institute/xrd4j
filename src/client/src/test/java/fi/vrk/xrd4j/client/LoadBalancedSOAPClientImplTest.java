@@ -22,10 +22,12 @@
  */
 package fi.vrk.xrd4j.client;
 
+import junit.framework.TestCase;
+
+import javax.xml.soap.SOAPException;
+
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.soap.SOAPException;
-import junit.framework.TestCase;
 
 /**
  * Test cases for LoadBalancedSOAPClientImpl class. Test cases cover only cases
@@ -35,6 +37,10 @@ import junit.framework.TestCase;
  */
 public class LoadBalancedSOAPClientImplTest extends TestCase {
 
+    /**
+     * Test that reading target url throws exception when given empty url list
+     * @throws SOAPException
+     */
     public void test1() throws SOAPException {
         List<String> urls = new ArrayList<>();
         LoadBalancedSOAPClientImpl client = new LoadBalancedSOAPClientImpl(urls);
@@ -48,6 +54,10 @@ public class LoadBalancedSOAPClientImplTest extends TestCase {
         }
     }
 
+    /**
+     * Test that reading target url keeps giving the same url
+     * @throws SOAPException
+     */
     public void test2() throws SOAPException {
         List<String> urls = new ArrayList<>();
         urls.add("http://server1.myhost.com");
@@ -57,6 +67,10 @@ public class LoadBalancedSOAPClientImplTest extends TestCase {
         assertEquals("http://server1.myhost.com", client.getTargetUrl());
     }
 
+    /**
+     * Test that reading target url load balances between given urls
+     * @throws SOAPException
+     */
     public void test3() throws SOAPException {
         List<String> urls = new ArrayList<>();
         urls.add("http://server1.myhost.com");
@@ -69,6 +83,10 @@ public class LoadBalancedSOAPClientImplTest extends TestCase {
         assertEquals("http://server1.myhost.com", client.getTargetUrl());
     }
 
+    /**
+     * Test that reading target url load balances between given urls
+     * @throws SOAPException
+     */
     public void test4() throws SOAPException {
         List<String> urls = new ArrayList<>();
         urls.add("http://server1.myhost.com");

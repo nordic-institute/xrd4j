@@ -23,15 +23,16 @@
 package fi.vrk.xrd4j.client;
 
 import fi.vrk.xrd4j.client.deserializer.ServiceResponseDeserializer;
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.message.ServiceResponse;
 import fi.vrk.xrd4j.client.serializer.ServiceRequestSerializer;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
+import fi.vrk.xrd4j.common.message.ServiceRequest;
+import fi.vrk.xrd4j.common.message.ServiceResponse;
 
-import java.util.List;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
+
+import java.util.List;
 
 /**
  * This class defines an interface for SOAP client that can be used for sending
@@ -70,7 +71,8 @@ public interface SOAPClient {
      * that was sent.
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse send(ServiceRequest request, String url, ServiceRequestSerializer serializer, ServiceResponseDeserializer deserializer) throws SOAPException;
+    ServiceResponse send(ServiceRequest request, String url, ServiceRequestSerializer serializer,
+                         ServiceResponseDeserializer deserializer) throws SOAPException;
 
     /**
      * Calls listClients meta service and retrieves list of all the potential
@@ -102,7 +104,7 @@ public interface SOAPClient {
      * @return ServiceResponse that holds a list of ProducerMember objects
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse listMethods(final ServiceRequest request, final String url) throws SOAPException;
+    ServiceResponse listMethods(ServiceRequest request, String url) throws SOAPException;
 
     /**
      * Calls allowedMethods meta service that lists all the services by a
@@ -115,7 +117,7 @@ public interface SOAPClient {
      * @return ServiceResponse that holds a list of ProducerMember objects
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse allowedMethods(final ServiceRequest request, final String url) throws SOAPException;
+    ServiceResponse allowedMethods(ServiceRequest request, String url) throws SOAPException;
 
     /**
      * Calls getSecurityServerMetrics monitoring service that returns a data set
@@ -127,5 +129,5 @@ public interface SOAPClient {
      * data
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse getSecurityServerMetrics(final ServiceRequest request, final String url) throws SOAPException;
+    ServiceResponse getSecurityServerMetrics(ServiceRequest request, String url) throws SOAPException;
 }

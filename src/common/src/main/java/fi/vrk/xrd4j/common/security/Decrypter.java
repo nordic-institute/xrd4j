@@ -36,5 +36,5 @@ public interface Decrypter {
      * @param cipherText encrypted string
      * @return plain text string
      */
-    public String decrypt(String cipherText);
+    String decrypt(String cipherText);
 }

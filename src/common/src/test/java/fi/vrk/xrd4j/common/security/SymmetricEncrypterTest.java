@@ -22,9 +22,10 @@
  */
 package fi.vrk.xrd4j.common.security;
 
+import junit.framework.TestCase;
+
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import junit.framework.TestCase;
 
 /**
  * Test cases for SymmetricEncrypter class. The cases cover decryption too.

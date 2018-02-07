@@ -28,7 +28,7 @@ package fi.vrk.xrd4j.common.util;
  *
  * @author Petteri Kivimäki
  */
-public class Constants {
+public final class Constants {
 
     // Namespace definitions
     /**

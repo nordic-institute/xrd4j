@@ -29,13 +29,14 @@ import fi.vrk.xrd4j.client.serializer.ServiceRequestSerializer;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ProducerMember;
 import fi.vrk.xrd4j.common.message.ServiceRequest;
+
+import junit.framework.TestCase;
+
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-
-import junit.framework.TestCase;
 
 /**
  * Test cases for SOAPClientImpl class. Test cases cover only cases where SOAP
@@ -194,9 +195,9 @@ public class SOAPClientTest extends TestCase {
      }*/
     private class TestRequestSerializer extends AbstractServiceRequestSerializer {
 
-        protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
+        protected void serializeRequest(ServiceRequest serviceRequest, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement data = soapRequest.addChildElement(envelope.createName("data"));
-            data.addTextNode((String) request.getRequestData());
+            data.addTextNode((String) serviceRequest.getRequestData());
         }
     }
 

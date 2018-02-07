@@ -22,21 +22,21 @@
  */
 package fi.vrk.xrd4j.client.deserializer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
 import fi.vrk.xrd4j.common.deserializer.AbstractHeaderDeserializer;
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.member.ConsumerMember;
 import fi.vrk.xrd4j.common.member.ObjectType;
 import fi.vrk.xrd4j.common.util.Constants;
 import fi.vrk.xrd4j.common.util.SOAPHelper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class implements a deserializer for deserializing the response of the
@@ -46,7 +46,7 @@ import fi.vrk.xrd4j.common.util.SOAPHelper;
  */
 public class ListClientsResponseDeserializer extends AbstractHeaderDeserializer {
 
-    private static final Logger logger = LoggerFactory.getLogger(ListClientsResponseDeserializer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListClientsResponseDeserializer.class);
     
     /**
      * Deserializes a list of ConsumerMember objects from the given XML. If
@@ -56,14 +56,14 @@ public class ListClientsResponseDeserializer extends AbstractHeaderDeserializer 
      * @return list of ConsumerMember objects
      */
     public List<ConsumerMember> deserializeConsumerList(String xml) {
-        logger.debug("Deserialize a list of consumers from XML.");
+        LOGGER.debug("Deserialize a list of consumers from XML.");
         // Convert XML string to XML Document for deserializing
         Document doc = SOAPHelper.xmlStrToDoc(xml);
         try {
             // Get list of consumers
             return this.deserializeMembers(doc);
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             return null;
         }
     }
@@ -78,19 +78,19 @@ public class ListClientsResponseDeserializer extends AbstractHeaderDeserializer 
     private List<ConsumerMember> deserializeMembers(final Document doc)
             throws XRd4JException {
         List<ConsumerMember> results = new ArrayList<>();
-        logger.debug("Deserialize \"{}\".", Constants.NS_XRD_ELEM_CLIENT_LIST);
+        LOGGER.debug("Deserialize \"{}\".", Constants.NS_XRD_ELEM_CLIENT_LIST);
 
         NodeList list = doc.getElementsByTagNameNS(Constants.NS_XRD_URL, Constants.NS_XRD_ELEM_ID);
-        logger.debug("Found {} {} elements from XML. ", list.getLength(), Constants.NS_XRD_ELEM_ID);
+        LOGGER.debug("Found {} {} elements from XML. ", list.getLength(), Constants.NS_XRD_ELEM_ID);
         for (int i = 0; i < list.getLength(); i++) {
             // Client object type
             ObjectType clientObjectType = super.deserializeObjectType(list.item(i));
             // Client headers
             Map<String, String> client = SOAPHelper.nodesToMap(list.item(i).getChildNodes());
-            logger.trace("Element found : \"{}\"", Constants.NS_XRD_ELEM_ID);
+            LOGGER.trace("Element found : \"{}\"", Constants.NS_XRD_ELEM_ID);
             results.add(super.getConsumerMember(client, clientObjectType));
         }
-        logger.debug("Deserialized {} \"{}\" elements from the given XML document.", results.size(), Constants.NS_XRD_ELEM_ID);
+        LOGGER.debug("Deserialized {} \"{}\" elements from the given XML document.", results.size(), Constants.NS_XRD_ELEM_ID);
         return results;
     }
 }

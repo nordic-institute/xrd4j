@@ -22,9 +22,9 @@
  */
 package fi.vrk.xrd4j.server.utils;
 
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.StringTokenizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.AttachmentPart;
@@ -32,17 +32,19 @@ import javax.xml.soap.MimeHeader;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 /**
  * This class offers helper methods for adapter servlet.
  *
  * @author Petteri Kivimäki
  */
-public class AdapterUtils {
+public final class AdapterUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(AdapterUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdapterUtils.class);
 
     /**
      * Constructs and initializes a new AdapterUtils object. Should never be
@@ -150,7 +152,7 @@ public class AdapterUtils {
             }
             return buf.toString();
         } catch (SOAPException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             return "";
         }
     }

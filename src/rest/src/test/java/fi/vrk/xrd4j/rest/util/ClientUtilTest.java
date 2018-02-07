@@ -22,11 +22,12 @@
  */
 package fi.vrk.xrd4j.rest.util;
 
+import junit.framework.TestCase;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import junit.framework.TestCase;
 
 /**
  * Test cases for JSONToXMLConverter class.
@@ -403,10 +404,10 @@ public class ClientUtilTest extends TestCase {
         Map<String, List<String>> params = new TreeMap<>();
         List<String> list = new ArrayList<>();
         list.add("value2");
-        params.put("key2",list);
+        params.put("key2", list);
         list = new ArrayList<>();
         list.add("value3");
-        params.put("key3",list);
+        params.put("key3", list);
         String resultURL = ClientUtil.buildTargetURL(baseURL, params);
         assertEquals(correctURL, resultURL);
     }

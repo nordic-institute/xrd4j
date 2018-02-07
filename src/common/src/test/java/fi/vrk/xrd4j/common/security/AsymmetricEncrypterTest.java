@@ -22,6 +22,8 @@
  */
 package fi.vrk.xrd4j.common.security;
 
+import junit.framework.TestCase;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.Key;
@@ -29,7 +31,6 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
-import junit.framework.TestCase;
 
 /**
  * Test cases for AsymmetricEncrypter class. The cases cover decryption too.
@@ -39,14 +40,14 @@ import junit.framework.TestCase;
 public class AsymmetricEncrypterTest extends TestCase {
 
     // Public key
-    private final static String publicKeyFile = "src/test/resources/mytruststore1.jks";
-    private final static String publicKeyFilePass = "truststore1";
-    private final static String publicKeyAlias = "key2";
+    private static final String PUBLIC_KEY_FILE = "src/test/resources/mytruststore1.jks";
+    private static final String PUBLIC_KEY_FILE_PASS = "truststore1";
+    private static final String PUBLIC_KEY_ALIAS = "key2";
     // Private key
-    private final static String privateKeyFile = "src/test/resources/mykeystore2.jks";
-    private final static String privateKeyFilePass = "storepass2";
-    private final static String privateKeyAlias = "selfsigned";
-    private final static String privateKeyPass = "keypass2";
+    private static final String PRIVATE_KEY_FILE = "src/test/resources/mykeystore2.jks";
+    private static final String PRIVATE_KEY_FILE_PASS = "storepass2";
+    private static final String PRIVATE_KEY_ALIAS = "selfsigned";
+    private static final String PRIVATE_KEY_PASS = "keypass2";
 
     /**
      * Test encrypting and decrypting 128 bit AES key that's used for encrypting
@@ -60,11 +61,11 @@ public class AsymmetricEncrypterTest extends TestCase {
      * @throws UnrecoverableEntryException
      */
     public void testEncryption1() throws KeyStoreException, IOException, FileNotFoundException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
-        Encrypter ae = new AsymmetricEncrypter(publicKeyFile, publicKeyFilePass, publicKeyAlias);
+        Encrypter ae = new AsymmetricEncrypter(PUBLIC_KEY_FILE, PUBLIC_KEY_FILE_PASS, PUBLIC_KEY_ALIAS);
         Key key = CryptoHelper.generateAESKey(128);
         String sessionKey = CryptoHelper.encodeBase64(key.getEncoded());
         String encryptedSessionKey = ae.encrypt(sessionKey);
-        Decrypter ad = new AsymmetricDecrypter(privateKeyFile, privateKeyFilePass, privateKeyAlias, privateKeyPass);
+        Decrypter ad = new AsymmetricDecrypter(PRIVATE_KEY_FILE, PRIVATE_KEY_FILE_PASS, PRIVATE_KEY_ALIAS, PRIVATE_KEY_PASS);
         String decryptedSessionKey = ad.decrypt(encryptedSessionKey);
         Key decodedKey = CryptoHelper.strToKey(decryptedSessionKey);
 
@@ -95,7 +96,7 @@ public class AsymmetricEncrypterTest extends TestCase {
         // END: encrypt data
 
         // BEGIN: encrypt symmetric key
-        Encrypter ae = new AsymmetricEncrypter(publicKeyFile, publicKeyFilePass, publicKeyAlias);
+        Encrypter ae = new AsymmetricEncrypter(PUBLIC_KEY_FILE, PUBLIC_KEY_FILE_PASS, PUBLIC_KEY_ALIAS);
         String sessionKey = CryptoHelper.encodeBase64(key.getEncoded());
         String encryptedSessionKey = ae.encrypt(sessionKey);
         String ivString = CryptoHelper.encodeBase64(iv);
@@ -103,7 +104,7 @@ public class AsymmetricEncrypterTest extends TestCase {
 
         //################################################################
         // BEGIN: decrypt symmetric key
-        Decrypter ad = new AsymmetricDecrypter(privateKeyFile, privateKeyFilePass, privateKeyAlias, privateKeyPass);
+        Decrypter ad = new AsymmetricDecrypter(PRIVATE_KEY_FILE, PRIVATE_KEY_FILE_PASS, PRIVATE_KEY_ALIAS, PRIVATE_KEY_PASS);
         String decryptedSessionKey = ad.decrypt(encryptedSessionKey);
         Key decodedKey = CryptoHelper.strToKey(decryptedSessionKey);
         byte[] decodedIv = CryptoHelper.decodeBase64(ivString);

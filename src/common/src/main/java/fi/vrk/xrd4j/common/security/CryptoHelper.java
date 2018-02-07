@@ -24,6 +24,13 @@ package fi.vrk.xrd4j.common.security;
 
 import fi.vrk.xrd4j.common.exception.XRd4JException;
 import fi.vrk.xrd4j.common.exception.XRd4JRuntimeException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.spec.SecretKeySpec;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.InvalidKeyException;
@@ -40,20 +47,17 @@ import java.security.UnrecoverableEntryException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.util.Base64;
-import javax.crypto.KeyGenerator;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This utility class provides helper methods for cryptographic operations.
  *
  * @author Petteri Kivimäki
  */
-public class CryptoHelper {
+public final class CryptoHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(CryptoHelper.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CryptoHelper.class);
+
+    private static final int AES_BLOCK_SIZE = 16;
 
     /**
      * No instances if this class should be created.
@@ -98,7 +102,7 @@ public class CryptoHelper {
      */
     public static byte[] generateIV() {
         SecureRandom random = new SecureRandom();
-        byte[] iv = new byte[16];
+        byte[] iv = new byte[AES_BLOCK_SIZE];
         random.nextBytes(iv);
         return iv;
     }
@@ -166,7 +170,7 @@ public class CryptoHelper {
             byte[] signedBytes = signature.sign();
             return encodeBase64(signedBytes);
         } catch (SignatureException | InvalidKeyException | NoSuchAlgorithmException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
             throw new XRd4JRuntimeException(ex.getMessage());
         }
     }
@@ -202,7 +206,7 @@ public class CryptoHelper {
             byte[] signedBytes = decodeBase64(signatureStr);
             return signature.verify(signedBytes);
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
             return false;
         }
     }
@@ -224,7 +228,7 @@ public class CryptoHelper {
             cert = keyStore.getCertificate(publicKeyAlias);
             return cert.getPublicKey();
         } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
             throw new XRd4JRuntimeException(ex.getMessage());
         }
     }
@@ -243,10 +247,12 @@ public class CryptoHelper {
         try (FileInputStream fis = new java.io.FileInputStream(path)) {
             KeyStore keyStore = KeyStore.getInstance("jks");
             keyStore.load(fis, storePassword.toCharArray());
-            KeyStore.PrivateKeyEntry pkEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(privateKeyAlias, new KeyStore.PasswordProtection(keyPassword.toCharArray()));
+            KeyStore.PrivateKeyEntry pkEntry = (KeyStore.PrivateKeyEntry) keyStore.getEntry(privateKeyAlias,
+                    new KeyStore.PasswordProtection(keyPassword.toCharArray()));
             return pkEntry.getPrivateKey();
-        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException | UnrecoverableEntryException ex) {
-            logger.error(ex.getMessage(), ex);
+        } catch (KeyStoreException | IOException | NoSuchAlgorithmException | CertificateException
+            | UnrecoverableEntryException ex) {
+            LOGGER.error(ex.getMessage(), ex);
             throw new XRd4JRuntimeException(ex.getMessage());
         }
     }

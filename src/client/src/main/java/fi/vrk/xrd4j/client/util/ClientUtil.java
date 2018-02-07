@@ -23,29 +23,32 @@
 package fi.vrk.xrd4j.client.util;
 
 import fi.vrk.xrd4j.common.exception.XRd4JException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 /**
  * This class offers some helper methods for SOAP client.
  *
  * @author Petteri Kivimäki
  */
-public class ClientUtil {
+public final class ClientUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(ClientUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientUtil.class);
 
     /**
      * Constructs and initializes a new ClientUtil object. Should never be used.
@@ -93,7 +96,7 @@ public class ClientUtil {
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HostnameVerifier hv = (String urlHostName, SSLSession session) -> {
                 if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
-                    logger.warn("Warning: URL host \"{}\" is different to SSLSession host \"{}\".", urlHostName, session.getPeerHost());
+                    LOGGER.warn("Warning: URL host \"{}\" is different to SSLSession host \"{}\".", urlHostName, session.getPeerHost());
                     return false;
                 }
                 return true;
@@ -102,7 +105,7 @@ public class ClientUtil {
             // Now you it's possible to acces a https URL without having the
             // certificate in the truststore
         } catch (NoSuchAlgorithmException | KeyManagementException ex) {
-            logger.error(ex.getMessage(), ex);
+            LOGGER.error(ex.getMessage(), ex);
             throw new XRd4JException(ex.getMessage());
         }
 
@@ -123,7 +126,7 @@ public class ClientUtil {
     public static void setCustomHostNameVerifier() {
         HostnameVerifier hv = (String urlHostName, SSLSession session) -> {
             if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
-                logger.warn("Warning: URL host \"{}\" is different to SSLSession host \"{}\".", urlHostName, session.getPeerHost());
+                LOGGER.warn("Warning: URL host \"{}\" is different to SSLSession host \"{}\".", urlHostName, session.getPeerHost());
                 return false;
             }
             return true;

@@ -23,6 +23,7 @@
 package fi.vrk.xrd4j.client.deserializer;
 
 import fi.vrk.xrd4j.common.message.ServiceResponse;
+
 import javax.xml.soap.SOAPMessage;
 
 /**
