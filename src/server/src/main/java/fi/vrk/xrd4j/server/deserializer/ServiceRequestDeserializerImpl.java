@@ -132,7 +132,7 @@ public class ServiceRequestDeserializerImpl extends AbstractHeaderDeserializer i
         request.setIssue(issue);
         request.setProtocolVersion(protocolVersion);
         request.setSecurityToken(securityToken);
-        request.setSecurityTokenType(securityTokenType);       
+        request.setSecurityTokenType(securityTokenType);
 
         LOGGER.debug("SOAP header was succesfully deserialized.");
         // Return request

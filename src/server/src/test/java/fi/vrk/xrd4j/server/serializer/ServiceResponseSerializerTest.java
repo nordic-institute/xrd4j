@@ -418,7 +418,7 @@ public class ServiceResponseSerializerTest extends TestCase {
 
     /**
      * Subsystem level service call. No NS on request. NS prefix on response.
-     * Request element with no children (<request></request>).
+     * Request element with no children (<request/>).
      * @throws XRd4JException
      * @throws SOAPException
      */

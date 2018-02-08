@@ -673,7 +673,7 @@ public class ServiceResponseDeserializerTest extends TestCase {
     }
 
     /**
-     * Response to subsystem -> service level service call. Security token 
+     * Response to subsystem -> service level service call. Security token
      * without token type.
      *
      * @throws XRd4JException

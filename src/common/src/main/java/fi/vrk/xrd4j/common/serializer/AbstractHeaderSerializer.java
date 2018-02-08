@@ -98,7 +98,10 @@ public abstract class AbstractHeaderSerializer {
             LOGGER.debug("Generate \"{}\" element.", Constants.NS_EXT_ELEM_SECURITY_TOKEN);
             SOAPElement securityToken = header.addChildElement(Constants.NS_EXT_ELEM_SECURITY_TOKEN, Constants.NS_EXT_SECURITY_TOKEN_PREFIX);
             if (message.getSecurityTokenType() != null && !message.getSecurityTokenType().isEmpty()) {
-                securityToken.addAttribute(envelope.createQName(Constants.NS_EXT_ATTR_TOKEN_TYPE, Constants.NS_EXT_SECURITY_TOKEN_PREFIX), message.getSecurityTokenType());
+                securityToken.addAttribute(
+                        envelope.createQName(Constants.NS_EXT_ATTR_TOKEN_TYPE, Constants.NS_EXT_SECURITY_TOKEN_PREFIX),
+                        message.getSecurityTokenType()
+                );
             }
             securityToken.addTextNode(message.getSecurityToken());
             LOGGER.debug("\"{}\" element was succesfully generated.", Constants.NS_EXT_ELEM_SECURITY_TOKEN);
