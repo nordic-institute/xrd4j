@@ -85,6 +85,15 @@ public abstract class AbstractMessage {
     protected boolean processingWrappers = Constants.DEFAULT_PROCESSING_WRAPPERS;
 
     /**
+     * Field for transferring JSON Web Token over X-Road. Optional.
+     */
+    private String securityToken;
+    /**
+     * Type of the security token. Optional.
+     */
+    private String securityTokenType;
+
+    /**
      * Constructs and initializes a new AbstractMessage object.
      */
     protected AbstractMessage() {
@@ -302,6 +311,42 @@ public abstract class AbstractMessage {
      */
     public void setProcessingWrappers(boolean processingWrappers) {
         this.processingWrappers = processingWrappers;
+    }
+
+    /**
+     * Returns the security token.
+     *
+     * @return security token as a String
+     */
+    public String getSecurityToken() {
+        return securityToken;
+    }
+
+    /**
+     * Sets the security token.
+     *
+     * @param securityToken new value
+     */
+    public void setSecurityToken(String securityToken) {
+        this.securityToken = securityToken;
+    }
+
+    /**
+     * Returns the security token type.
+     *
+     * @return security token type
+     */
+    public String getSecurityTokenType() {
+        return securityTokenType;
+    }
+
+    /**
+     * Sets the security token type.
+     *
+     * @param securityTokenType new value
+     */
+    public void setSecurityTokenType(String securityTokenType) {
+        this.securityTokenType = securityTokenType;
     }
 
     /**

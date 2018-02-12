@@ -178,6 +178,8 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
         String requestHash = super.deserializeRequestHash(header);
         String algorithmId = super.deserializeAlgorithmId(header);
         String protocolVersion = super.deserializeProtocolVersion(header);
+        String securityToken = super.deserializeSecurityToken(header);
+        String securityTokenType = super.deserializeTokenType(header);
 
         // Create objects
         ConsumerMember consumer = null;
@@ -206,7 +208,10 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
         response.setRequestHashAlgorithm(algorithmId);
         response.setIssue(issue);
         response.setProtocolVersion(protocolVersion);
+        response.setSecurityToken(securityToken);
+        response.setSecurityTokenType(securityTokenType);
         LOGGER.debug("SOAP header was succesfully deserialized.");
+
         // Return response
         return response;
     }

@@ -89,9 +89,8 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
             }
 
             LOGGER.debug("Serialize ServiceResponse message to SOAP.");
-            
-            SOAPMessage message = createNewMessage();
 
+            SOAPMessage message = createNewMessage();
             response.setSoapMessage(message);
 
             // If response has SOAP Fault, skip header
@@ -99,13 +98,14 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
                 LOGGER.warn("Standard SOAP error detected. SOAP header is skipped.");
                 this.serializeSOAPFault(response);
             } else {
-                // Generate header by copying it from the request
-                // Request and response MUST have the same headers
-                super.serializeHeader(request, message.getSOAPPart().getEnvelope());
                 // Check request for null
                 if (request == null) {
                     throw new NullPointerException("Request can not be null.");
                 }
+                // Generate header by copying it from the request
+                // Request and response MUST have the same headers
+                message = SOAPHelper.cloneSOAPMsgWithoutBody(request.getSoapMessage());
+                response.setSoapMessage(message);
                 try {
                     // Generate body
                     this.serializeBody(response, request.getSoapMessage());
@@ -130,7 +130,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
         LOGGER.warn("Failed to serialize ServiceResponse message to SOAP.");
         return null;
     }
-    
+
     private SOAPMessage createNewMessage() throws SOAPException {
         return SOAPHelper.createSOAPMessage();
     }

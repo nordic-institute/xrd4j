@@ -42,7 +42,7 @@ import java.util.Map;
  * @author Petteri Kivimäki
  */
 public class ServiceResponseDeserializerTest extends TestCase {
-  
+
     /**
      * Response to subsystem -> service level service call
      *
@@ -580,6 +580,129 @@ public class ServiceResponseDeserializerTest extends TestCase {
         assertEquals("ID-1234567890", response.getId());
         assertEquals("EE1234567890", response.getUserId());
         assertEquals("4.0", response.getProtocolVersion());
+        assertEquals(ObjectType.SERVICE, response.getProducer().getObjectType());
+        assertEquals("1234567890", response.getRequestData());
+        assertEquals("9876543210", response.getResponseData());
+
+        assertEquals("SHA-512", response.getRequestHashAlgorithm());
+        assertEquals("ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==", response.getRequestHash());
+        assertEquals(true, response.getSoapMessage() != null);
+        assertEquals(true, response.getSecurityServer() == null);
+    }
+
+    /**
+     * Response to subsystem -> service level service call. Security token and
+     * token type with namespace prefix.
+     *
+     * @throws XRd4JException
+     * @throws SOAPException
+     */
+    public void test13() throws XRd4JException, SOAPException {
+        String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\" xmlns:ext=\"http://x-road.eu/xsd/security-token.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>getRandom</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><ext:securityToken ext:tokenType=\"urn:ietf:params:oauth:token-type:jwt\">eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw</ext:securityToken><xrd:protocolVersion>4.5</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><ns1:getRandomResponse xmlns:ns1=\"http://producer.x-road.ee\"><ns1:request><ns1:data>1234567890</ns1:data></ns1:request><ns1:response><ns1:data>9876543210</ns1:data></ns1:response></ns1:getRandomResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+        SOAPMessage msg = SOAPHelper.toSOAP(soapString);
+
+        ServiceResponseDeserializer deserializer = new TestResponseDeserializer();
+        ServiceResponse<String, String> response = deserializer.deserialize(msg);
+
+        assertEquals("FI", response.getConsumer().getXRoadInstance());
+        assertEquals("GOV", response.getConsumer().getMemberClass());
+        assertEquals("MEMBER1", response.getConsumer().getMemberCode());
+        assertEquals("subsystem", response.getConsumer().getSubsystemCode());
+        assertEquals(ObjectType.SUBSYSTEM, response.getConsumer().getObjectType());
+
+        assertEquals("FI", response.getProducer().getXRoadInstance());
+        assertEquals("COM", response.getProducer().getMemberClass());
+        assertEquals("MEMBER2", response.getProducer().getMemberCode());
+        assertEquals("subsystem", response.getProducer().getSubsystemCode());
+        assertEquals("getRandom", response.getProducer().getServiceCode());
+        assertEquals("v1", response.getProducer().getServiceVersion());
+        assertEquals("ID-1234567890", response.getId());
+        assertEquals("EE1234567890", response.getUserId());
+        assertEquals("eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw", response.getSecurityToken());
+        assertEquals("urn:ietf:params:oauth:token-type:jwt", response.getSecurityTokenType());
+        assertEquals("4.5", response.getProtocolVersion());
+        assertEquals(ObjectType.SERVICE, response.getProducer().getObjectType());
+        assertEquals("1234567890", response.getRequestData());
+        assertEquals("9876543210", response.getResponseData());
+
+        assertEquals("SHA-512", response.getRequestHashAlgorithm());
+        assertEquals("ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==", response.getRequestHash());
+        assertEquals(true, response.getSoapMessage() != null);
+        assertEquals(true, response.getSecurityServer() == null);
+    }
+
+    /**
+     * Response to subsystem -> service level service call. Security token and
+     * token type. Token type without namespace prefix.
+     *
+     * @throws XRd4JException
+     * @throws SOAPException
+     */
+    public void test14() throws XRd4JException, SOAPException {
+        String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\" xmlns:ext=\"http://x-road.eu/xsd/security-token.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>getRandom</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><ext:securityToken tokenType=\"urn:ietf:params:oauth:token-type:jwt\">eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw</ext:securityToken><xrd:protocolVersion>4.5</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><ns1:getRandomResponse xmlns:ns1=\"http://producer.x-road.ee\"><ns1:request><ns1:data>1234567890</ns1:data></ns1:request><ns1:response><ns1:data>9876543210</ns1:data></ns1:response></ns1:getRandomResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+        SOAPMessage msg = SOAPHelper.toSOAP(soapString);
+
+        ServiceResponseDeserializer deserializer = new TestResponseDeserializer();
+        ServiceResponse<String, String> response = deserializer.deserialize(msg);
+
+        assertEquals("FI", response.getConsumer().getXRoadInstance());
+        assertEquals("GOV", response.getConsumer().getMemberClass());
+        assertEquals("MEMBER1", response.getConsumer().getMemberCode());
+        assertEquals("subsystem", response.getConsumer().getSubsystemCode());
+        assertEquals(ObjectType.SUBSYSTEM, response.getConsumer().getObjectType());
+
+        assertEquals("FI", response.getProducer().getXRoadInstance());
+        assertEquals("COM", response.getProducer().getMemberClass());
+        assertEquals("MEMBER2", response.getProducer().getMemberCode());
+        assertEquals("subsystem", response.getProducer().getSubsystemCode());
+        assertEquals("getRandom", response.getProducer().getServiceCode());
+        assertEquals("v1", response.getProducer().getServiceVersion());
+        assertEquals("ID-1234567890", response.getId());
+        assertEquals("EE1234567890", response.getUserId());
+        assertEquals("eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw", response.getSecurityToken());
+        assertEquals("urn:ietf:params:oauth:token-type:jwt", response.getSecurityTokenType());
+        assertEquals("4.5", response.getProtocolVersion());
+        assertEquals(ObjectType.SERVICE, response.getProducer().getObjectType());
+        assertEquals("1234567890", response.getRequestData());
+        assertEquals("9876543210", response.getResponseData());
+
+        assertEquals("SHA-512", response.getRequestHashAlgorithm());
+        assertEquals("ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==", response.getRequestHash());
+        assertEquals(true, response.getSoapMessage() != null);
+        assertEquals(true, response.getSecurityServer() == null);
+    }
+
+    /**
+     * Response to subsystem -> service level service call. Security token
+     * without token type.
+     *
+     * @throws XRd4JException
+     * @throws SOAPException
+     */
+    public void test15() throws XRd4JException, SOAPException {
+        String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\" xmlns:ext=\"http://x-road.eu/xsd/security-token.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>getRandom</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><ext:securityToken>eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw</ext:securityToken><xrd:protocolVersion>4.5</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><ns1:getRandomResponse xmlns:ns1=\"http://producer.x-road.ee\"><ns1:request><ns1:data>1234567890</ns1:data></ns1:request><ns1:response><ns1:data>9876543210</ns1:data></ns1:response></ns1:getRandomResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
+        SOAPMessage msg = SOAPHelper.toSOAP(soapString);
+
+        ServiceResponseDeserializer deserializer = new TestResponseDeserializer();
+        ServiceResponse<String, String> response = deserializer.deserialize(msg);
+
+        assertEquals("FI", response.getConsumer().getXRoadInstance());
+        assertEquals("GOV", response.getConsumer().getMemberClass());
+        assertEquals("MEMBER1", response.getConsumer().getMemberCode());
+        assertEquals("subsystem", response.getConsumer().getSubsystemCode());
+        assertEquals(ObjectType.SUBSYSTEM, response.getConsumer().getObjectType());
+
+        assertEquals("FI", response.getProducer().getXRoadInstance());
+        assertEquals("COM", response.getProducer().getMemberClass());
+        assertEquals("MEMBER2", response.getProducer().getMemberCode());
+        assertEquals("subsystem", response.getProducer().getSubsystemCode());
+        assertEquals("getRandom", response.getProducer().getServiceCode());
+        assertEquals("v1", response.getProducer().getServiceVersion());
+        assertEquals("ID-1234567890", response.getId());
+        assertEquals("EE1234567890", response.getUserId());
+        assertEquals("eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoiVGVzdCJ9.negHPJEwkKcNcgVC6dNtzPZk_48Kig6IzxnabL9jKsw", response.getSecurityToken());
+        assertEquals(null, response.getSecurityTokenType());
+        assertEquals("4.5", response.getProtocolVersion());
         assertEquals(ObjectType.SERVICE, response.getProducer().getObjectType());
         assertEquals("1234567890", response.getRequestData());
         assertEquals("9876543210", response.getResponseData());
