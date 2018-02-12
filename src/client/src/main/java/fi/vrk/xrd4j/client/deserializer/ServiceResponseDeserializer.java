@@ -45,7 +45,7 @@ public interface ServiceResponseDeserializer {
     /**
      * Deserializes the given SOAPMessage object to ServiceResponse object.
      * If service producer's namespace URI is given, then it's used for
-     * finding the response from the SOAP mesagge's body. Value "*" means
+     * finding the response from the SOAP message's body. Value "*" means
      * that the namespace is ignored.
      * @param message SOAP message to be deserialized
      * @param producerNamespaceURI service producer's namespace URI
@@ -57,7 +57,7 @@ public interface ServiceResponseDeserializer {
     /**
      * Deserializes the given SOAPMessage object to ServiceResponse object.
      * If service producer's namespace URI is given, then it's used for
-     * finding the response from the SOAP mesagge's body. Value "*" means
+     * finding the response from the SOAP message's body. Value "*" means
      * that the namespace is ignored.
      * @param message SOAP message to be deserialized
      * @param producerNamespaceURI service producer's namespace URI

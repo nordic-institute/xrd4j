@@ -211,7 +211,7 @@ public final class Constants {
     /**
      * Default behavior for processing "request" and "response" wrappers.
      */
-    public static final boolean DEFAULT_PROCESSING_WRAPPERS = true;
+    public static final boolean DEFAULT_PROCESSING_WRAPPERS = false;
 
     /**
      * Constructs and initializes a new Constants object. Should never be used.
