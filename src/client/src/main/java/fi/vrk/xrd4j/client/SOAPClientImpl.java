@@ -62,6 +62,7 @@ public class SOAPClientImpl implements SOAPClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SOAPClientImpl.class);
     private static final String SEND_SOAP_TO = "Send SOAP message to \"{}\".";
+    private static final String CALL_METASERVICE = "Call \"{}\" meta service.";
     private final SOAPConnectionFactory connectionFactory;
 
     /**
@@ -145,7 +146,7 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public List<ConsumerMember> listClients(String url) {
-        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_CLIENTS);
+        LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_LIST_CLIENTS);
         if (!url.endsWith("/")) {
             url += "/";
         }
@@ -167,7 +168,7 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public List<ProducerMember> listCentralServices(String url) {
-        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_CENTRAL_SERVICES);
+        LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_LIST_CENTRAL_SERVICES);
         if (!url.endsWith("/")) {
             url += "/";
         }
@@ -191,7 +192,7 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public ServiceResponse listMethods(final ServiceRequest request, final String url) throws SOAPException {
-        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_METHODS);
+        LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_LIST_METHODS);
         return this.listServices(request, url, Constants.META_SERVICE_LIST_METHODS);
     }
 
@@ -208,7 +209,7 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public ServiceResponse allowedMethods(final ServiceRequest request, final String url) throws SOAPException {
-        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_ALLOWED_METHODS);
+        LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_ALLOWED_METHODS);
         return this.listServices(request, url, Constants.META_SERVICE_ALLOWED_METHODS);
     }
 
