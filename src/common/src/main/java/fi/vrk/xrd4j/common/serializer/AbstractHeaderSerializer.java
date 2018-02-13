@@ -45,6 +45,8 @@ import javax.xml.soap.SOAPHeader;
 public abstract class AbstractHeaderSerializer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractHeaderSerializer.class);
+    private static final String GENERATE_ELEMENT = "Generate \"{}\" element.";
+    private static final String ELEMENT_GENERATED = "\"{}\" element was succesfully generated.";
 
     /**
      * Adds X-Road version 6 SOAP headers to the given SOAP envelope. The given
@@ -78,24 +80,24 @@ public abstract class AbstractHeaderSerializer {
         }
         // SecurityServer - End
         if (message.getUserId() != null && !message.getUserId().isEmpty()) {
-            LOGGER.debug("Generate \"{}\" element.", Constants.NS_XRD_ELEM_USER_ID);
+            LOGGER.debug(GENERATE_ELEMENT, Constants.NS_XRD_ELEM_USER_ID);
             SOAPElement userId = header.addChildElement(Constants.NS_XRD_ELEM_USER_ID, Constants.NS_XRD_PREFIX);
             userId.addTextNode(message.getUserId());
-            LOGGER.debug("\"{}\" element was succesfully generated.", Constants.NS_XRD_ELEM_USER_ID);
+            LOGGER.debug(ELEMENT_GENERATED, Constants.NS_XRD_ELEM_USER_ID);
         }
-        LOGGER.debug("Generate \"{}\" element.", Constants.NS_XRD_ELEM_ID);
+        LOGGER.debug(GENERATE_ELEMENT, Constants.NS_XRD_ELEM_ID);
         SOAPElement id = header.addChildElement(Constants.NS_XRD_ELEM_ID, Constants.NS_XRD_PREFIX);
         id.addTextNode(message.getId());
-        LOGGER.debug("\"{}\" element was succesfully generated.", Constants.NS_XRD_ELEM_ID);
+        LOGGER.debug(ELEMENT_GENERATED, Constants.NS_XRD_ELEM_ID);
         if (message.getIssue() != null && !message.getIssue().isEmpty()) {
-            LOGGER.debug("Generate \"{}\" element.", Constants.NS_XRD_ELEM_ISSUE);
+            LOGGER.debug(GENERATE_ELEMENT, Constants.NS_XRD_ELEM_ISSUE);
             SOAPElement issue = header.addChildElement(Constants.NS_XRD_ELEM_ISSUE, Constants.NS_XRD_PREFIX);
             issue.addTextNode(message.getIssue());
-            LOGGER.debug("\"{}\" element was succesfully generated.", Constants.NS_XRD_ELEM_ISSUE);
+            LOGGER.debug(ELEMENT_GENERATED, Constants.NS_XRD_ELEM_ISSUE);
         }
         if (message.getSecurityToken() != null && !message.getSecurityToken().isEmpty()) {
             envelope.addNamespaceDeclaration(Constants.NS_EXT_SECURITY_TOKEN_PREFIX, Constants.NS_EXT_SECURITY_TOKEN_URL);
-            LOGGER.debug("Generate \"{}\" element.", Constants.NS_EXT_ELEM_SECURITY_TOKEN);
+            LOGGER.debug(GENERATE_ELEMENT, Constants.NS_EXT_ELEM_SECURITY_TOKEN);
             SOAPElement securityToken = header.addChildElement(Constants.NS_EXT_ELEM_SECURITY_TOKEN, Constants.NS_EXT_SECURITY_TOKEN_PREFIX);
             if (message.getSecurityTokenType() != null && !message.getSecurityTokenType().isEmpty()) {
                 securityToken.addAttribute(
@@ -104,12 +106,12 @@ public abstract class AbstractHeaderSerializer {
                 );
             }
             securityToken.addTextNode(message.getSecurityToken());
-            LOGGER.debug("\"{}\" element was succesfully generated.", Constants.NS_EXT_ELEM_SECURITY_TOKEN);
+            LOGGER.debug(ELEMENT_GENERATED, Constants.NS_EXT_ELEM_SECURITY_TOKEN);
         }
-        LOGGER.debug("Generate \"{}\" element.", Constants.NS_XRD_ELEM_PROTOCOL_VERSION);
+        LOGGER.debug(GENERATE_ELEMENT, Constants.NS_XRD_ELEM_PROTOCOL_VERSION);
         SOAPElement protocolVersion = header.addChildElement(Constants.NS_XRD_ELEM_PROTOCOL_VERSION, Constants.NS_XRD_PREFIX);
         protocolVersion.addTextNode(message.getProtocolVersion());
-        LOGGER.debug("\"{}\" element was succesfully generated.", Constants.NS_XRD_ELEM_PROTOCOL_VERSION);
+        LOGGER.debug(ELEMENT_GENERATED, Constants.NS_XRD_ELEM_PROTOCOL_VERSION);
         // Header - End
         LOGGER.debug("SOAP header was generated succesfully.");
     }
