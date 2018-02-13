@@ -61,6 +61,7 @@ import java.util.List;
 public class SOAPClientImpl implements SOAPClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SOAPClientImpl.class);
+    private static final String SEND_SOAP_TO = "Send SOAP message to \"{}\".";
     private final SOAPConnectionFactory connectionFactory;
 
     /**
@@ -93,7 +94,7 @@ public class SOAPClientImpl implements SOAPClient {
             throw new XRd4JRuntimeException(ex.getMessage());
         }
         SOAPConnection connection = connectionFactory.createConnection();
-        LOGGER.debug("Send SOAP message to \"{}\".", url);
+        LOGGER.debug(SEND_SOAP_TO, url);
         LOGGER.trace("Outgoing SOAP request : \"{}\".", SOAPHelper.toString(request));
         SOAPMessage response = connection.call(request, client);
         LOGGER.debug("SOAP response received.");
@@ -148,7 +149,7 @@ public class SOAPClientImpl implements SOAPClient {
         if (!url.endsWith("/")) {
             url += "/";
         }
-        LOGGER.debug("Send SOAP message to \"{}\".", url);
+        LOGGER.debug(SEND_SOAP_TO, url);
         RESTClient client = RESTClientFactory.createRESTClient("get");
         ClientResponse response = client.send(url + Constants.META_SERVICE_LIST_CLIENTS, null, null, null);
         List<ConsumerMember> list = new ListClientsResponseDeserializer().deserializeConsumerList(response.getData());
@@ -170,7 +171,7 @@ public class SOAPClientImpl implements SOAPClient {
         if (!url.endsWith("/")) {
             url += "/";
         }
-        LOGGER.debug("Send SOAP message to \"{}\".", url);
+        LOGGER.debug(SEND_SOAP_TO, url);
         RESTClient client = RESTClientFactory.createRESTClient("get");
         ClientResponse response = client.send(url + Constants.META_SERVICE_LIST_CENTRAL_SERVICES, null, null, null);
         List<ProducerMember> list = new ListCentralServicesResponseDeserializer().deserializeProducerList(response.getData());
