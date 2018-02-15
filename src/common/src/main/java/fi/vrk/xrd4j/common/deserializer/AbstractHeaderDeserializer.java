@@ -68,7 +68,7 @@ public abstract class AbstractHeaderDeserializer {
      */
     protected final ConsumerMember deserializeConsumer(final SOAPHeader header)
             throws XRd4JException, XRd4JMissingMemberException {
-        LOGGER.debug("Deserialize \"{}\".", Constants.NS_XRD_ELEM_CLIENT);
+        LOGGER.debug(DESERIALIZE_LOG_PATTERN, Constants.NS_XRD_ELEM_CLIENT);
         // Client headers
         Map<String, String> client;
         // Client object type

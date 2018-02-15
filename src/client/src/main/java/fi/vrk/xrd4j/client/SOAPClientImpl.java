@@ -61,6 +61,8 @@ import java.util.List;
 public class SOAPClientImpl implements SOAPClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SOAPClientImpl.class);
+    private static final String SEND_SOAP_TO = "Send SOAP message to \"{}\".";
+    private static final String CALL_METASERVICE = "Call \"{}\" meta service.";
     private final SOAPConnectionFactory connectionFactory;
 
     /**
@@ -93,7 +95,7 @@ public class SOAPClientImpl implements SOAPClient {
             throw new XRd4JRuntimeException(ex.getMessage());
         }
         SOAPConnection connection = connectionFactory.createConnection();
-        LOGGER.debug("Send SOAP message to \"{}\".", url);
+        LOGGER.debug(SEND_SOAP_TO, url);
         LOGGER.trace("Outgoing SOAP request : \"{}\".", SOAPHelper.toString(request));
         SOAPMessage response = connection.call(request, client);
         LOGGER.debug("SOAP response received.");
@@ -144,11 +146,11 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public List<ConsumerMember> listClients(String url) {
-        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_CLIENTS);
+        LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_LIST_CLIENTS);
         if (!url.endsWith("/")) {
             url += "/";
         }
-        LOGGER.debug("Send SOAP message to \"{}\".", url);
+        LOGGER.debug(SEND_SOAP_TO, url);
         RESTClient client = RESTClientFactory.createRESTClient("get");
         ClientResponse response = client.send(url + Constants.META_SERVICE_LIST_CLIENTS, null, null, null);
         List<ConsumerMember> list = new ListClientsResponseDeserializer().deserializeConsumerList(response.getData());
@@ -166,11 +168,11 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public List<ProducerMember> listCentralServices(String url) {
-        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_CENTRAL_SERVICES);
+        LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_LIST_CENTRAL_SERVICES);
         if (!url.endsWith("/")) {
             url += "/";
         }
-        LOGGER.debug("Send SOAP message to \"{}\".", url);
+        LOGGER.debug(SEND_SOAP_TO, url);
         RESTClient client = RESTClientFactory.createRESTClient("get");
         ClientResponse response = client.send(url + Constants.META_SERVICE_LIST_CENTRAL_SERVICES, null, null, null);
         List<ProducerMember> list = new ListCentralServicesResponseDeserializer().deserializeProducerList(response.getData());
@@ -190,7 +192,7 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public ServiceResponse listMethods(final ServiceRequest request, final String url) throws SOAPException {
-        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_LIST_METHODS);
+        LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_LIST_METHODS);
         return this.listServices(request, url, Constants.META_SERVICE_LIST_METHODS);
     }
 
@@ -207,7 +209,7 @@ public class SOAPClientImpl implements SOAPClient {
      */
     @Override
     public ServiceResponse allowedMethods(final ServiceRequest request, final String url) throws SOAPException {
-        LOGGER.info("Call \"{}\" meta service.", Constants.META_SERVICE_ALLOWED_METHODS);
+        LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_ALLOWED_METHODS);
         return this.listServices(request, url, Constants.META_SERVICE_ALLOWED_METHODS);
     }
 

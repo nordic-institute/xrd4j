@@ -65,9 +65,6 @@ public abstract class AbstractClient implements RESTClient {
         // Build target URL
         url = ClientUtil.buildTargetURL(url, params);
 
-        // Create HTTP client
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-
         // Build request
         HttpUriRequest request = this.buildtHttpRequest(url, requestBody, headers);
 
@@ -81,7 +78,7 @@ public abstract class AbstractClient implements RESTClient {
             }
         }
 
-        try {
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             //Send the request; It will immediately return the response in HttpResponse object
             CloseableHttpResponse response = httpClient.execute(request);
             // Get Content-Type header

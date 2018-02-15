@@ -81,10 +81,12 @@ public final class ClientUtil {
 
                 @Override
                 public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+                    // perform no validation, trust everyone
                 }
 
                 @Override
                 public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+                    // perform no validation, trust everyone
                 }
             }
         };
