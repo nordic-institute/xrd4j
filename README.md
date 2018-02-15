@@ -1,8 +1,8 @@
 # XRd4J
 
-XRd4J is a Java library for building X-Road v6 Adapter Servers and clients. The library implements X-Road v6 [SOAP profile](https://github.com/vrk-kpa/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/vrk-kpa/X-Road/blob/develop/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages: built-in support for standard X-Road SOAP headers, only processing of application specific ```request``` and ```response``` elements must be implemented.
+XRd4J is a Java library for building X-Road v6 Adapter Servers and clients. The library implements X-Road v6 [SOAP profile](https://github.com/vrk-kpa/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/vrk-kpa/X-Road/blob/develop/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages: built-in support for standard X-Road SOAP headers, only processing of application specific request and response content must be implemented.
 
-By default this library is processing SOAP Body elements in compatibility mode with older versions of X-Road protocol. This means that request messages must contain ```request``` wrapper and response messages must contain ```request``` and ```response``` wrappers. To skip automatic procession of ```request``` and ```response``` wrappers, method ```request.setProcessingWrappers(false)``` must be called before serialization or deserialization of messages is performed. The usage of ```setProcessingWrappers``` method is demonstrated in the examples below.
+To enable processing of SOAP Body elements in compatibility mode with older versions of X-Road protocol method ```request.setProcessingWrappers(true)``` must be called before serialization or deserialization of messages. This means that request messages must contain ```request``` wrapper and response messages must contain ```request``` and ```response``` wrappers. To skip automatic procession of ```request``` and ```response``` wrappers, method ```request.setProcessingWrappers(false)``` must be called before serialization or deserialization of messages, which is the default. The usage of ```setProcessingWrappers``` method is demonstrated in the examples below.
 
 ##### Modules:
 
@@ -138,8 +138,8 @@ Main class (generated [request](examples/request1.xml), received [response](exam
   // Type of the ServiceRequest is the type of the request data (String in this case)
   ServiceRequest<String> request = new ServiceRequest<String>(consumer, producer, MessageHelper.generateId());
 
-  // Please uncomment the following line to disable procession of "request" and "response" wrappers.
-  // request.setProcessingWrappers(false);
+  // Please uncomment the following line to enable procession of "request" and "response" wrappers.
+  // request.setProcessingWrappers(true);
 
   // Set username
   request.setUserId("jdoe");
@@ -354,8 +354,8 @@ public class ExampleAdapter extends AbstractAdapterServlet {
 
     @Override
     protected ServiceResponse handleRequest(ServiceRequest request) throws SOAPException, XRd4JException {
-        // Please uncomment the following line to disable procession of "request" and "response" wrappers.
-        // request.setProcessingWrappers(false);
+        // Please uncomment the following line to enable processing of "request" and "response" wrappers.
+        // request.setProcessingWrappers(true);
 
         // Create a new response serializer that serializes the response to SOAP
         ServiceResponseSerializer serializer = serializer = new HelloServiceResponseSerializer();
