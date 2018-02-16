@@ -61,15 +61,33 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractAdapterServlet.class);
     private static final String FAULT_CODE_CLIENT = "SOAP-ENV:Client";
-    private ServiceRequestDeserializer deserializer;
-    private ServiceResponseSerializer serializer;
-    private String errGetNotSupportedStr;
-    private String errWsdlNotFoundStr;
-    private String errInternalServerErrStr;
+    private final ServiceRequestDeserializer deserializer;
+    private final ServiceResponseSerializer serializer;
+    private final String errGetNotSupportedStr;
+    private final String errWsdlNotFoundStr;
+    private final String errInternalServerErrStr;
     private final ErrorMessage errGetNotSupported = new ErrorMessage(FAULT_CODE_CLIENT, "HTTP GET method not implemented", null, null);
     private final ErrorMessage errWsdlNotFound = new ErrorMessage(FAULT_CODE_CLIENT, "WSDL not found", null, null);
     private final ErrorMessage errInternalServerErr = new ErrorMessage(FAULT_CODE_CLIENT, "500 Internal Server Error", null, null);
     private final ErrorMessage errUnknownServiceCode = new ErrorMessage(FAULT_CODE_CLIENT, "Unknown service code.", null, null);
+
+    /**
+     * Constructor
+     */
+    public AbstractAdapterServlet() {
+        LOGGER.debug("Starting to initialize AbstractServlet.");
+        LOGGER.debug("Initialize deserializer");
+        this.deserializer = new ServiceRequestDeserializerImpl();
+        LOGGER.debug("Initialize serializer");
+        this.serializer = new DummyServiceResponseSerializer();
+        LOGGER.debug("Initialize \"errGetNotSupportedStr\" error message.");
+        this.errGetNotSupportedStr = SOAPHelper.toString(this.errorToSOAP(this.errGetNotSupported, null));
+        LOGGER.debug("Initialize \"errWsdlNotFoundStr\" error message.");
+        this.errWsdlNotFoundStr = SOAPHelper.toString(this.errorToSOAP(this.errWsdlNotFound, null));
+        LOGGER.debug("Initialize \"errInternalServerErrStr\" error message.");
+        this.errInternalServerErrStr = SOAPHelper.toString(this.errorToSOAP(this.errInternalServerErr, null));
+        LOGGER.debug("AbstractServlet initialized.");
+    }
 
     /**
      * Handles and processes the given request and returns a SOAP message as a
@@ -88,23 +106,6 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
      * @return path of the WSDL file
      */
     protected abstract String getWSDLPath();
-
-    /**
-     * Initializes AbstractAdapterServlet.
-     */
-    @Override
-    public void init() {
-        LOGGER.debug("Starting to initialize AbstractServlet.");
-        this.deserializer = new ServiceRequestDeserializerImpl();
-        this.serializer = new DummyServiceResponseSerializer();
-        LOGGER.debug("Initialize \"errGetNotSupportedStr\" error message.");
-        this.errGetNotSupportedStr = SOAPHelper.toString(this.errorToSOAP(this.errGetNotSupported, null));
-        LOGGER.debug("Initialize \"errWsdlNotFoundStr\" error message.");
-        this.errWsdlNotFoundStr = SOAPHelper.toString(this.errorToSOAP(this.errWsdlNotFound, null));
-        LOGGER.debug("Initialize \"errInternalServerErrStr\" error message.");
-        this.errInternalServerErrStr = SOAPHelper.toString(this.errorToSOAP(this.errInternalServerErr, null));
-        LOGGER.debug("AbstractServlet initialized.");
-    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
