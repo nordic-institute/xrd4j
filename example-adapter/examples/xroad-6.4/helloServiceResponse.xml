@@ -20,12 +20,7 @@
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
         <ts1:helloServiceResponse xmlns:ts1="http://test.x-road.fi/producer">
-            <ts1:request>
-                <ts1:name>Test</ts1:name>
-            </ts1:request>
-            <ts1:response>
-                <ts1:message>Hello Test! Greetings from adapter server!</ts1:message>
-            </ts1:response>
+            <ts1:message>Hello Test! Greetings from adapter server!</ts1:message>
         </ts1:helloServiceResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

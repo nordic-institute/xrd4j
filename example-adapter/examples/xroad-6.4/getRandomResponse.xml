@@ -20,10 +20,7 @@
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
         <ts1:getRandomResponse xmlns:ts1="http://test.x-road.fi/producer">
-            <ts1:request/>
-            <ts1:response>
-                <ts1:data>95</ts1:data>
-            </ts1:response>
+            <ts1:data>95</ts1:data>
         </ts1:getRandomResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

@@ -13,16 +13,14 @@
             <iden:subsystemCode>DemoService</iden:subsystemCode>
             <iden:serviceCode>helloService</iden:serviceCode>
             <iden:serviceVersion>v1</iden:serviceVersion>
-        </xro:service>        
+        </xro:service>
         <xro:id>ID11234</xro:id>
         <xro:userId>EE1234567890</xro:userId>
         <xro:protocolVersion>4.0</xro:protocolVersion>
     </soapenv:Header>
     <soapenv:Body>
         <prod:helloService xmlns:prod="http://test.x-road.fi/producer">
-            <prod:request>
-                <prod:name>Test</prod:name>
-            </prod:request>
+            <prod:name>Test</prod:name>
         </prod:helloService>
     </soapenv:Body>
 </soapenv:Envelope>
