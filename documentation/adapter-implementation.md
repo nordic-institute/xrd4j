@@ -27,10 +27,10 @@ to and processing responses from X-Road;
 from and producing responses for X-Road. 
 
 The X-Road-capability of applications within the context of this document refers to the capability of producing and
-consuming requests and responses compatible with the [X-Road v6 Message Protocol Version 4](https://github.com/ria-ee/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md)
-utilizing the XRd4J library.
+consuming requests and responses compatible with the [X-Road v6 Message Protocol Version 4.0](https://github.com/ria-ee/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md)
+utilizing the XRd4J-library.
 
-The examples and code presented in this document present a simple and minimal implementation that is meant to overview
+The examples and code in this document present a simple and minimal implementation that is meant to overview
 the basic structure and idea of general adapter functionality. The examples do not constitute a reference/recommended implementation for a service adapter.
 
 ## 2 Client
@@ -111,7 +111,7 @@ Main class (generated [request](../examples/request1.xml), received [response](.
   }
 ```
 
-HelloServiceRequestSerializer (serialized [request](../examples/request1.xml)):
+`HelloServiceRequestSerializer` (serialized [request](../examples/request1.xml)):
 
 ```java
   /**
@@ -135,15 +135,15 @@ HelloServiceRequestSerializer (serialized [request](../examples/request1.xml)):
   }
 ```
 
-HelloServiceRequestSerializer generates `name` element and sets request data ("Test message") as its value.
+`HelloServiceRequestSerializer` generates `name` element and sets request data ("Test message") as its value.
 
 ```xml
-  <ts:request>
+  <ts:helloService xmlns:ts="http://test.x-road.fi/producer">
     <ts:name>Test message</ts:name>
-  </ts:request>
+  </ts:helloService>
 ```
 
-HelloServiceResponseDeserializer ([response](../examples/response1.xml) to be deserialized):
+`HelloServiceResponseDeserializer` ([response](../examples/response1.xml) to be deserialized):
 
 ```java
   /**
@@ -194,16 +194,21 @@ HelloServiceResponseDeserializer ([response](../examples/response1.xml) to be de
 }
 ```
 
-HelloServiceResponseDeserializer's `deserializeRequestData` method reads `name` elements's value ("Test message") under `request` element, and `deserializeResponseData` method reads `message` element's value ("Hello Test message! Greetings from adapter server!") under `response` element.
+`HelloServiceResponseDeserializer`'s `deserializeRequestData` method reads `name` elements's value ("Test message") under request content:
+```xml
+  <ts:helloService xmlns:ts="http://test.x-road.fi/producer">
+    <ts:name>Test message</ts:name>
+  </ts:helloService>
+```
+and `deserializeResponseData` method reads `message` element's value ("Hello Test message! Greetings from adapter server!") under response content:
 
 ```xml
-  <ts:request>
-    <ts:name>Test message</ts:name>
-  </ts:request>
-  <ts:response>
+  <ts:helloServiceResponse xmlns:ts="http://test.x-road.fi/producer">
     <ts:message>Hello Test message! Greetings from adapter server!</ts:message>
-  </ts:response>
+  </ts:helloServiceResponse>
 ```
+
+If compatibility mode for request and response wrappers is turned on, the `helloService` and `helloServiceResponse` elements would have `request` and/or `response` wrapper elements and the data elements would be placed within them.
 
 #### 2.2.1 Receiving an Image from Server
 
@@ -257,168 +262,16 @@ A working example of an application implementing a test service with a server ad
   * [CustomRequestDeserializerImpl](../example-adapter/src/main/java/fi/vrk/xrd4j/exampleadapter/ExampleAdapter.java#L207-L233)
     * Implements the required request deserializer that searches for the expected `name` element containing request data necessary for the creation of the `helloService` response. `getRandom` response can be constructed without parsing further data from the request.
 * `response serializer`:
-  * [ServiceResponseSerializerImpl](../example-adapter/src/main/java/fi/vrk/xrd4j/exampleadapter/ExampleAdapter.java#L158-L173)
+  * [ServiceResponseSerializerImpl](../example-adapter/src/main/java/fi/vrk/xrd4j/exampleadapter/ExampleAdapter.java#L158-L176)
     * Implements the required response serialization for the `getRandom` response. It creates a `data` element for the response value in the response message. 
   * [HelloServiceResponseSerializer](../example-adapter/src/main/java/fi/vrk/xrd4j/exampleadapter/ExampleAdapter.java#L182-L200) 
     * Another implementation for response serialization that is used for creating the `message` element for the `helloService` response data.
  
 With these class implementations the example adapter creates a server adapter that has two extremely simple built-in services responding to two types of service requests.
 
-Setting up SSL on Tomcat is explained [here](Setting-up-SSL-on-Tomcat.md).
-
-Adapter servlet (received [request](../examples/request1.xml), generated [response](../examples/response1.xml)):
-
-```java
-/**
- * This class implements one simple X-Road v6 compatible service: "helloService".
- * Service description is defined in "example.wsdl" file
- * that's located in WEB-INF/classes folder. The name of the WSDL file and the
- * namespace is configured in WEB-INF/classes/xrd-servlet.properties file.
- *
- * @author Petteri Kivimäki
- */
-public class ExampleAdapter extends AbstractAdapterServlet {
-
-    private Properties props;
-    private final static Logger logger = LoggerFactory.getLogger(ExampleAdapter.class);
-    private String namespaceSerialize;
-    private String namespaceDeserialize;
-    private String prefix;
-
-    @Override
-    public void init() {
-        super.init();
-        logger.debug("Starting to initialize Enpoint.");
-        this.props = PropertiesUtil.getInstance().load("/xrd-servlet.properties");
-        this.namespaceSerialize = this.props.getProperty("namespace.serialize");
-        this.namespaceDeserialize = this.props.getProperty("namespace.deserialize");
-        this.prefix = this.props.getProperty("namespace.prefix.serialize");
-        logger.debug("Namespace for incoming ServiceRequests : \"" + this.namespaceDeserialize + "\".");
-        logger.debug("Namespace for outgoing ServiceResponses : \"" + this.namespaceSerialize + "\".");
-        logger.debug("Namespace prefix for outgoing ServiceResponses : \"" + this.prefix + "\".");
-        logger.debug("Endpoint initialized.");
-    }
-
-    /**
-     * Must return the path of the WSDL file.
-     *
-     * @return absolute path of the WSDL file
-     */
-    @Override
-    protected String getWSDLPath() {
-        String path = this.props.getProperty("wsdl.path");
-        logger.debug("WSDL path : \"" + path + "\".");
-        return path;
-    }
-
-    @Override
-    protected ServiceResponse handleRequest(ServiceRequest request) throws SOAPException, XRd4JException {
-        // Please uncomment the following line to enable processing of "request" and "response" wrappers.
-        // request.setProcessingWrappers(true);
-
-        // Create a new response serializer that serializes the response to SOAP
-        ServiceResponseSerializer serializer = serializer = new HelloServiceResponseSerializer();
-        ServiceResponse<String, String> response = null;
-
-        // Process services by service code
-        if (request.getProducer().getServiceCode().equals("helloService")) {
-            // Process "helloService" service
-            logger.info("Process \"helloService\" service.");
-            // Create a custom request deserializer that parses the request
-            // data from the SOAP request
-            CustomRequestDeserializer customDeserializer = new CustomRequestDeserializerImpl();
-            // Parse the request data from the request
-            customDeserializer.deserialize(request, this.namespaceDeserialize);
-            // Create a new ServiceResponse object
-            response = new ServiceResponse<String, String>(request.getConsumer(), request.getProducer(), request.getId());
-            // Set namespace of the SOAP response
-            response.getProducer().setNamespaceUrl(this.namespaceSerialize);
-            response.getProducer().setNamespacePrefix(this.prefix);
-            logger.debug("Do message prosessing...");
-            if (request.getRequestData() != null) {
-                // If request data is not null, add response data to the
-                // response object
-                response.setResponseData("Hello " + request.getRequestData() + "! Greetings from adapter server!");
-            } else {
-                // No request data is found - an error message is returned
-                logger.warn("No \"name\" parameter found. Return a non-techinal error message.");
-                ErrorMessage error = new ErrorMessage("422", "422 Unprocessable Entity. Missing \"name\" element.");
-                response.setErrorMessage(error);
-            }
-            logger.debug("Message prosessing done!");
-            // Serialize the response to SOAP
-            serializer.serialize(response, request);
-            // Return the response - AbstractAdapterServlet takes care of
-            // the rest
-            return response;
-        }
-        // No service matching the service code in the request was found -
-        // and error is returned
-        response = new ServiceResponse();
-        ErrorMessage error = new ErrorMessage("SOAP-ENV:Client", "Unknown service code.", null, null);
-        response.setErrorMessage(error);
-        serializer.serialize(response, request);
-        return response;
-    }
-
-    /**
-     * This class is responsible for serializing response data of helloService
-     * service responses.
-     */
-    private class HelloServiceResponseSerializer extends AbstractServiceResponseSerializer {
-
-        @Override
-        /**
-         * Serializes the response data.
-         *
-         * @param response ServiceResponse holding the application specific
-         * response object
-         * @param soapResponse SOAPMessage's response object where the response
-         * element is added
-         * @param envelope SOAPMessage's SOAPEnvelope object
-         */
-        public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
-            // Add "message" element
-            SOAPElement data = soapResponse.addChildElement(envelope.createName("message"));
-            // Put response data inside the "message" element
-            data.addTextNode((String) response.getResponseData());
-        }
-    }
-
-    /**
-     * This class is responsible for deserializing request data of helloService
-     * service requests. The type declaration "<String>" defines the type of the
-     * request data, which in this case is String.
-     */
-    private class CustomRequestDeserializerImpl extends AbstractCustomRequestDeserializer<String> {
-
-        /**
-         * Deserializes the "request" element.
-         *
-         * @param requestNode request element
-         * @return content of the request element
-         */
-        @Override
-        protected String deserializeRequest(Node requestNode, SOAPMessage message) throws SOAPException {
-            if (requestNode == null) {
-                logger.warn("\"requestNode\" is null. Null is returned.");
-                return null;
-            }
-            for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {
-                // Request data is inside of "name" element
-                if (requestNode.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE
-                        && requestNode.getChildNodes().item(i).getLocalName().equals("name")) {
-                    logger.debug("Found \"name\" element.");
-                    // "name" element was found - return the text content
-                    return requestNode.getChildNodes().item(i).getTextContent();
-                }
-            }
-            logger.warn("No \"name\" element found. Null is returned.");
-            return null;
-        }
-    }
-}
-```
+With default settings, the request and response elements would look something like these examples:
+* received [request](../examples/request1.xml),
+* generated [response](../examples/response1.xml).
 
 #### 3.2.1 Returning an Image From Server
 

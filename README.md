@@ -1,6 +1,6 @@
 # XRd4J
 
-XRd4J is a Java library for building X-Road v6 Adapter servers and clients. The library implements X-Road v6 [SOAP profile](https://github.com/vrk-kpa/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/vrk-kpa/X-Road/blob/develop/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages: built-in support for standard X-Road SOAP headers, only processing of application specific request and response content must be implemented.
+XRd4J is a Java library for building X-Road v6 Adapter servers and clients. The library implements X-Road v6 [SOAP profile](https://github.com/ria-ee/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/ria-ee/X-Road/blob/master/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages thus offering built-in support for standard X-Road SOAP headers; only processing of application specific request and response content remains to be implemented.
 
 ## Library Modules
 
@@ -116,7 +116,7 @@ Testing HTTPS connectivity may require setting up SSL on Tomcat. Basic instructi
 
 ### Compatibility Mode With Older X-Road Versions
 
-To enable processing of SOAP Body elements in compatibility mode with older versions of X-Road protocol, method ```request.setProcessingWrappers(true)``` must be called before serialization or deserialization of messages. This means that request messages must contain ```request``` wrapper and response messages must contain ```request``` and ```response``` wrappers. To skip automatic procession of ```request``` and ```response``` wrappers, method ```request.setProcessingWrappers(false)``` must be called before serialization or deserialization of messages, which is the default. The usage of ```setProcessingWrappers``` method is demonstrated in the examples below.
+To enable processing of SOAP Body elements in compatibility mode with older versions of X-Road protocol, method `request.setProcessingWrappers(true)` must be called before serialization or deserialization of messages. This means that request messages must contain `request` wrapper and response messages must contain `request` and `response` wrappers. To skip automatic procession of `request` and `response` wrappers, method `request.setProcessingWrappers(false)` must be called before serialization or deserialization of messages, which is the default. The usage of `setProcessingWrappers` method is demonstrated in the [the adapter implementation examples](documentation/adapter-implementation.md).
 
 ## Credits
 
