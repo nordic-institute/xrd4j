@@ -153,41 +153,41 @@ Main class (generated [request](../examples/request1.xml), received [response](.
   public class HelloServiceResponseDeserializer extends AbstractResponseDeserializer<String, String> {
 
     @Override
-	/**
-	 * Deserializes the request data content
-	 * @param requestNode request node containing request data
-	 * @return request data content, in this case the name element content
-	 */
+    /**
+     * Deserializes the request data content
+     * @param requestNode request node containing request data
+     * @return request data content, in this case the name element content
+     */
     protected String deserializeRequestData(Node requestNode) throws SOAPException {
       // Loop through all the children of the request node
       for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {
-	    // We're looking for "name" element
+        // We're looking for "name" element
         if (requestNode.getChildNodes().item(i).getLocalName().equals("name")) {
-	      // Return the text content of the element
+        // Return the text content of the element
           return requestNode.getChildNodes().item(i).getTextContent();
         }
       }
-	  // No "name" element was found, return null
+      // No "name" element was found, return null
       return null;
     }
 
     @Override
-	/**
-	 * Deserializes response data content.
-	 * @param responseNode response node containing response data
-	 * @param message SOAP response
-	 * @return response data content, in this case the message element content
-	 */
+    /**
+     * Deserializes response data content.
+     * @param responseNode response node containing response data
+     * @param message SOAP response
+     * @return response data content, in this case the message element content
+     */
     protected String deserializeResponseData(Node responseNode, SOAPMessage message) throws SOAPException {
       // Loop through all the children of the response node
       for (int i = 0; i < responseNode.getChildNodes().getLength(); i++) {
-	    // We're looking for "message" element
+        // We're looking for "message" element
         if (responseNode.getChildNodes().item(i).getLocalName().equals("message")) {
-	      // Return the text content of the element
+          // Return the text content of the element
           return responseNode.getChildNodes().item(i).getTextContent();
         }
       }
-	  // No "message" element was found, return null
+      // No "message" element was found, return null
       return null;
     }
 }
