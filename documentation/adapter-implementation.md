@@ -120,14 +120,14 @@ Main class (generated [request](../examples/request1.xml), received [response](.
   public class HelloServiceRequestSerializer extends AbstractServiceRequestSerializer {
 
     @Override
-	/**
-	 * Serializes the request data.
+    /**
+     * Serializes the request data.
      * @param request ServiceRequest holding the application specific request object
      * @param soapRequest SOAPMessage's request object where the request data is added
      * @param envelope SOAPMessage's SOAPEnvelope object
-	 */
+     */
     protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
-	  // Create element "name" and put request data inside the element
+      // Create element "name" and put request data inside the element
       SOAPElement data = soapRequest.addChildElement(envelope.createName("name"));
       data.addTextNode((String) request.getRequestData());
     }
@@ -163,7 +163,7 @@ Main class (generated [request](../examples/request1.xml), received [response](.
       for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {
         // We're looking for "name" element
         if (requestNode.getChildNodes().item(i).getLocalName().equals("name")) {
-        // Return the text content of the element
+          // Return the text content of the element
           return requestNode.getChildNodes().item(i).getTextContent();
         }
       }
