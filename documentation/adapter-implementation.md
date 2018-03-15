@@ -41,12 +41,12 @@ A client application must implement two classes:
 
 * `request serializer` is responsible for converting the object representing the request payload to SOAP
   * extends `AbstractServiceRequestSerializer`
-    * serializes all the other parts of the SOAP message except `request` element
+    * serializes all other parts of the SOAP message except request data content
   * used through `ServiceRequestSerializer` interface
-  * must implement `serializeRequest` method that serializes the `request` element to SOAP
+  * must implement `serializeRequest` method that serializes request data content to SOAP
 * `response deserializer` parses the incoming SOAP response message and constructs the objects representing the response payload
   * extends `AbstractResponseDeserializer<?, ?>`
-    * deserializes all the other parts of the incoming SOAP message except `request` and `response` elements
+    * deserializes all the other parts of the incoming SOAP message except request and response data content
 	* type of the request and response data must be given as type parameters
   * used through `ServiceResponseSerializer` interface
   * must implement `deserializeRequestData` and `deserializeResponseData` methods
@@ -115,8 +115,7 @@ Main class (generated [request](../examples/request1.xml), received [response](.
 
 ```java
   /**
-   * This class is responsible for serialiazing request data to SOAP. Request data is wrapped
-   * inside "request" element in SOAP body.
+   * This class is responsible for serializing request data to SOAP.
    */
   public class HelloServiceRequestSerializer extends AbstractServiceRequestSerializer {
 
@@ -124,7 +123,7 @@ Main class (generated [request](../examples/request1.xml), received [response](.
 	/**
 	 * Serializes the request data.
      * @param request ServiceRequest holding the application specific request object
-     * @param soapRequest SOAPMessage's request object where the request element is added
+     * @param soapRequest SOAPMessage's request object where the request data is added
      * @param envelope SOAPMessage's SOAPEnvelope object
 	 */
     protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
@@ -147,7 +146,7 @@ Main class (generated [request](../examples/request1.xml), received [response](.
 
 ```java
   /**
-   * This class is responsible for deserializing "request" and "response" elements of the SOAP response message
+   * This class is responsible for deserializing request and response data content of the SOAP response message
    * returned by the Security Server. The type declaration "<String, String>" defines the type of request and
    * response data, in this case they're both String.
    */
@@ -155,12 +154,12 @@ Main class (generated [request](../examples/request1.xml), received [response](.
 
     @Override
 	/**
-	 * Deserializes the "request" element.
-	 * @param requestNode request element
-	 * @return content of the request element
+	 * Deserializes the request data content
+	 * @param requestNode request node containing request data
+	 * @return request data content, in this case the name element content
 	 */
     protected String deserializeRequestData(Node requestNode) throws SOAPException {
-      // Loop through all the children of the "request" element
+      // Loop through all the children of the request node
       for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {
 	    // We're looking for "name" element
         if (requestNode.getChildNodes().item(i).getLocalName().equals("name")) {
@@ -174,13 +173,13 @@ Main class (generated [request](../examples/request1.xml), received [response](.
 
     @Override
 	/**
-	 * Deserializes the "response" element.
-	 * @param responseNode response element
+	 * Deserializes response data content.
+	 * @param responseNode response node containing response data
 	 * @param message SOAP response
-	 * @return content of the response element
+	 * @return response data content, in this case the message element content
 	 */
     protected String deserializeResponseData(Node responseNode, SOAPMessage message) throws SOAPException {
-      // Loop through all the children of the "response" element
+      // Loop through all the children of the response node
       for (int i = 0; i < responseNode.getChildNodes().getLength(); i++) {
 	    // We're looking for "message" element
         if (responseNode.getChildNodes().item(i).getLocalName().equals("message")) {
@@ -244,12 +243,12 @@ Server application must implement three classes:
   * extends `AbstractCustomRequestDeserializer<?>`
     * type of the request data must be given as type parameter
   * used through `CustomRequestDeserializer` interface
-  * must implement `deserializeRequest` method that deserializes the `request` element
+  * must implement `deserializeRequest` method that deserializes the request data content
 * `response serializer`
   * extends `AbstractServiceResponseSerializer`
     * is responsible for converting the object representing the response payload to SOAP
   * used through `ServiceResponseSerializer` interface
-  * must implement `serializeResponse` method that serializes the `response` element to SOAP
+  * must implement `serializeResponse` method that serializes the response data content to SOAP
 
 ### 3.2 Server example
 
@@ -269,7 +268,7 @@ A working example of an application implementing a test service with a server ad
  
 With these class implementations the example adapter creates a server adapter that has two extremely simple built-in services responding to two types of service requests.
 
-With default settings, the request and response elements would look something like these examples:
+With default settings, the request and response messages would look something like these examples:
 * received [request](../examples/request1.xml),
 * generated [response](../examples/response1.xml).
 
