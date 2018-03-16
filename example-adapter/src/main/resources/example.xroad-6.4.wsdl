@@ -17,20 +17,12 @@
             <xsd:element name="getRandomResponse">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="request">
-                        </xsd:element>
-                        <xsd:element name="response">
-                            <xsd:complexType>
-                                <xsd:sequence>
-                                    <xsd:element name="data" type="xsd:string">
-                                        <xsd:annotation>
-                                            <xsd:documentation>
-                                                Service response
-                                            </xsd:documentation>
-                                        </xsd:annotation>
-                                    </xsd:element>
-                                </xsd:sequence>
-                            </xsd:complexType>
+                        <xsd:element name="data" type="xsd:string">
+                            <xsd:annotation>
+                                <xsd:documentation>
+                                    Service response
+                                </xsd:documentation>
+                            </xsd:annotation>
                         </xsd:element>
                     </xsd:sequence>
                 </xsd:complexType>
@@ -38,18 +30,12 @@
             <xsd:element name="helloService">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="request">
-                            <xsd:complexType>
-                                <xsd:sequence>
-                                    <xsd:element name="name" type="xsd:string">
-                                        <xsd:annotation>
-                                            <xsd:documentation>
-                                                Name
-                                            </xsd:documentation>
-                                        </xsd:annotation>
-                                    </xsd:element>
-                                </xsd:sequence>
-                            </xsd:complexType>
+                        <xsd:element name="name" type="xsd:string">
+                            <xsd:annotation>
+                                <xsd:documentation>
+                                    Name
+                                </xsd:documentation>
+                            </xsd:annotation>
                         </xsd:element>
                     </xsd:sequence>
                 </xsd:complexType>
@@ -57,25 +43,12 @@
             <xsd:element name="helloServiceResponse">
                 <xsd:complexType>
                     <xsd:sequence>
-                        <xsd:element name="request">
-                            <xsd:complexType>
-                                <xsd:sequence>
-                                    <xsd:element name="name" nillable="true" type="xsd:string"/>
-                                </xsd:sequence>
-                            </xsd:complexType>
-                        </xsd:element>
-                        <xsd:element name="response">
-                            <xsd:complexType>
-                                <xsd:sequence>
-                                    <xsd:element name="message" type="xsd:string">
-                                        <xsd:annotation>
-                                            <xsd:documentation>
-                                                Service response
-                                            </xsd:documentation>
-                                        </xsd:annotation>
-                                    </xsd:element>
-                                </xsd:sequence>
-                            </xsd:complexType>
+                        <xsd:element name="message" type="xsd:string">
+                            <xsd:annotation>
+                                <xsd:documentation>
+                                    Service response
+                                </xsd:documentation>
+                            </xsd:annotation>
                         </xsd:element>
                     </xsd:sequence>
                 </xsd:complexType>

@@ -23,3 +23,7 @@ example-adapter/target/
 # IntelliJ Idea
 .idea/
 *.iml
+
+# Other
+.extract/
+xrd-servlet.log

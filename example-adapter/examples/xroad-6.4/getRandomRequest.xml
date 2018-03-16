@@ -13,14 +13,12 @@
             <iden:subsystemCode>DemoService</iden:subsystemCode>
             <iden:serviceCode>getRandom</iden:serviceCode>
             <iden:serviceVersion>v1</iden:serviceVersion>
-        </xro:service>	  
+        </xro:service>
         <xro:id>ID11234</xro:id>
         <xro:userId>EE1234567890</xro:userId>
         <xro:protocolVersion>4.0</xro:protocolVersion>
     </soapenv:Header>
     <soapenv:Body>
-        <prod:getRandom xmlns:prod="http://test.x-road.fi/producer">
-            <prod:request/>
-        </prod:getRandom>   
+        <prod:getRandom xmlns:prod="http://test.x-road.fi/producer" /> 
     </soapenv:Body>
 </soapenv:Envelope>
