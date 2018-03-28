@@ -11,7 +11,7 @@ XRd4J is a Java library for building X-Road v6 Adapter servers and clients. The 
 
 ## Maven Repositories
 
-### Releases
+### Release Repository
 
 All XRd4J release versions are available through the CSC Maven Repository [https://maven.csc.fi/repository/internal/](https://maven.csc.fi/repository/internal/).
 

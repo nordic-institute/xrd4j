@@ -92,7 +92,7 @@ Uncomment it and make the following changes.
 
 Start Tomcat and try to access `https://localhost:8443`. The default `8080` port is still working too `http://localhost:8080`. 
 
-#### 4. How to configure web applications for SSL
+#### 4. How to configure web applications for SSL only
 
 Current configuration allows connecting to applications with both HTTP and HTTPS. Restricting access to HTTPS only can be done by adding the following lines at the end of the ```web.xml``` file of an application.
 

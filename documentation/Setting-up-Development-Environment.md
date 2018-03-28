@@ -35,12 +35,3 @@ src/common/target/common-x.x.x-SNAPSHOT.jar
 src/server/target/server-x.x.x-SNAPSHOT.jar
 src/rest/target/rest-x.x.x-SNAPSHOT.jar
 ```
-### IDE Setup
-
-The project can be imported into different IDEs, but currently this section covers only Netbeans. However, some modifications are required regardless of the IDE that's being used.
-
-#### Netbeans
-
-Opening the project in Netbeans.
-
-* File -> Open Project -> path of the src folder -> Click Open Project button
