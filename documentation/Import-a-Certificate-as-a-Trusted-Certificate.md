@@ -1,18 +1,20 @@
-If HTTPS is used between the client and the Security Server, the public key certificate of the Security Server MUST be imported into "cacerts" keystore. 
+## Importing a Certificate As Trusted
+
+If HTTPS is used between the client and the Security Server, the public key certificate of the Security Server MUST be imported into `cacerts` keystore. 
 
 The first step is to obtain the Security Server's public certificate. That can be done in a variety of ways, such as contacting the server admin and asking for it, using openssl to download it, or, since it's an HTTP server, connecting to it with any browser, viewing the page's security info, and saving a copy of the certificate. 
 
 ```
-https://mysecurityserverver.com/
+https://mysecurityserverver.com:4000/
 ```
 
-Now that you have the certificate saved in a file, you need to add it to your JVM's trust store. At ```$JAVA_HOME/jre/lib/security/``` for JDKs or ```$JAVA_HOME/lib/security``` for JREs, there's a file named cacerts, which comes with Java and contains the public certificates of the well-known Certifying Authorities. To import the new cert, run keytool as a user who has permission to write to cacerts:
+Now that you have the certificate saved in a file, you need to add it to your JVM's trust store. At ```$JAVA_HOME/jre/lib/security/``` for JDKs or ```$JAVA_HOME/lib/security``` for JREs, there's a file named `cacerts`, which comes with Java and contains the public certificates of the well-known Certifying Authorities. To import the new cert, run keytool as a user who has permission to write to `cacerts`:
 
 ```
 keytool -import -alias <some meaningful name> -file <the cert file> -keystore <path to cacerts file>
 ```
 
-The password is "changeit".
+The default password is `changeit`.
 
 If you see the below error message after importing the certificate when trying to publish a connection from the client to the Security Server, the certificate wasn't imported correctly.
 

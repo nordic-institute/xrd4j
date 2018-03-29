@@ -49,7 +49,7 @@ See [Usage section](#usage) for further instructions.
 
 ### Software Requirements
 
-* Java 6 or later
+* Java 8
 * Tomcat 6 or later
 
 ### Development Environment

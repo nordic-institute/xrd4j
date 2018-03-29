@@ -20,9 +20,7 @@
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
         <ts:helloService xmlns:ts="http://test.x-road.fi/producer">
-            <ts:request>
-                <ts:name>Test message</ts:name>
-            </ts:request>
+            <ts:name>Test message</ts:name>
         </ts:helloService>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
