@@ -20,18 +20,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package fi.vrk.xrd4j.exampleadapter;
+package org.niis.xrd4j.exampleadapter;
 
-import fi.vrk.xrd4j.common.exception.XRd4JException;
-import fi.vrk.xrd4j.common.message.ErrorMessage;
-import fi.vrk.xrd4j.common.message.ServiceRequest;
-import fi.vrk.xrd4j.common.message.ServiceResponse;
-import fi.vrk.xrd4j.common.util.PropertiesUtil;
-import fi.vrk.xrd4j.server.AbstractAdapterServlet;
-import fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer;
-import fi.vrk.xrd4j.server.deserializer.CustomRequestDeserializer;
-import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
-import fi.vrk.xrd4j.server.serializer.ServiceResponseSerializer;
+import org.niis.xrd4j.common.exception.XRd4JException;
+import org.niis.xrd4j.common.message.ErrorMessage;
+import org.niis.xrd4j.common.message.ServiceRequest;
+import org.niis.xrd4j.common.message.ServiceResponse;
+import org.niis.xrd4j.common.util.PropertiesUtil;
+import org.niis.xrd4j.server.AbstractAdapterServlet;
+import org.niis.xrd4j.server.deserializer.AbstractCustomRequestDeserializer;
+import org.niis.xrd4j.server.deserializer.CustomRequestDeserializer;
+import org.niis.xrd4j.server.serializer.AbstractServiceResponseSerializer;
+import org.niis.xrd4j.server.serializer.ServiceResponseSerializer;
 import java.util.Properties;
 import java.util.Random;
 import javax.xml.soap.Node;

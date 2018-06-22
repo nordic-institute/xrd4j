@@ -2,7 +2,7 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>fi.vrk</groupId>
+    <groupId>org.niis</groupId>
     <artifactId>example-adapter</artifactId>
     <version>0.0.5-SNAPSHOT</version>
     <name>Example Adapter for X-Road version 6</name>
@@ -13,7 +13,7 @@
         on XRd4J library. The service contains a single servlet that implements
         two services
     </description>
-    <url>https://github.com/vrk-kpa/xrd4j/tree/master/example-adapter</url>
+    <url>https://github.com/nordic-institute/xrd4j/tree/master/example-adapter</url>
     <packaging>war</packaging>
     <properties>
         <slf4j.version>1.7.7</slf4j.version>
@@ -24,12 +24,12 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>fi.vrk.xrd4j</groupId>
+            <groupId>org.niis.xrd4j</groupId>
             <artifactId>common</artifactId>
             <version>${xrd4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>fi.vrk.xrd4j</groupId>
+            <groupId>org.niis.xrd4j</groupId>
             <artifactId>server</artifactId>
             <version>${xrd4j.version}</version>
         </dependency>
