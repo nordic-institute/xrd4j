@@ -20,7 +20,7 @@
         <xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <ts:helloServiceResponse xmlns:ts="http://test.x-road.fi/producer">
+        <ts:helloServiceResponse xmlns:ts="http://test.x-road.global/producer">
             <ts:message>Hello Test message! Greetings from adapter server!</ts:message>
         </ts:helloServiceResponse>
     </SOAP-ENV:Body>
