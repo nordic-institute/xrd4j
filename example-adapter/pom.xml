@@ -6,7 +6,7 @@
     <artifactId>example-adapter</artifactId>
     <version>0.0.5-SNAPSHOT</version>
     <name>Example Adapter for X-Road version 6</name>
-    <inceptionYear>2017</inceptionYear>
+    <inceptionYear>2018</inceptionYear>
     <description>
         This project provides an example implementation of a web service
         that's compatible with X-Road version 6. The implementation is based
@@ -74,6 +74,15 @@
         </license>
     </licenses>
     <developers>
+        <developer>
+            <id>niis</id>
+            <name>Nordic Institute for Interoperability Solutions (NIIS)</name>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
         <developer>
             <id>vrk</id>
             <name>Population Register Centre (VRK)</name>
@@ -149,7 +158,7 @@
                 <configuration>
                     <header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
                     <properties>
-                        <owner>Population Register Centre (VRK)</owner>
+                        <owner>Nordic Institute for Interoperability Solutions (NIIS)</owner>
                     </properties>
                     <skipExistingHeaders>true</skipExistingHeaders>
                     <includes>
