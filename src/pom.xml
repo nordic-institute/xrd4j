@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>fi.vrk</groupId>
+    <groupId>org.niis</groupId>
     <artifactId>xrd4j</artifactId>
     <version>0.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -15,7 +15,7 @@
         only processing of application specific request and response 
         elements must be implemented.
     </description>
-    <url>https://github.com/vrk-kpa/xrd4j</url>
+    <url>https://github.com/nordic-institute/xrd4j</url>
     <modules>
         <module>common</module>
         <module>client</module>
@@ -68,9 +68,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git@github.com:vrk-kpa/xrd4j.git</connection>
-        <developerConnection>scm:git:git@github.com:vrk-kpa/xrd4j.git</developerConnection>
-        <url>git@github.com:vrk-kpa/xrd4j.git</url>
+        <connection>scm:git:git@github.com:nordic-institute/xrd4j.git</connection>
+        <developerConnection>scm:git:git@github.com:nordic-institute/xrd4j.git</developerConnection>
+        <url>git@github.com:nordic-institute/xrd4j.git</url>
     </scm>
     <developers>
         <developer>
