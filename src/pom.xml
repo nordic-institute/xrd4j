@@ -6,7 +6,7 @@
     <version>0.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>XRd4J</name>
-    <inceptionYear>2017</inceptionYear>
+    <inceptionYear>2018</inceptionYear>
     <description>
         XRd4J is a Java library for building X-Road v6 Adapter Servers 
         and clients. The library implements X-Road v6 SOAP profile. 
@@ -74,6 +74,15 @@
     </scm>
     <developers>
         <developer>
+            <id>niis</id>
+            <name>Nordic Institute for Interoperability Solutions (NIIS)</name>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
             <id>vrk</id>
             <name>Population Register Centre (VRK)</name>
             <roles>
@@ -130,7 +139,7 @@
                 <configuration>
                     <header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
                     <properties>
-                        <owner>Population Register Centre (VRK)</owner>
+                        <owner>Nordic Institute for Interoperability Solutions (NIIS)</owner>
                     </properties>
                     <skipExistingHeaders>true</skipExistingHeaders>
                     <includes>
