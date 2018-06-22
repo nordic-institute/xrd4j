@@ -255,15 +255,15 @@ Server application must implement three classes:
 A working example of an application implementing a test service with a server adapter utilizing XRd4J can be found under directory `example-adapter` ([documentation](../example-adapter/README.md)). It implements the adapter server with four classes:
   
 * `servlet`:
-  * [ExampleAdapter](../example-adapter/src/main/java/fi/vrk/xrd4j/exampleadapter/ExampleAdapter.java#L53-L152)
+  * [ExampleAdapter](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L53-L152)
     * Implements the servlet requirement of the server adapter. It provides handling for `helloService` and `getRandom` requests as well as the `getWsdlPath` method.
 * `request deserializer`: 
-  * [CustomRequestDeserializerImpl](../example-adapter/src/main/java/fi/vrk/xrd4j/exampleadapter/ExampleAdapter.java#L207-L233)
+  * [CustomRequestDeserializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L207-L233)
     * Implements the required request deserializer that searches for the expected `name` element containing request data necessary for the creation of the `helloService` response. `getRandom` response can be constructed without parsing further data from the request.
 * `response serializer`:
-  * [ServiceResponseSerializerImpl](../example-adapter/src/main/java/fi/vrk/xrd4j/exampleadapter/ExampleAdapter.java#L158-L176)
+  * [ServiceResponseSerializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L158-L176)
     * Implements the required response serialization for the `getRandom` response. It creates a `data` element for the response value in the response message. 
-  * [HelloServiceResponseSerializer](../example-adapter/src/main/java/fi/vrk/xrd4j/exampleadapter/ExampleAdapter.java#L182-L200) 
+  * [HelloServiceResponseSerializer](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L182-L200) 
     * Another implementation for response serialization that is used for creating the `message` element for the `helloService` response data.
  
 With these class implementations the example adapter creates a server adapter that has two extremely simple built-in services responding to two types of service requests.
