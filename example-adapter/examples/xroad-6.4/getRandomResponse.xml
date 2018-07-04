@@ -19,7 +19,7 @@
         <xrd:protocolVersion>4.0</xrd:protocolVersion>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <ts1:getRandomResponse xmlns:ts1="http://test.x-road.fi/producer">
+        <ts1:getRandomResponse xmlns:ts1="http://test.x-road.global/producer">
             <ts1:data>95</ts1:data>
         </ts1:getRandomResponse>
     </SOAP-ENV:Body>

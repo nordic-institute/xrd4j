@@ -1,6 +1,6 @@
 # XRd4J
 
-XRd4J is a Java library for building X-Road v6 Adapter servers and clients. The library implements X-Road v6 [SOAP profile](https://github.com/ria-ee/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/ria-ee/X-Road/blob/master/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages offering built-in support for standard X-Road SOAP headers; only processing of application specific request and response content remains to be implemented.
+XRd4J is a Java library for building X-Road v6 Adapter servers and clients. The library implements X-Road v6 [SOAP profile](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages offering built-in support for standard X-Road SOAP headers; only processing of application specific request and response content remains to be implemented.
 
 ## Library Modules
 
@@ -97,16 +97,16 @@ Javadocs can be generated with the included script `generate-javadocs.sh`. The s
 
 The most essential classes of the library are:
 
-* `fi.vrk.xrd4j.common.member.ConsumerMember` : represents an X-Road consumer member that acts as a client that initiates a service call by sending a ServiceRequest.
-* `fi.vrk.xrd4j.common.member.ProducerMember` : represents an X-Road producer member that produces services to X-Road.
-* `fi.vrk.xrd4j.common.message.ServiceRequest<?>` : represents an X-Road service request that is sent by a ConsumerMember and received by a ProviderMember. Contains the sent SOAP request.
-* `fi.vrk.xrd4j.common.message.ServiceResponse<?, ?>` : represents an X-Road service response message that is sent by a ProviderMember and received by a ConsumerMember. Contains the SOAP response.
-* `fi.vrk.xrd4j.client.serializer.AbstractServiceRequestSerializer` : an abstract base class for service request serializers.
-* `fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer<?>` : an abstract base class for service request deserializers.
-* `fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer` : an abstract base class for service response serializers.
-* `fi.vrk.xrd4j.client.deserializer.AbstractResponseDeserializer<?, ?>` : an abstract base class for service response deserializers.
-* `fi.vrk.xrd4j.client.SOAPClientImpl` : a SOAP client that offers two methods for sending SOAPMessage and ServiceRequest objects.
-* `fi.vrk.xrd4j.server.AbstractAdapterServlet` : an abstract base class for Servlets that implement SOAP message processing. Can be used as a base class for Adapter Server implementations.
+* `org.niis.xrd4j.common.member.ConsumerMember` : represents an X-Road consumer member that acts as a client that initiates a service call by sending a ServiceRequest.
+* `org.niis.xrd4j.common.member.ProducerMember` : represents an X-Road producer member that produces services to X-Road.
+* `org.niis.xrd4j.common.message.ServiceRequest<?>` : represents an X-Road service request that is sent by a ConsumerMember and received by a ProviderMember. Contains the sent SOAP request.
+* `org.niis.xrd4j.common.message.ServiceResponse<?, ?>` : represents an X-Road service response message that is sent by a ProviderMember and received by a ConsumerMember. Contains the SOAP response.
+* `org.niis.xrd4j.client.serializer.AbstractServiceRequestSerializer` : an abstract base class for service request serializers.
+* `org.niis.xrd4j.server.deserializer.AbstractCustomRequestDeserializer<?>` : an abstract base class for service request deserializers.
+* `org.niis.xrd4j.server.serializer.AbstractServiceResponseSerializer` : an abstract base class for service response serializers.
+* `org.niis.xrd4j.client.deserializer.AbstractResponseDeserializer<?, ?>` : an abstract base class for service response deserializers.
+* `org.niis.xrd4j.client.SOAPClientImpl` : a SOAP client that offers two methods for sending SOAPMessage and ServiceRequest objects.
+* `org.niis.xrd4j.server.AbstractAdapterServlet` : an abstract base class for Servlets that implement SOAP message processing. Can be used as a base class for Adapter Server implementations.
 
 ### Adapter Development Using XRd4J
 
@@ -120,5 +120,7 @@ To enable processing of SOAP Body elements in compatibility mode with older vers
 
 ## Credits
 
-XRd4J library was originally developed by Petteri Kivimäki (https://github.com/petkivim) during 2014-2017. In June 2017 it was agreed that Population Register Centre (VRK) takes maintenance responsibility.
+* XRd4J library was originally developed by Petteri Kivimäki (https://github.com/petkivim) during 2014-2017. 
+* XRd4J library was maintained and further developed by the Finnish Population Register Centre (VRK) during 06/2017-05/2018.
+* In June 2018 it was agreed that Nordic Institute for Interoperability Solutions (NIIS) takes maintenance responsibility.
 

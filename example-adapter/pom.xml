@@ -2,18 +2,18 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>fi.vrk</groupId>
+    <groupId>org.niis</groupId>
     <artifactId>example-adapter</artifactId>
     <version>0.0.5-SNAPSHOT</version>
     <name>Example Adapter for X-Road version 6</name>
-    <inceptionYear>2017</inceptionYear>
+    <inceptionYear>2018</inceptionYear>
     <description>
         This project provides an example implementation of a web service
         that's compatible with X-Road version 6. The implementation is based
         on XRd4J library. The service contains a single servlet that implements
         two services
     </description>
-    <url>https://github.com/vrk-kpa/xrd4j/tree/master/example-adapter</url>
+    <url>https://github.com/nordic-institute/xrd4j/tree/master/example-adapter</url>
     <packaging>war</packaging>
     <properties>
         <slf4j.version>1.7.7</slf4j.version>
@@ -24,12 +24,12 @@
     </properties>
     <dependencies>
         <dependency>
-            <groupId>fi.vrk.xrd4j</groupId>
+            <groupId>org.niis.xrd4j</groupId>
             <artifactId>common</artifactId>
             <version>${xrd4j.version}</version>
         </dependency>
         <dependency>
-            <groupId>fi.vrk.xrd4j</groupId>
+            <groupId>org.niis.xrd4j</groupId>
             <artifactId>server</artifactId>
             <version>${xrd4j.version}</version>
         </dependency>
@@ -74,6 +74,15 @@
         </license>
     </licenses>
     <developers>
+        <developer>
+            <id>niis</id>
+            <name>Nordic Institute for Interoperability Solutions (NIIS)</name>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
         <developer>
             <id>vrk</id>
             <name>Population Register Centre (VRK)</name>
@@ -149,7 +158,7 @@
                 <configuration>
                     <header>com/mycila/maven/plugin/license/templates/MIT.txt</header>
                     <properties>
-                        <owner>Population Register Centre (VRK)</owner>
+                        <owner>Nordic Institute for Interoperability Solutions (NIIS)</owner>
                     </properties>
                     <skipExistingHeaders>true</skipExistingHeaders>
                     <includes>

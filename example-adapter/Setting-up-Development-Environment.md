@@ -12,7 +12,7 @@ This document describes how a developer's workstation can be setup.
 The example adapter project is a part of the XRd4J git repository. You can access the source code by cloning it:
 
 ```
-git clone https://github.com/vrk-kpa/xrd4j.git
+git clone https://github.com/nordic-institute/xrd4j.git
 ```
 
 The example adapter is a separate Maven project and can be found under the `example-adapter` directory.
