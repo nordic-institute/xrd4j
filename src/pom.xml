@@ -172,9 +172,9 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>3.0.2</version>
+                <version>3.2.1</version>
                 <configuration>
-                    <cveValidForHours>12</cveValidForHours>
+                    <cveValidForHours>24</cveValidForHours>
                     <skip>false</skip>
                     <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                     <enableExperimental>false</enableExperimental>
@@ -255,43 +255,18 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-        <profile>
-            <id>owasp</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.owasp</groupId>
-                        <artifactId>dependency-check-maven</artifactId>
-                        <version>1.4.3</version>
-                        <configuration>
-                            <cveValidForHours>12</cveValidForHours>
-                            <failBuildOnCVSS>4</failBuildOnCVSS>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
+            <!-- Deploy artifacts to NIIS Maven repository. Deployment must
+                 be run using "release" profile (mvn clean deploy -P release). -->
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>niis-snapshots</id>
+                    <url>https:/artifactory.niis.org/xroad-maven-snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>niis-releases</id>
+                    <url>https://artifactory.niis.org/xroad-maven-releases/</url>
+                </repository>
+            </distributionManagement>
         </profile>
     </profiles>
-    <!-- 
-    Deploy artifacts to CSC's Maven repository. Deployment must
-    be run using "release" profile (mvn clean deploy -P release).
-    -->
-    <distributionManagement>
-        <snapshotRepository>
-            <id>csc.snapshots</id>
-            <url>https://maven.csc.fi/repository/snapshots/</url>
-        </snapshotRepository>
-        <repository>
-            <id>csc.internal</id>
-            <url>https://maven.csc.fi/repository/internal/</url>
-        </repository>
-    </distributionManagement>
 </project>
