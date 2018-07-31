@@ -186,14 +186,14 @@
     </build>
     <repositories>
         <repository>
-            <id>csc-repo</id>
-            <name>CSC's Maven repository</name>
-            <url>https://maven.csc.fi/repository/internal/</url>
+            <id>niis-repo</id>
+            <name>NIIS's Maven repository</name>
+            <url>https://artifactory.niis.org/xroad-maven-releases</url>
         </repository>
         <repository>
-            <id>csc-snapshot-repo</id>
-            <name>CSC's snapshot Maven repository</name>
-            <url>https://maven.csc.fi/repository/snapshots/</url>
+            <id>niis-snapshot-repo</id>
+            <name>NIIS's snapshot Maven repository</name>
+            <url>https://artifactory.niis.org/xroad-maven-snapshots</url>
         </repository>
     </repositories>
     <reporting>
