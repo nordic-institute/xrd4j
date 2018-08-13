@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
@@ -85,41 +84,31 @@ public final class PropertiesUtil {
      * null, if loading the properties fails
      */
     public Properties load(String propsName, boolean fromClasspath) {
-        LOGGER.debug("Load properties from file : \"" + propsName + "\".");
+        LOGGER.debug("Load properties from file : \"{}\".", propsName);
         // If file is already loaded, return it from cache
         if (loadedProps.containsKey(propsName)) {
             LOGGER.debug("File already loaded. Use cache.");
             return loadedProps.get(propsName);
         }
 
-        Properties props = null;
-        InputStream is = null;
-        try {
-            if (fromClasspath) {
-                LOGGER.debug("Load properties from classpath.");
-                is = this.getClass().getResourceAsStream(propsName);
-            } else {
-                LOGGER.debug("Load properties from file system.");
-                is = new FileInputStream(propsName);
-            }
-            props = new Properties();
+        if (fromClasspath) {
+            LOGGER.debug("Load properties from classpath.");
+        } else {
+            LOGGER.debug("Load properties from file system.");
+        }
+        
+        try (
+                InputStream is = fromClasspath ? this.getClass().getResourceAsStream(propsName) : new FileInputStream(propsName)
+        ) {
+            Properties props = new Properties();
             props.load(is);
             loadedProps.put(propsName, props);
-            LOGGER.debug("Properties were succesfully loaded.");
+            LOGGER.debug("Properties were successfully loaded.");
+            return props;
         } catch (Exception e) {
             LOGGER.error("Loading properties failed.");
             LOGGER.error(e.getMessage(), e);
             return null;
-        } finally {
-            if (is != null) {
-                try {
-                    is.close();
-                } catch (IOException ex) {
-                    LOGGER.error("Closing input stream failed.");
-                    LOGGER.error(ex.getMessage(), ex);
-                }
-            }
         }
-        return props;
     }
 }

@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MessageFactory;
@@ -143,7 +144,9 @@ public final class SOAPHelper {
     public static String toString(Node node) {
         StringWriter sw = new StringWriter();
         try {
-            Transformer t = TransformerFactory.newInstance().newTransformer();
+            TransformerFactory factory = TransformerFactory.newInstance();
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            Transformer t = factory.newTransformer();
             t.setOutputProperty(OutputKeys.ENCODING, CHARSET);
             t.transform(new DOMSource(node), new StreamResult(sw));
             return sw.toString();
@@ -361,10 +364,10 @@ public final class SOAPHelper {
             if (message.getProducer().getNamespacePrefix() != null
                     && !message.getProducer().getNamespacePrefix().isEmpty()) {
                 node = (Node) node.getOwnerDocument().renameNode(node, message.getProducer().getNamespaceUrl(),
-                    message.getProducer().getNamespacePrefix() + ":" + node.getNodeName());
+                        message.getProducer().getNamespacePrefix() + ":" + node.getNodeName());
             } else {
                 node = (Node) node.getOwnerDocument().renameNode(node, message.getProducer().getNamespaceUrl(),
-                    node.getNodeName());
+                        node.getNodeName());
             }
         }
 
@@ -651,7 +654,7 @@ public final class SOAPHelper {
      * @param mimeHeaders needed for creating SOAP message
      * @param is needed for creating SOAP message
      * @return New SOAP message
-     * @throws IOException on IO error
+     * @throws IOException   on IO error
      * @throws SOAPException on soap error
      */
     public static SOAPMessage createSOAPMessage(MimeHeaders mimeHeaders, InputStream is)
