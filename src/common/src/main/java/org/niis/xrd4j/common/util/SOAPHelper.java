@@ -700,6 +700,10 @@ public final class SOAPHelper {
      */
     public static SOAPMessage cloneSOAPMsgWithoutBody(SOAPMessage source) {
         SOAPMessage target = toSOAP(toString(source));
+        if(target == null) {
+            LOGGER.debug("Cloned SOAP message is null.");
+            return null;
+        }
         try {
             target.getSOAPBody().removeContents();
             return target;
