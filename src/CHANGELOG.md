@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.3.0-SNAPSHOT 2018-08-15
+- XRDDEV-90 Fix critical errors and bugs reported by SonarQube.
+
 ## 0.3.0-SNAPSHOT 2018-07-04
 - XRDDEV-44 Change copyright owner from VRK to NIIS and artifact package names from `fi.vrk.xrd4j` to `org.niis.xrd4j`.
 
