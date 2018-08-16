@@ -32,15 +32,17 @@ import fi.vrk.xrd4j.server.deserializer.AbstractCustomRequestDeserializer;
 import fi.vrk.xrd4j.server.deserializer.CustomRequestDeserializer;
 import fi.vrk.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import fi.vrk.xrd4j.server.serializer.ServiceResponseSerializer;
-import java.util.Properties;
-import java.util.Random;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.Properties;
+import java.util.Random;
 
 /**
  * This class implements two simple X-Road v6 compatible services: "getRandom"
@@ -57,6 +59,13 @@ public class ExampleAdapter extends AbstractAdapterServlet {
     private String namespaceSerialize;
     private String namespaceDeserialize;
     private String prefix;
+    private String FOO;
+
+    public void foOOO(String s)
+    {
+
+
+    }
 
     @Override
     public void init() {
