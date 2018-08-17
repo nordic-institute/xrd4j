@@ -26,6 +26,8 @@ import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.util.ClientUtil;
 
 import org.apache.http.Header;
+import org.apache.http.HttpHost;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -46,7 +48,28 @@ public abstract class AbstractClient implements RESTClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractClient.class);
 
-    protected abstract HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers);
+    private RequestConfig requestConfig = null; // null unless proxy is set
+
+    /**
+     * @param url URL where the request is sent
+     * @param requestBody request body
+     * @param headers HTTP headers to be added to the request
+     * @param config RequestConfig that can be used to set http proxy for the request
+     * @return new HttpUriRequest object
+     */
+    protected abstract HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers, RequestConfig config);
+
+    /**
+     * Configures requestConfig so that a http proxy is used for requests
+     * @param hostName
+     * @param port
+     */
+    public void setProxy(String hostName, int port) {
+        HttpHost proxy = new HttpHost(hostName, port, "http");
+        requestConfig = RequestConfig.custom()
+                .setProxy(proxy)
+                .build();
+    }
 
     /**
      * Makes a HTTP request to the given URL using the given request body,
@@ -64,9 +87,9 @@ public abstract class AbstractClient implements RESTClient {
     public ClientResponse send(String url, String requestBody, Map<String, ?> params, Map<String, String> headers) {
         // Build target URL
         url = ClientUtil.buildTargetURL(url, params);
+        LOGGER.debug("proxy: {} for url: {}", (requestConfig != null), url);
 
-        // Build request
-        HttpUriRequest request = this.buildtHttpRequest(url, requestBody, headers);
+        HttpUriRequest request = this.buildtHttpRequest(url, requestBody, headers, requestConfig);
 
         LOGGER.info("Starting HTTP {} operation.", request.getMethod());
 
@@ -78,7 +101,9 @@ public abstract class AbstractClient implements RESTClient {
             }
         }
 
+
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+
             //Send the request; It will immediately return the response in HttpResponse object
             CloseableHttpResponse response = httpClient.execute(request);
             // Get Content-Type header

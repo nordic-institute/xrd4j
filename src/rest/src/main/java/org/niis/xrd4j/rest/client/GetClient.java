@@ -22,6 +22,7 @@
  */
 package org.niis.xrd4j.rest.client;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.slf4j.Logger;
@@ -42,15 +43,12 @@ public class GetClient extends AbstractClient {
      * Builds a new HTTP GET request with the given URL. Request body and
      * headers are omitted.
      *
-     * @param url URL where the request is sent
-     * @param requestBody request body
-     * @param headers HTTP headers to be added to the request
-     * @return new HttpUriRequest object
+     * {@inheritDoc}
      */
     @Override
-    protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers) {
+    protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers, RequestConfig config) {
         LOGGER.debug("Build new HTTP GET request.");
         // Create a new post request
-        return RequestBuilder.get().setUri(url).build();
+        return RequestBuilder.get().setConfig(config).setUri(url).build();
     }
 }

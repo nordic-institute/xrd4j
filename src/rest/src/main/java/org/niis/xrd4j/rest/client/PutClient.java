@@ -22,6 +22,7 @@
  */
 package org.niis.xrd4j.rest.client;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
@@ -51,16 +52,16 @@ public class PutClient extends AbstractBodyHandler {
      * @return new HttpUriRequest object
      */
     @Override
-    protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers) {
+    protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers, RequestConfig config) {
         LOGGER.debug("Build new HTTP PUT request.");
         HttpUriRequest request;
         // Create request entity that's used as request body
         StringEntity requestEntity = super.buildRequestEntity(requestBody, headers);
         if (requestEntity != null) {
-            request = RequestBuilder.put().setUri(url).setEntity(requestEntity).build();
+            request = RequestBuilder.put().setConfig(config).setUri(url).setEntity(requestEntity).build();
         } else {
             LOGGER.debug("No request body found for HTTP PUT request.");
-            request = RequestBuilder.put().setUri(url).build();
+            request = RequestBuilder.put().setConfig(config).setUri(url).build();
         }
         // Return request
         return request;

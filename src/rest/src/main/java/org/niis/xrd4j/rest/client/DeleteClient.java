@@ -22,6 +22,7 @@
  */
 package org.niis.xrd4j.rest.client;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.entity.StringEntity;
@@ -44,23 +45,19 @@ public class DeleteClient extends AbstractBodyHandler {
      * Content type of the request is set according to the given headers. If the
      * given headers do not contain Content-Type header, "application/xml" is
      * used.
-     *
-     * @param url URL where the request is sent
-     * @param requestBody request body
-     * @param headers HTTP headers to be added to the request
-     * @return new HttpUriRequest object
      */
     @Override
-    protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers) {
+    protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers, RequestConfig config) {
         LOGGER.debug("Build new HTTP DELETE request.");
         HttpUriRequest request;
         // Create request entity that's used as request body
         StringEntity requestEntity = super.buildRequestEntity(requestBody, headers);
+        RequestBuilder builder = RequestBuilder.delete().setConfig(config);
         if (requestEntity != null) {
-            request = RequestBuilder.delete().setUri(url).setEntity(requestEntity).build();
+            request = builder.setUri(url).setEntity(requestEntity).build();
         } else {
             LOGGER.debug("No request body found for HTTP DELETE request.");
-            request = RequestBuilder.delete().setUri(url).build();
+            request = builder.setUri(url).build();
         }
         // Return request
         return request;
