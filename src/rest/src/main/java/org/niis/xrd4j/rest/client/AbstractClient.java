@@ -26,10 +26,13 @@ import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.util.ClientUtil;
 
 import org.apache.http.Header;
+import org.apache.http.HttpHost;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,8 +48,16 @@ import java.util.Map;
 public abstract class AbstractClient implements RESTClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractClient.class);
+    public static final int PROXY_PORT = 13000;
 
-    protected abstract HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers);
+    /**
+     * @param url URL where the request is sent
+     * @param requestBody request body
+     * @param headers HTTP headers to be added to the request
+     * @param config RequestConfig that can be used to set http proxy for the request
+     * @return new HttpUriRequest object
+     */
+    protected abstract HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers, RequestConfig config);
 
     /**
      * Makes a HTTP request to the given URL using the given request body,
@@ -66,7 +77,13 @@ public abstract class AbstractClient implements RESTClient {
         url = ClientUtil.buildTargetURL(url, params);
 
         // Build request
-        HttpUriRequest request = this.buildtHttpRequest(url, requestBody, headers);
+        // trying out proxy
+        HttpHost proxy = new HttpHost("127.0.0.1", PROXY_PORT, "http");
+        RequestConfig config = RequestConfig.custom()
+                .setProxy(proxy)
+                .build();
+
+        HttpUriRequest request = this.buildtHttpRequest(url, requestBody, headers, config);
 
         LOGGER.info("Starting HTTP {} operation.", request.getMethod());
 
@@ -79,6 +96,7 @@ public abstract class AbstractClient implements RESTClient {
         }
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+
             //Send the request; It will immediately return the response in HttpResponse object
             CloseableHttpResponse response = httpClient.execute(request);
             // Get Content-Type header
