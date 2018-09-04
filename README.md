@@ -13,22 +13,22 @@ XRd4J is a Java library for building X-Road v6 Adapter servers and clients. The 
 
 ### Release Repository
 
-All XRd4J release versions are available through the CSC Maven Repository [https://maven.csc.fi/repository/internal/](https://maven.csc.fi/repository/internal/).
+All XRd4J release versions are available through the NIIS Maven Repository [https://artifactory.niis.org/xroad-maven-releases](https://artifactory.niis.org/xroad-maven-releases).
 
-Add the CSC Maven Repository in your POM-file inside the `<repositories>` tag:
+Add the NIIS Maven Repository in your POM-file inside the `<repositories>` tag:
 
 ```XML
 <repository>
-  <id>csc-repo</id>
-  <name>CSC's Maven repository</name>
-  <url>https://maven.csc.fi/repository/internal/</url>
+    <id>niis-repo</id>
+    <name>NIIS's Maven repository</name>
+    <url>https://artifactory.niis.org/xroad-maven-releases</url>
 </repository>
 ```
 
 If running `mvn clean install` generates the error
 
 ```
-Failed to collect dependencies at fi.vrk.xrd4j:common:jar:0.2.0: Failed to read artifact descriptor for fi.vrk.xrd4j:common:jar:0.2.0: Could not transfer artifact fi.vrk.xrd4j:common:pom:0.2.0 from/to csc-repo (https://maven.csc.fi/repository/internal/): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
+Failed to collect dependencies at org.niis.xrd4j:common:jar:0.2.0: Failed to read artifact descriptor for org.niis.xrd4j:common:jar:0.2.0: Could not transfer artifact org.niis.xrd4j:common:pom:0.2.0 from/to NIIS-repo (https://artifactory.niis.org/): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
 ```
 you can either skip the certificate validation with command
 
@@ -36,7 +36,7 @@ you can either skip the certificate validation with command
 mvn install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true
 ```
 
-or import the CSC Maven repository certificate as a trusted certificate into `cacerts` keystore. See full [instructions](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md) for more information.
+or import the NIIS Maven repository certificate as a trusted certificate into `cacerts` keystore. See full [instructions](documentation/Import-a-Certificate-as-a-Trusted-Certificate.md) for more information.
 
 #### Dependency Declaration
 
@@ -45,44 +45,44 @@ Declare the following dependencies in your POM-file:
 ```XML
 <!-- Module: common-->
 <dependency>
-  <groupId>fi.vrk.xrd4j</groupId>
-  <artifactId>common</artifactId>
-  <version>0.2.0</version>
+    <groupId>org.niis.xrd4j</groupId>
+    <artifactId>common</artifactId>
+    <version>${xrd4j.version}</version>
 </dependency>
 
 <!-- Module: client-->
 <dependency>
-  <groupId>fi.vrk.xrd4j</groupId>
-  <artifactId>client</artifactId>
-  <version>0.2.0</version>
+    <groupId>org.niis.xrd4j</groupId>
+    <artifactId>client</artifactId>
+    <version>${xrd4j.version}</version>
 </dependency>
 
 <!-- Module: server-->
 <dependency>
-  <groupId>fi.vrk.xrd4j</groupId>
-  <artifactId>server</artifactId>
-  <version>0.2.0</version>
+    <groupId>org.niis.xrd4j</groupId>
+    <artifactId>server</artifactId>
+    <version>${xrd4j.version}</version>
 </dependency>
 
 <!-- Module: rest-->
 <dependency>
-  <groupId>fi.vrk.xrd4j</groupId>
-  <artifactId>rest</artifactId>
-  <version>0.2.0</version>
+    <groupId>org.niis.xrd4j</groupId>
+    <artifactId>rest</artifactId>
+    <version>${xrd4j.version}</version>
 </dependency>
 ```
 
 #### Snapshot Repository
 
-Snapshot versions of XRd4J are available through the CSC Maven Snapshot repository in [https://maven.csc.fi/repository/snapshots/](https://maven.csc.fi/repository/snapshots/).
+Snapshot versions of XRd4J are available through the NIIS Maven Snapshot repository in [https://artifactory.niis.org/xroad-maven-snapshots](https://artifactory.niis.org/xroad-maven-snapshots).
 
 Include the snapshot repository in your POM-file inside the `<repositories>` tag:
 
 ```XML
 <repository>
-  <id>csc-snapshot-repo</id>
-  <name>CSC's snapshot Maven repository</name>
-  <url>https://maven.csc.fi/repository/snapshots/</url>
+    <id>niis-snapshot-repo</id>
+    <name>NIIS's snapshot Maven repository</name>
+    <url>https://artifactory.niis.org/xroad-maven-snapshots</url>
 </repository>
 ```
 After this, `x.x.x-SNAPSHOT` versions are available to be declared as dependencies as with release versions above. XRd4J snapshots are meant for development use only. Use release versions for final adapter implementations.
