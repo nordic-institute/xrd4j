@@ -34,6 +34,8 @@ import org.slf4j.LoggerFactory;
 public final class RESTClientFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RESTClientFactory.class);
+    private static final boolean USE_PROXY = true;
+    private static final boolean NO_PROXY = false;
 
     /**
      * Constructs and initializes a new RESTClientFactory object. Should never
@@ -50,25 +52,55 @@ public final class RESTClientFactory {
      * @return RESTClient object matching the given HTTP verb or null
      */
     public static RESTClient createRESTClient(String httpVerb) {
+        return createRESTClient(httpVerb, NO_PROXY, null, -1);
+    }
+
+    /**
+     * Creates a new RESTClient object matching the given HTTP verb. If no
+     * matching RESTClient is found, null is returned.
+     *
+     * RESTClient will use a http proxy.
+     *
+     * @param httpVerb HTTP verb (GET, POST, PUT, DELETE)
+     * @param proxyHost proxy host
+     * @param proxyPort proxy port
+     * @return RESTClient object matching the given HTTP verb or null
+     */
+    public static RESTClient createRESTClient(String httpVerb, String proxyHost, int proxyPort) {
+        return createRESTClient(httpVerb, USE_PROXY, proxyHost, proxyPort);
+    }
+
+
+    private static RESTClient createRESTClient(String httpVerb,
+                                               boolean useProxy,
+                                               String proxyHost,
+                                               int proxyPort) {
         if (httpVerb == null || httpVerb.isEmpty()) {
             LOGGER.warn("HTTP verb can't be null or empty. Null is returned.");
             return null;
         }
         LOGGER.trace("Create new REST client.");
+        AbstractClient client = null;
         if ("get".equalsIgnoreCase(httpVerb)) {
             LOGGER.debug("New GET client created.");
-            return new GetClient();
+            client = new GetClient();
         } else if ("post".equalsIgnoreCase(httpVerb)) {
             LOGGER.debug("New POST client created.");
-            return new PostClient();
+            client = new PostClient();
         } else if ("put".equalsIgnoreCase(httpVerb)) {
             LOGGER.debug("New PUT client created.");
-            return new PutClient();
+            client = new PutClient();
         } else if ("delete".equalsIgnoreCase(httpVerb)) {
             LOGGER.debug("New DELETE client created.");
-            return new DeleteClient();
+            client = new DeleteClient();
+        } else {
+            LOGGER.warn("Unable to create a new REST client. Invalid HTTP verb : \"{}\". Null is returned.", httpVerb);
+            return null;
         }
-        LOGGER.warn("Unable to create a new REST client. Invalid HTTP verb : \"{}\". Null is returned.", httpVerb);
-        return null;
+        if (useProxy) {
+            client.setProxy(proxyHost, proxyPort);
+        }
+        return client;
     }
+
 }
