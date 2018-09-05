@@ -19,7 +19,7 @@
         <xro:protocolVersion>4.0</xro:protocolVersion>
     </soapenv:Header>
     <soapenv:Body>
-        <prod:helloService xmlns:prod="http://test.x-road.fi/producer">
+        <prod:helloService xmlns:prod="http://test.x-road.global/producer">
             <prod:name>Test</prod:name>
         </prod:helloService>
     </soapenv:Body>

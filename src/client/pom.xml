@@ -4,32 +4,32 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>xrd4j</artifactId>
-        <groupId>fi.vrk</groupId>
-        <version>0.3.0-SNAPSHOT</version>
+        <groupId>org.niis</groupId>
+        <version>0.3.0</version>
     </parent>
-    <groupId>fi.vrk.xrd4j</groupId>
+    <groupId>org.niis.xrd4j</groupId>
     <artifactId>client</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.3.0</version>
     <packaging>jar</packaging>
     <name>XRd4J :: Client</name>
     <description>
         This module provides a SOAP client that generates X-Road v6 SOAP 
         messages that can be sent to X-Road Security Server.
     </description>
-    <url>https://github.com/vrk-kpa/xrd4j</url>
+    <url>https://github.com/nordic-institute/xrd4j</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
-            <groupId>fi.vrk.xrd4j</groupId>
+            <groupId>org.niis.xrd4j</groupId>
             <artifactId>common</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <version>0.3.0</version>
         </dependency>
         <dependency>
-            <groupId>fi.vrk.xrd4j</groupId>
+            <groupId>org.niis.xrd4j</groupId>
             <artifactId>rest</artifactId>
-            <version>0.3.0-SNAPSHOT</version>
+            <version>0.3.0</version>
         </dependency>
     </dependencies>
     <build>

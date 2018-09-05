@@ -12,7 +12,7 @@ This document describes how a developer's workstation can be setup.
 The example adapter project is a part of the XRd4J git repository. You can access the source code by cloning it:
 
 ```
-git clone https://github.com/vrk-kpa/xrd4j.git
+git clone https://github.com/nordic-institute/xrd4j.git
 ```
 
 The example adapter is a separate Maven project and can be found under the `example-adapter` directory.
@@ -36,7 +36,7 @@ target/example-adapter-x.x.x-SNAPSHOT.war
 If running `mvn clean install` generates the error 
 
 ```
-[ERROR] Failed to execute goal on project example-adapter: Could not resolve dependencies for project com.pkrete.xrd4j.tools:example-adapter:war:0.0.1-SNAPSHOT: Failed to collect dependencies at com.pkrete.xrd4j:common:jar:0.0.1: Failed to read artifact descriptor for com.pkrete.xrd4j:common:jar:0.0.1: Could not transfer artifact com.pkrete.xrd4j:common:pom:0.0.1 from/to csc-repo (https://maven.csc.fi/repository/internal/): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
+[ERROR] Failed to execute goal on project example-adapter: Could not resolve dependencies for project com.pkrete.xrd4j.tools:example-adapter:war:0.0.1-SNAPSHOT: Failed to collect dependencies at com.pkrete.xrd4j:common:jar:0.0.1: Failed to read artifact descriptor for com.pkrete.xrd4j:common:jar:0.0.1: Could not transfer artifact com.pkrete.xrd4j:common:pom:0.0.1 from/to NIIS-repo (https://artifactory.niis.org/xroad-maven-releases): sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target -> [Help 1]
 ```
 
 try one of two solutions:
@@ -51,7 +51,7 @@ mvn install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall
 
 ##### Solution 2
 
-Import CSC's Maven repository's certificate as a trusted certificate into `cacerts` keystore. See full [instructions](../documentation/Import-a-Certificate-as-a-Trusted-Certificate.md). CSC's Maven repository's URL is  `https://maven.csc.fi`.
+Import NIIS's Maven repository's certificate as a trusted certificate into `cacerts` keystore. See full [instructions](../documentation/Import-a-Certificate-as-a-Trusted-Certificate.md). NIIS Maven repository's URL is  `https://artifactory.niis.org`.
 
 ### IDE Setup
 

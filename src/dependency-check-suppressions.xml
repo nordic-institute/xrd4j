@@ -13,7 +13,7 @@
        <notes><![CDATA[
            file name: rest-0.2.0-SNAPSHOT.jar
            ]]></notes>
-       <gav regex="true">^fi\.vrk\.xrd4j:rest:.*$</gav>
+       <gav regex="true">^org\.niis\.xrd4j:rest:.*$</gav>
        <cpe>cpe:/a:rest-client_project:rest-client</cpe>
    </suppress>
 </suppressions>

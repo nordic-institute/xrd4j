@@ -13,7 +13,7 @@
             <param name="ConversionPattern" value="%m"/>
         </layout>
     </appender>
-    <!--<logger name="fi.vrk.xrd4j.rest" additivity="false">
+    <!--<logger name="org.niis.xrd4j.rest" additivity="false">
         <level value="DEBUG"/>
         <appender-ref ref="console"/>
     </logger>-->

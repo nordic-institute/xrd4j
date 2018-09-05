@@ -4,19 +4,19 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>xrd4j</artifactId>
-        <groupId>fi.vrk</groupId>
-        <version>0.3.0-SNAPSHOT</version>
+        <groupId>org.niis</groupId>
+        <version>0.3.0</version>
     </parent>
-    <groupId>fi.vrk.xrd4j</groupId>
+    <groupId>org.niis.xrd4j</groupId>
     <artifactId>common</artifactId>
-    <version>0.3.0-SNAPSHOT</version>
+    <version>0.3.0</version>
     <packaging>jar</packaging>
     <name>XRd4J :: Common</name>
     <description>
         This module provides general purpose utilities for processing 
         SOAP messages and it also contains X-Road v6 message data models.
     </description>
-    <url>https://github.com/vrk-kpa/xrd4j</url>
+    <url>https://github.com/nordic-institute/xrd4j</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

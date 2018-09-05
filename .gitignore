@@ -27,3 +27,4 @@ example-adapter/target/
 # Other
 .extract/
 xrd-servlet.log
+.DS_Store

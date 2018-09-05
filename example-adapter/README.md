@@ -1,6 +1,6 @@
 # X-Road Adapter Example
 
-This project provides an example implementation of a web service that is compatible with the X-Road v6 adapter server protocol version [4.0](https://github.com/vrk-kpa/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md). The implementation is based on the [XRd4J](https://github.com/vrk-kpa/xrd4j) library. The example adapter contains a single class that
+This project provides an example implementation of a web service that is compatible with the X-Road v6 adapter server protocol version [4.0](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md). The implementation is based on the [XRd4J](https://github.com/nordic-institute/xrd4j) library. The example adapter contains a single class that
 implements two services:
 
 * `getRandom` : returns a random number between 1-100
@@ -17,7 +17,7 @@ The `example-adapter` directory contains a Dockerfile that can be used to create
 Clone the repository to get access to the sources:  
 
 ```
-git clone https://github.com/vrk-kpa/xrd4j.git
+git clone https://github.com/nordic-institute/xrd4j.git
 ```
 
 The example adapter project root is under the `example-adapter` directory.
