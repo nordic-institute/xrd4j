@@ -219,7 +219,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <xrd4j.version>0.3.0-SNAPSHOT</xrd4j.version>
+                <xrd4j.version>0.3.0</xrd4j.version>
                 <wsdl.path>example.xroad-6.4.wsdl</wsdl.path>
             </properties>
         </profile>
