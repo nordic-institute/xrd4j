@@ -181,6 +181,10 @@
                     <suppressionFiles>
                         <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
                     </suppressionFiles>
+                    <formats>
+                        <format>HTML</format>
+                        <format>XML</format>
+                    </formats>
                 </configuration>
                 <executions>
                     <execution>
