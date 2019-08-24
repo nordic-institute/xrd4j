@@ -120,6 +120,6 @@ To enable processing of SOAP Body elements in compatibility mode with older vers
 
 ## Credits
 
-* XRd4J library was originally developed by Petteri Kivimäki (https://github.com/petkivim) during 2014-2017.
+* XRd4J library was originally developed by Petteri Kivimäki (https://github.com/petkivim) during 2014-2017. 
 * XRd4J library was maintained and further developed by the Finnish Population Register Centre (VRK) during 06/2017-05/2018.
 * In June 2018 it was agreed that Nordic Institute for Interoperability Solutions (NIIS) takes maintenance responsibility.
