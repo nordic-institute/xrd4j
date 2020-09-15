@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.4.0-SNAPSHOT 2020-09-15
+- XRDDEV-1349 Update dependencies.
+
 ## 0.3.0 - 2018-09-05
 - XRDDEV-89 Release version 0.3.0
 
