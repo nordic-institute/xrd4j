@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.niis</groupId>
     <artifactId>example-adapter</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.6-SNAPSHOT</version>
     <name>Example Adapter for X-Road version 6</name>
     <inceptionYear>2018</inceptionYear>
     <description>
@@ -97,6 +97,14 @@
             <name>Petteri Kivimäki</name>
             <roles>
                 <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
+        <developer>
+            <id>raits</id>
+            <name>Raido Kaju</name>
+            <roles>
                 <role>developer</role>
             </roles>
             <timezone>+2</timezone>
