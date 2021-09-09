@@ -3,10 +3,10 @@
 This project provides an example implementation of a web service that is compatible with the X-Road v6 adapter server protocol version [4.0](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md). The implementation is based on the [XRd4J](https://github.com/nordic-institute/xrd4j) library. The example adapter contains a single class that
 implements two services:
 
-- `getRandom` : returns a random number between 1-100
-- `helloService` : returns a hello message with the given name
-- `listPeople` : returns a list of mock people
-- `personDetails` : returns a mock person based on the given `SSN`
+* `getRandom` : returns a random number between 1-100
+* `helloService` : returns a hello message with the given name
+* `listPeople` : returns a list of mock people
+* `personDetails` : returns a mock person based on the given `SSN`
 
 The example adapter is meant to illustrate the basic level usage of the XRd4J library in processing X-Road messages.
 
@@ -51,8 +51,8 @@ See [Usage section](#usage) for further instructions.
 
 ### Software Requirements
 
-- Java 8
-- Tomcat 6 or later
+* Java 8
+* Tomcat 6 or later
 
 ### Development Environment
 
@@ -68,14 +68,14 @@ Setting up an environment for example-related development is explained [here](Se
 
 #### JAR
 
-- Build the project and produce `example-adapter-x.x.x-SNAPSHOT.jar` file (`x.x.x` being replaced by the actual version).
-- Run the application: `$ java -jar example-adapter-x.x.x-SNAPSHOT.jar`.
+* Build the project and produce `example-adapter-x.x.x-SNAPSHOT.jar` file (`x.x.x` being replaced by the actual version).
+* Run the application: `$ java -jar example-adapter-x.x.x-SNAPSHOT.jar`.
 
 #### WAR
 
-- Build the project and produce `example-adapter-x.x.x-SNAPSHOT.war` file.
-- Copy the file to `tomcat.home/webapps` folder.
-- Start/restart Tomcat.
+* Build the project and produce `example-adapter-x.x.x-SNAPSHOT.war` file.
+* Copy the file to `tomcat.home/webapps` folder.
+* Start/restart Tomcat.
 
 ### Access the application
 
@@ -101,7 +101,7 @@ An example [SOAP request](examples/xroad-6.4/getRandomRequest.xml) (available in
 
 Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `getRandom` service:
 
-```
+```bash
 curl -d @examples/xroad-6.4/getRandomRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
 ```
 
@@ -113,7 +113,7 @@ An example [SOAP request](examples/xroad-6.4/helloServiceRequest.xml) (available
 
 Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `helloService`:
 
-```
+```bash
 curl -d @examples/xroad-6.4/helloServiceRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
 ```
 
@@ -125,7 +125,7 @@ An example [SOAP request](examples/xroad-6.4/listPeopleRequest.xml) (available i
 
 Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `listPeople`:
 
-```
+```bash
 curl -d @examples/xroad-6.4/listPeopleRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
 ```
 
@@ -137,7 +137,7 @@ An example [SOAP request](examples/xroad-6.4/personDetailsRequest.xml) (availabl
 
 Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `personDetails`:
 
-```
+```bash
 curl -d @examples/xroad-6.4/personDetailsRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
 ```
 
