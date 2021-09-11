@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.4.0-SNAPSHOT 2021-09-11
+- Add 3rd party notices file.
+
 ## 0.3.0 - 2018-09-05
 - XRDDEV-89 Release version 0.3.0
 
