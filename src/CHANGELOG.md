@@ -1,7 +1,8 @@
-# Change Log
+# Changelog
 
 ## 0.4.0-SNAPSHOT 2021-09-11
-- Add 3rd party notices file.
+- Add `3RD-PARTY-NOTICES.txt` file.
+- Incluce `LICENSE` and `3RD-PARTY-NOTICES.txt` in `jar` files. 
 
 ## 0.4.0-SNAPSHOT 2020-09-15
 - XRDDEV-1349 Update dependencies.
