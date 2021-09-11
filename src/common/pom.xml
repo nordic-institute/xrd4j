@@ -46,11 +46,6 @@
                                     <directory>../../</directory>
                                     <includes>
                                         <include>3RD-PARTY-NOTICES.txt</include>
-                                    </includes>
-                                </resource>
-                                <resource>
-                                    <directory>../../</directory>
-                                    <includes>
                                         <include>LICENSE</include>
                                     </includes>
                                 </resource>
