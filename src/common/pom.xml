@@ -43,7 +43,7 @@
                             <outputDirectory>${basedir}/target/classes/META-INF</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>../</directory>
+                                    <directory>../../</directory>
                                     <includes>
                                         <include>3RD-PARTY-NOTICES.txt</include>
                                     </includes>
