@@ -1,5 +1,8 @@
 # Change Log
 
+## 0.4.0-SNAPSHOT 2021-09-11
+- Add 3rd party notices file.
+
 ## 0.4.0-SNAPSHOT 2020-09-15
 - XRDDEV-1349 Update dependencies.
 

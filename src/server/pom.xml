@@ -13,7 +13,7 @@
     <packaging>jar</packaging>
     <name>XRd4J :: Server</name>
     <description>
-        This module provides an abstract servlet that can be use as a base 
+        This module provides an abstract servlet that can be use as a base
         class for Adapter Server implementation.
     </description>
     <url>https://github.com/nordic-institute/xrd4j</url>
@@ -33,7 +33,7 @@
             <version>0.4.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-    <build>       
+    <build>
         <defaultGoal>package</defaultGoal>
         <resources>
             <resource>
@@ -41,6 +41,38 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
+        <plugins>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/META-INF</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>../</directory>
+                                    <includes>
+                                        <include>3RD-PARTY-NOTICES.txt</include>
+                                    </includes>
+                                </resource>
+                                <resource>
+                                    <directory>../../</directory>
+                                    <includes>
+                                        <include>LICENSE</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     <reporting>
         <plugins>
