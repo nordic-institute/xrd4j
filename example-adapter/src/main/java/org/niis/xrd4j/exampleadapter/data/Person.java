@@ -41,16 +41,16 @@ import org.niis.xrd4j.exampleadapter.data.PersonContact.PersonContactType;
  * @author Raido Kaju
  */
 public class Person {
-    private String SSN;
+    private String ssn;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
     private String contactAddress;
     private List<PersonContact> contacts;
 
-    public Person(final String SSN, final String firstName, final String lastName, final LocalDate dateOfBirth, final String contactAddress,
+    public Person(final String ssn, final String firstName, final String lastName, final LocalDate dateOfBirth, final String contactAddress,
             final List<PersonContact> contacts) {
-        this.SSN = SSN;
+        this.ssn = ssn;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
@@ -99,12 +99,12 @@ public class Person {
             );
     }
 
-    public String getSSN() {
-        return SSN;
+    public String getSsn() {
+        return ssn;
     }
 
-    public void setSSN(final String sSN) {
-        SSN = sSN;
+    public void setSsn(final String ssn) {
+        this.ssn = ssn;
     }
 
     public String getFirstName() {

@@ -53,6 +53,7 @@ import org.slf4j.LoggerFactory;
  * namespace is configured in WEB-INF/classes/xrd-servlet.properties file.
  *
  * @author Petteri Kivimäki
+ * @author Raido Kaju
  */
 public class ExampleAdapter extends AbstractAdapterServlet {
 
@@ -189,7 +190,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             if (request.getRequestData() != null) {
                 // If request data is not null, try to find the person and add it to the
                 // response object. If the person was not found, nothing will be added
-                peopleExampleData.stream().filter(p -> request.getRequestData().equals(p.getSSN()))
+                peopleExampleData.stream().filter(p -> request.getRequestData().equals(p.getSsn()))
                     .findFirst()
                     .ifPresent(response::setResponseData);
 
@@ -332,8 +333,8 @@ public class ExampleAdapter extends AbstractAdapterServlet {
          */
         private void serializePerson(final SOAPEnvelope envelope, final SOAPElement parentElement, final Person person) throws SOAPException {
             // Create and add the "SSN" element
-            SOAPElement SSN = parentElement.addChildElement(envelope.createName("ssn"));
-            SSN.addTextNode(person.getSSN());
+            SOAPElement ssn = parentElement.addChildElement(envelope.createName("ssn"));
+            ssn.addTextNode(person.getSsn());
             // Create and add the "firstName" element
             SOAPElement firstName = parentElement.addChildElement(envelope.createName("firstName"));
             firstName.addTextNode(person.getFirstName());
@@ -365,8 +366,8 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             // Get our person data to serialize into the response and cast it to the "Person" class
             final Person person = (Person) response.getResponseData();
             // Create and add the "SSN" element
-            SOAPElement SSN = data.addChildElement(envelope.createName("ssn"));
-            SSN.addTextNode(person.getSSN());
+            SOAPElement ssn = data.addChildElement(envelope.createName("ssn"));
+            ssn.addTextNode(person.getSsn());
             // Create and add the "firstName" element
             SOAPElement firstName = data.addChildElement(envelope.createName("firstName"));
             firstName.addTextNode(person.getFirstName());
