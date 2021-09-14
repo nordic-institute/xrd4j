@@ -101,6 +101,14 @@
             </roles>
             <timezone>+2</timezone>
         </developer>
+        <developer>
+            <id>raits</id>
+            <name>Raido Kaju</name>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>+2</timezone>
+        </developer>
     </developers>
     <build>
         <plugins>

@@ -22,6 +22,9 @@
                                 <xsd:documentation>
                                     Service response
                                 </xsd:documentation>
+                                <xsd:appinfo>
+                                    <xrd:title xml:lang="en">Random number response</xrd:title>
+                                </xsd:appinfo>
                             </xsd:annotation>
                         </xsd:element>
                     </xsd:sequence>
@@ -35,6 +38,9 @@
                                 <xsd:documentation>
                                     Name
                                 </xsd:documentation>
+                                <xsd:appinfo>
+                                    <xrd:title xml:lang="en">Name</xrd:title>
+                                </xsd:appinfo>
                             </xsd:annotation>
                         </xsd:element>
                     </xsd:sequence>
@@ -48,11 +54,167 @@
                                 <xsd:documentation>
                                     Service response
                                 </xsd:documentation>
+                                <xsd:appinfo>
+                                    <xrd:title xml:lang="en">Hello response</xrd:title>
+                                </xsd:appinfo>
                             </xsd:annotation>
                         </xsd:element>
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>
+            <xsd:element name="listPeople">
+                <xsd:complexType/>
+            </xsd:element>
+            <xsd:element name="listPeopleResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="people">
+                            <xsd:complexType>
+                                <xsd:sequence>
+                                    <xsd:element name="person" type="tns:personShort" minOccurs="0"
+                                                maxOccurs="unbounded"/>
+                                </xsd:sequence>
+                            </xsd:complexType>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="personDetails">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="ssn" type="xsd:string">
+                            <xsd:annotation>
+                                <xsd:appinfo>
+                                    <xrd:title xml:lang="en">Social Security Number</xrd:title>
+                                </xsd:appinfo>
+                            </xsd:annotation>
+                        </xsd:element>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="personDetailsResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="person" type="tns:person" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:complexType name="personShort">
+                <xsd:sequence>
+                    <xsd:element name="ssn" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                                <xrd:title xml:lang="en">Social Security Number</xrd:title>
+                            </xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="firstName" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                                <xrd:title xml:lang="en">First name</xrd:title>
+                            </xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="lastName" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                                <xrd:title xml:lang="en">Last name</xrd:title>
+                            </xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:complexType name="person">
+                <xsd:complexContent>
+                    <xsd:extension base="tns:personShort">
+                        <xsd:sequence>
+                            <xsd:element name="dateOfBirth" type="xsd:date">
+                                <xsd:annotation>
+                                    <xsd:appinfo>
+                                        <xrd:title xml:lang="en">Date of birth</xrd:title>
+                                    </xsd:appinfo>
+                                </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element name="contactAddress" type="xsd:string" minOccurs="0">
+                                <xsd:annotation>
+                                    <xsd:appinfo>
+                                        <xrd:title xml:lang="en">Contact address</xrd:title>
+                                    </xsd:appinfo>
+                                </xsd:annotation>
+                            </xsd:element>
+                            <xsd:element name="contacts">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="contact" minOccurs="0" maxOccurs="unbounded"
+                                                    type="tns:contact">
+                                            <xsd:annotation>
+                                                <xsd:appinfo>
+                                                    <xrd:title xml:lang="en">Contact</xrd:title>
+                                                </xsd:appinfo>
+                                            </xsd:annotation>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                    </xsd:extension>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <xsd:complexType name="contact">
+                <xsd:sequence>
+                    <xsd:element name="type" type="tns:contactType">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                                <xrd:title xml:lang="en">Contact type</xrd:title>
+                            </xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="name" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                                <xrd:title xml:lang="en">Contact name</xrd:title>
+                            </xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                    <xsd:element name="value" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                                <xrd:title xml:lang="en">Contact value</xrd:title>
+                            </xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:element>
+                </xsd:sequence>
+            </xsd:complexType>
+            <xsd:simpleType name="contactType" final="restriction">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <xrd:title xml:lang="en">Contact type</xrd:title>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="phone">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                                <xrd:title xml:lang="en">PHONE</xrd:title>
+                            </xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:enumeration>
+                    <xsd:enumeration value="mobile">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                                <xrd:title xml:lang="en">MOBILE</xrd:title>
+                            </xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:enumeration>
+                    <xsd:enumeration value="email">
+                        <xsd:annotation>
+                            <xsd:appinfo>
+                                <xrd:title xml:lang="en">E-MAIL</xrd:title>
+                            </xsd:appinfo>
+                        </xsd:annotation>
+                    </xsd:enumeration>
+                </xsd:restriction>
+            </xsd:simpleType>
         </xsd:schema>
     </wsdl:types>
 
@@ -77,15 +239,57 @@
     <wsdl:message name="helloServiceResponse">
         <wsdl:part name="body" element="tns:helloServiceResponse"/>
     </wsdl:message>
+    <wsdl:message name="listPeople">
+        <wsdl:part name="listPeople" element="tns:listPeople"/>
+    </wsdl:message>
+    <wsdl:message name="listPeopleResponse">
+        <wsdl:part name="listPeopleResponse"
+                   element="tns:listPeopleResponse"/>
+      </wsdl:message>
+    <wsdl:message name="personDetails">
+        <wsdl:part name="personDetails" element="tns:personDetails"/>
+    </wsdl:message>
+    <wsdl:message name="personDetailsResponse">
+        <wsdl:part name="personDetailsResponse"
+                   element="tns:personDetailsResponse"/>
+    </wsdl:message>
 
     <wsdl:portType name="testServicePortType">
         <wsdl:operation name="getRandom">
+            <wsdl:documentation>
+                <xrd:title xml:lang="en">Get random number service</xrd:title>
+                <xrd:notes>This service returns a random number every time.</xrd:notes>
+            </wsdl:documentation>
             <wsdl:input message="tns:getRandom"/>
             <wsdl:output message="tns:getRandomResponse"/>
         </wsdl:operation>
         <wsdl:operation name="helloService">
+            <wsdl:documentation>
+                <xrd:title xml:lang="en">Hello service</xrd:title>
+                <xrd:notes>This service returns a hello message using the given input.</xrd:notes>
+            </wsdl:documentation>
             <wsdl:input message="tns:helloService"/>
             <wsdl:output message="tns:helloServiceResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="listPeople">
+            <wsdl:documentation>
+                <xrd:title xml:lang="en">List people service</xrd:title>
+                <xrd:notes>This service returns a list of people in the registry.</xrd:notes>
+            </wsdl:documentation>
+            <wsdl:input name="listPeople" message="tns:listPeople"/>
+            <wsdl:output name="listPeopleResponse"
+                         message="tns:listPeopleResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="personDetails">
+            <wsdl:documentation>
+                <xrd:title xml:lang="en">Person details service</xrd:title>
+                <xrd:notes>This service returns the details of the person with the provided SSN. If no matching person
+                    is found, an empty result is returned.
+                </xrd:notes>
+            </wsdl:documentation>
+            <wsdl:input name="personDetails" message="tns:personDetails"/>
+            <wsdl:output name="personDetailsResponse"
+                         message="tns:personDetailsResponse"/>
         </wsdl:operation>
     </wsdl:portType>
 
@@ -134,6 +338,74 @@
                 <soap:header message="tns:requestheader" part="id" use="literal"/>
                 <soap:header message="tns:requestheader" part="issue" use="literal"/>
                 <soap:header message="tns:requestheader" part="protocolVersion" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="listPeople">
+            <soap:operation soapAction="" style="document"/>
+            <xrd:version>v1</xrd:version>
+            <wsdl:input name="listPeople">
+                <soap:body use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="client" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="service" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="id" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="userId" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="issue" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="protocolVersion" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="listPeopleResponse">
+                <soap:body use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="client" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="service" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="id" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="userId" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="issue" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="protocolVersion" use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="personDetails">
+            <soap:operation soapAction="" style="document"/>
+            <xrd:version>v1</xrd:version>
+            <wsdl:input name="personDetails">
+                <soap:body use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="client" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="service" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="id" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="userId" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="issue" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="protocolVersion" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="personDetailsResponse">
+                <soap:body use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="client" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="service" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="id" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="userId" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="issue" use="literal"/>
+                <soap:header message="tns:requestHeader"
+                             part="protocolVersion" use="literal"/>
             </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
