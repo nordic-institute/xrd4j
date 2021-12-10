@@ -16,8 +16,8 @@
     <url>https://github.com/nordic-institute/xrd4j/tree/master/example-adapter</url>
     <packaging>war</packaging>
     <properties>
-        <slf4j.version>1.7.7</slf4j.version>
-        <log4j.version>1.2.16</log4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <log4j.version>2.15.0</log4j.version>
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
@@ -55,8 +55,8 @@
         </dependency>
 
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
         </dependency>
 
