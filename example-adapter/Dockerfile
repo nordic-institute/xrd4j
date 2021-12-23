@@ -1,5 +1,5 @@
-# Base java:8
-FROM java:8
+# Base java:11
+FROM adoptopenjdk/openjdk11:jre-11.0.11_9
 
 # Add Rest Gateway jar to container
 ADD target/example-adapter-*.jar example-adapter.jar
