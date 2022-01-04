@@ -1,5 +1,5 @@
-# Base java:8
-FROM java:8
+# Base java:11
+FROM eclipse-temurin:11-jre
 
 # Add Rest Gateway jar to container
 ADD target/example-adapter-*.jar example-adapter.jar
