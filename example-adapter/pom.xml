@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.niis</groupId>
     <artifactId>example-adapter</artifactId>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.5</version>
     <name>Example Adapter for X-Road version 6</name>
     <inceptionYear>2018</inceptionYear>
     <description>
@@ -257,7 +257,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <xrd4j.version>0.4.0-SNAPSHOT</xrd4j.version>
+                <xrd4j.version>0.4.0</xrd4j.version>
                 <wsdl.path>example.xroad-6.4.wsdl</wsdl.path>
             </properties>
         </profile>
