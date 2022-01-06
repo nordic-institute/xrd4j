@@ -1,8 +1,15 @@
 # Changelog
 
+## 0.4.0 - 2022-01-05
+- XRDDEV-1874 Release version 0.4.0
+
+## 0.4.0-SNAPSHOT 2022-01-04
+- XRDDEV-1874 Add JRE 11 support
+- Update dependencies
+
 ## 0.4.0-SNAPSHOT 2021-09-11
 - Add `3RD-PARTY-NOTICES.txt` file.
-- Incluce `LICENSE` and `3RD-PARTY-NOTICES.txt` in `jar` files. 
+- Include `LICENSE` and `3RD-PARTY-NOTICES.txt` in `jar` files. 
 
 ## 0.4.0-SNAPSHOT 2020-09-15
 - XRDDEV-1349 Update dependencies.
