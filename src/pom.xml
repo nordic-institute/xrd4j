@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.niis</groupId>
     <artifactId>xrd4j</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
     <packaging>pom</packaging>
     <name>XRd4J</name>
     <inceptionYear>2018</inceptionYear>
@@ -23,8 +23,8 @@
         <module>rest</module>
     </modules>
     <properties>
-        <slf4j.version>1.7.7</slf4j.version>
-        <log4j.version>1.2.16</log4j.version>
+        <slf4j.version>1.7.30</slf4j.version>
+        <log4j.version>2.17.1</log4j.version>
         <junit.version>3.8.1</junit.version>
         <jdk.version>1.8</jdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -32,6 +32,14 @@
         <sonar.junit.reportPaths>common/target/surefire-reports,client/target/surefire-reports,rest/target/surefire-reports,server/target/surefire-reports</sonar.junit.reportPaths>
     </properties>
     <dependencies>
+        <!-- SOAP API for JRE 11 support -->
+        <dependency>
+            <groupId>com.sun.xml.messaging.saaj</groupId>
+            <artifactId>saaj-impl</artifactId>
+            <version>1.3.28</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- Logging API: SLF4J -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -48,8 +56,8 @@
         </dependency>
 
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
             <scope>test</scope>
         </dependency>
@@ -57,7 +65,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -172,7 +180,7 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>3.2.1</version>
+                <version>6.5.0</version>
                 <configuration>
                     <cveValidForHours>24</cveValidForHours>
                     <skip>false</skip>
@@ -181,6 +189,10 @@
                     <suppressionFiles>
                         <suppressionFile>dependency-check-suppressions.xml</suppressionFile>
                     </suppressionFiles>
+                    <formats>
+                        <format>HTML</format>
+                        <format>XML</format>
+                    </formats>
                 </configuration>
                 <executions>
                     <execution>

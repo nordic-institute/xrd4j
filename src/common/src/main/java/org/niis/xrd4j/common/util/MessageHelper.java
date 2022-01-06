@@ -30,7 +30,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -40,6 +39,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.UUID;
 
 /**
@@ -145,7 +145,7 @@ public final class MessageHelper {
             byte[] hashedByteArray = sha.digest();
 
             // Use Base64 encoding here -->
-            return DatatypeConverter.printBase64Binary(hashedByteArray);
+            return Base64.getEncoder().encodeToString(hashedByteArray);
         } catch (NoSuchAlgorithmException | UnsupportedEncodingException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return null;
@@ -163,7 +163,7 @@ public final class MessageHelper {
         BufferedImage image = null;
         byte[] imageByte;
         try {
-            imageByte = DatatypeConverter.parseBase64Binary(imgStr);
+            imageByte = Base64.getDecoder().decode(imgStr);
             ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
             image = ImageIO.read(bis);
             bis.close();
@@ -187,7 +187,7 @@ public final class MessageHelper {
         try {
             ImageIO.write(image, type, bos);
             byte[] imageBytes = bos.toByteArray();
-            imageString = DatatypeConverter.printBase64Binary(imageBytes);
+            imageString = Base64.getEncoder().encodeToString(imageBytes);
             bos.close();
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage(), ex);
@@ -210,7 +210,7 @@ public final class MessageHelper {
             BufferedImage image = ImageIO.read(is);
             ImageIO.write(image, type, bos);
             byte[] imageBytes = bos.toByteArray();
-            imageString = DatatypeConverter.printBase64Binary(imageBytes);
+            imageString = Base64.getEncoder().encodeToString(imageBytes);
             bos.close();
         } catch (IOException ex) {
             LOGGER.error(ex.getMessage(), ex);
