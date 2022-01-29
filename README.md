@@ -5,6 +5,8 @@
 
 X-Road Library for Java (XRd4J) provides a Java library for building X-Road Adapter servers and clients. The library implements X-Road [SOAP profile](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages offering built-in support for standard X-Road SOAP headers; only processing of application specific request and response content remains to be implemented.
 
+The library is compatible with X-Road 6 and 7.
+
 ## Library Modules
 
 * `client` : SOAP client that generates X-Road SOAP messages that can be sent to X-Road Security Server. Includes request serializer and response deserializer.
