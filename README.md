@@ -3,13 +3,13 @@
 [![Go to X-Road Community Slack](https://img.shields.io/badge/Go%20to%20Community%20Slack-grey.svg)](https://jointxroad.slack.com/)
 [![Get invited](https://img.shields.io/badge/No%20Slack-Get%20invited-green.svg)](https://x-road.global/community)
 
-X-Road Library for Java (XRd4J) provides a Java library for building X-Road v6 Adapter servers and clients. The library implements X-Road v6 [SOAP profile](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages offering built-in support for standard X-Road SOAP headers; only processing of application specific request and response content remains to be implemented.
+X-Road Library for Java (XRd4J) provides a Java library for building X-Road Adapter servers and clients. The library implements X-Road [SOAP profile](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md) v4.0 and [Service Metadata Protocol](https://github.com/nordic-institute/X-Road/blob/master/doc/Protocols/pr-meta_x-road_service_metadata_protocol.md). The library takes care of serialization and deserialization of SOAP messages offering built-in support for standard X-Road SOAP headers; only processing of application specific request and response content remains to be implemented.
 
 ## Library Modules
 
-* `client` : SOAP client that generates X-Road v6 SOAP messages that can be sent to X-Road Security Server. Includes request serializer and response deserializer.
+* `client` : SOAP client that generates X-Road SOAP messages that can be sent to X-Road Security Server. Includes request serializer and response deserializer.
 * `server` : Provides an abstract servlet that can be used as a base class for Adapter Server implementations. Includes a request deserializer and a response serializer.
-* `common` : General purpose utilities for processing SOAP messages and X-Road v6 message data models.
+* `common` : General purpose utilities for processing SOAP messages and X-Road message data models.
 * `rest` : HTTP clients that can be used for sending requests to web services from Adapter Server.
 
 ## Maven Repositories
