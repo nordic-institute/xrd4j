@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0-SNAPSHOT 2023-02-24
+- Add JDK 11 support
+- Update dependencies
+- 
 ## 0.4.0 - 2022-01-05
 - XRDDEV-1874 Release version 0.4.0
 
