@@ -1,7 +1,7 @@
-# X-Road Adapter Example
+# X-Road Example Adapter
 
-X-Road Adapter Example provides an example implementation of a web service that is compatible with the X-Road 6 and X-Road 7. The 
-Adapter Example support the X-Road Message Protocol for SOAP version [4.0](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md).
+X-Road Example Adapter provides an example implementation of a web service that is compatible with the X-Road 6 and X-Road 7. The 
+Example Adapter support the X-Road Message Protocol for SOAP version [4.0](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md).
 
 The implementation is based on the [XRd4J](https://github.com/nordic-institute/xrd4j) library. The Example Adapter contains 
 a single class that implements four services:
