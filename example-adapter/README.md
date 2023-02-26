@@ -108,7 +108,7 @@ This section provides examples for calling the service after it is deployed and 
 
 An example [SOAP request](examples/getRandomRequest.xml) (available in the `examples` directory).
 
-Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `getRandom` service:
+At the project root, the following command will call `getRandom` service:
 
 ```bash
 curl -d @examples/getRandomRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
@@ -120,7 +120,7 @@ An example of the corresponding [SOAP response](examples/getRandomResponse.xml) 
 
 An example [SOAP request](examples/helloServiceRequest.xml) (available in the `examples` directory).
 
-Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `helloService`:
+At the project root, the following command will call `helloService`:
 
 ```bash
 curl -d @examples/helloServiceRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
@@ -132,7 +132,7 @@ An example of the corresponding [SOAP response](examples/helloServiceResponse.xm
 
 An example [SOAP request](examples/listPeopleRequest.xml) (available in the `examples` directory).
 
-Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `listPeople`:
+At the project root, the following command will call `listPeople`:
 
 ```bash
 curl -d @examples/listPeopleRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
@@ -144,7 +144,7 @@ An example of the corresponding [SOAP response](examples/listPeopleResponse.xml)
 
 An example [SOAP request](examples/personDetailsRequest.xml) (available in the `examples` directory).
 
-Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `personDetails`:
+At the project root, the following command will call `personDetails`:
 
 ```bash
 curl -d @examples/personDetailsRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
