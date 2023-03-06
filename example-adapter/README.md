@@ -63,24 +63,24 @@ Build X-Road Example Adapter and deploy it to a Java application server, e.g., T
 You can create a Docker image to run X-Road Example Adapter inside a container, using the provided Dockerfile.
 Before building the image, you must build the war file.
 
-```
-mvn clean install
+```bash
+mvn clean verify
 ```
 If you have not built the war, building the Docker image will fail with message
-```
+```bash
 Step 2 : ADD src/target/example-adapter-*.war example-adapter.war
 No source files were specified
 ```
 
 While you are in the project root directory, build the image using the `docker build` command. The `-t` parameter gives your image a tag, so you can run it more easily later. Don’t forget the `.` command, which tells the `docker build` command to look in the current directory for a file called Dockerfile.
 
-```
+```bash
 docker build -t example-adapter .
 ```
 
 After building the image, you can run X-Road Test Service using it.
 
-```
+```bash
 docker run -p 8080:8080 example-adapter
 ```
 
