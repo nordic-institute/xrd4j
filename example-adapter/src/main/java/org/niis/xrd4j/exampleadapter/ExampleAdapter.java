@@ -47,10 +47,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This class implements two simple X-Road v6 compatible services: "getRandom"
- * and "helloService". Service descriptions are defined in "example.wsdl" file
- * that's located in WEB-INF/classes folder. The name of the WSDL file and the
- * namespace is configured in WEB-INF/classes/xrd-servlet.properties file.
+ * This class implements four simple X-Road 6 and X-Road 7 compatible services:
+ * "getRandom", "helloService", "listPeople" and "personDetails". Service descriptions
+ * are defined in "example-adapter.wsdl" file that's located in resources/ folder.
+ * The name of the WSDL file and the namespace is configured in resources/xrd-servlet.properties file.
  *
  * @author Petteri Kivimäki
  * @author Raido Kaju
@@ -151,11 +151,6 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             // Create a new response serializer that serializes the response
             // to SOAP
             serializer = new ListPeopleResponseSerializer();
-            // Create a custom request deserializer that parses the request
-            // data from the SOAP request
-            CustomRequestDeserializer customDeserializer = new CustomRequestDeserializerImpl();
-            // Parse the request data from the request
-            customDeserializer.deserialize(request, this.namespaceDeserialize);
             // Create a new ServiceResponse object
             ServiceResponse<String, List<Person>> response = new ServiceResponse<>(request.getConsumer(), request.getProducer(), request.getId());
             // Set namespace of the SOAP response
