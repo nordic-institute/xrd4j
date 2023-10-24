@@ -2,10 +2,10 @@
 FROM eclipse-temurin:11-jre
 
 # Add Rest Gateway jar to container
-ADD target/example-adapter-*.jar example-adapter.jar
+ADD target/example-adapter-*.war example-adapter.war
 
 # Entry in json format
-ENTRYPOINT ["java", "-jar", "/example-adapter.jar"]
+ENTRYPOINT ["java", "-jar", "/example-adapter.war"]
 
 # Expose Tomcat
 EXPOSE 8080
