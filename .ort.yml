@@ -53,3 +53,16 @@ excludes:
   - pattern: "provided"
     reason: "RUNTIME_DEPENDENCY_OF"
     comment: "Packages that are provided by the runtime."
+
+license_choices:
+  repository_license_choices:
+    - given: "GPL-2.0-only OR Apache-2.0"
+      choice: "Apache-2.0"
+    - given: "GPL-2.0-only OR BSD-3-Clause"
+      choice: "BSD-3-Clause"
+    - given: "GPL-2.0-only OR CDDL-1.1"
+      choice: "CDDL-1.1"
+    - given: "CDDL-1.1 OR GPL-2.0-only WITH Classpath-exception-2.0"
+      choice: "CDDL-1.1"
+    - given: "GPL-2.0-only OR CDDL-1.0"
+      choice: "CDDL-1.0"
