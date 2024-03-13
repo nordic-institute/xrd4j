@@ -66,3 +66,8 @@ license_choices:
       choice: "CDDL-1.1"
     - given: "GPL-2.0-only OR CDDL-1.0"
       choice: "CDDL-1.0"
+
+- id: "Maven:com.sun.xml.messaging.saaj:saaj-impl:1.3.28"
+  curations:
+    comment: "The package offers GPL-2.0-only OR CDDL-1.1 and we use the curation to override the choice mechanism due to a pending issue in ORT."
+    concluded_license: "CDDL-1.1"
