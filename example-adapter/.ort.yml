@@ -73,7 +73,7 @@ curations:
       curations:
         comment: "The package offers GPL-2.0-only OR CDDL-1.1 and we use the curation to override the choice mechanism due to a pending issue in ORT."
         concluded_license: "CDDL-1.1"
-    - id: "pkg:maven/org.yaml/snakeyaml@1.33"
+    - id: "Maven:org.yaml:snakeyaml:1.33"
       curations:
         comment: "The Apache-2.0 licensed package has a file which also offers a choice of multiple other licenses and we use the curation to override the choice mechanism due to a pending issue in ORT."
         concluded_license: "Apache-2.0"
