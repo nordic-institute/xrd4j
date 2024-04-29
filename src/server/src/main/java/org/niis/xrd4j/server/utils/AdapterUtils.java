@@ -22,11 +22,11 @@
  */
 package org.niis.xrd4j.server.utils;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MimeHeader;
 import javax.xml.soap.MimeHeaders;
