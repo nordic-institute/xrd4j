@@ -22,17 +22,15 @@
  */
 package org.niis.xrd4j.client;
 
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
+import java.util.List;
 import org.niis.xrd4j.client.deserializer.ServiceResponseDeserializer;
 import org.niis.xrd4j.client.serializer.ServiceRequestSerializer;
 import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.message.ServiceResponse;
-
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-
-import java.util.List;
 
 /**
  * This class defines an interface for load balanced SOAP client that can be

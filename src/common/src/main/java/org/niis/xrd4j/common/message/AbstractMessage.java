@@ -22,14 +22,13 @@
  */
 package org.niis.xrd4j.common.message;
 
+import jakarta.xml.soap.SOAPMessage;
 import org.niis.xrd4j.common.exception.XRd4JException;
 import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.member.SecurityServer;
 import org.niis.xrd4j.common.util.Constants;
 import org.niis.xrd4j.common.util.ValidationHelper;
-
-import javax.xml.soap.SOAPMessage;
 
 /**
  * This class represents SOAP header fields that are used in both ServiceRequest

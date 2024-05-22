@@ -22,6 +22,9 @@
  */
 package org.niis.xrd4j.client.deserializer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.niis.xrd4j.common.deserializer.AbstractHeaderDeserializer;
 import org.niis.xrd4j.common.exception.XRd4JException;
 import org.niis.xrd4j.common.member.ObjectType;
@@ -33,10 +36,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class implements a deserializer for deserializing the response of the

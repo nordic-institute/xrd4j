@@ -22,6 +22,9 @@
  */
 package org.niis.xrd4j.common.deserializer;
 
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPHeader;
+import java.util.Map;
 import org.niis.xrd4j.common.exception.XRd4JException;
 import org.niis.xrd4j.common.exception.XRd4JMissingMemberException;
 import org.niis.xrd4j.common.member.ConsumerMember;
@@ -35,11 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
-
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPHeader;
-
-import java.util.Map;
 
 /**
  * This abstract class contains methods for deserializing X-Road headers from

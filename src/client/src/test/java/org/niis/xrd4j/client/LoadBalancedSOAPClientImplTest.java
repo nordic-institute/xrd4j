@@ -24,7 +24,7 @@ package org.niis.xrd4j.client;
 
 import junit.framework.TestCase;
 
-import javax.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPException;
 
 import java.util.ArrayList;
 import java.util.List;

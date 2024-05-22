@@ -22,9 +22,8 @@
  */
 package org.niis.xrd4j.client.deserializer;
 
+import jakarta.xml.soap.SOAPMessage;
 import org.niis.xrd4j.common.message.ServiceResponse;
-
-import javax.xml.soap.SOAPMessage;
 
 /**
  * This class defines an interface for deserializing SOAPMessage objects

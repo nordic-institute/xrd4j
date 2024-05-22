@@ -22,6 +22,14 @@
  */
 package org.niis.xrd4j.client;
 
+import jakarta.xml.soap.SOAPConnection;
+import jakarta.xml.soap.SOAPConnectionFactory;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import org.niis.xrd4j.client.deserializer.GetSecurityServerMetricsResponseDeserializer;
 import org.niis.xrd4j.client.deserializer.ListCentralServicesResponseDeserializer;
 import org.niis.xrd4j.client.deserializer.ListClientsResponseDeserializer;
@@ -42,15 +50,6 @@ import org.niis.xrd4j.rest.client.RESTClientFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.xml.soap.SOAPConnection;
-import javax.xml.soap.SOAPConnectionFactory;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.List;
 
 /**
  * This class represents a SOAP client that can be used for sending SOAPMessage

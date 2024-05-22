@@ -32,11 +32,11 @@ import org.niis.xrd4j.common.message.ServiceRequest;
 
 import junit.framework.TestCase;
 
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPEnvelope;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 
 /**
  * Test cases for SOAPClientImpl class. Test cases cover only cases where SOAP

@@ -31,8 +31,8 @@ import org.niis.xrd4j.common.util.SOAPHelper;
 
 import junit.framework.TestCase;
 
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 
 import java.util.List;
 

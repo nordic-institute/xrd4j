@@ -22,9 +22,8 @@
  */
 package org.niis.xrd4j.client.serializer;
 
+import jakarta.xml.soap.SOAPMessage;
 import org.niis.xrd4j.common.message.ServiceRequest;
-
-import javax.xml.soap.SOAPMessage;
 
 /**
  * This class defines an interface for serializing ServiceRequest objects

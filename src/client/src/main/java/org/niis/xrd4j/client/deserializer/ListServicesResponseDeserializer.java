@@ -22,6 +22,12 @@
  */
 package org.niis.xrd4j.client.deserializer;
 
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import org.niis.xrd4j.common.member.ObjectType;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.util.Constants;
@@ -30,14 +36,6 @@ import org.niis.xrd4j.common.util.SOAPHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
-
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * This class is used for deserializing responses of listMethods and
