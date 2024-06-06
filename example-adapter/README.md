@@ -151,3 +151,27 @@ curl -d @examples/personDetailsRequest.xml --header "Content-Type: text/xml" -X 
 ```
 
 An example of the corresponding [SOAP response](examples/personDetailsResponse.xml) (available in the `examples` directory).
+
+### storeAttachments
+
+An example [multipart MIME request](examples/storeAttachmentsRequest.txt) (available in the `examples` directory).
+
+At the project root, the following command will call `storeAttachments`:
+
+```bash
+curl -X POST -H "Content-Type: multipart/related; start=\"<rootpart>\"; boundary=MIME_boundary" --data-binary @examples/storeAttachmentsRequest.txt -X POST http://localhost:8080/example-adapter/Endpoint
+```
+
+An example of the corresponding [SOAP response](examples/storeAttachmentsResponse.xml) (available in the `examples` directory).
+
+### getAttachments
+
+An example [SOAP request](examples/getAttachmentsRequest.xml) (available in the `examples` directory).
+
+At the project root, the following command will call `getAttachments`:
+
+```bash
+curl -d @examples/getAttachmentsRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
+```
+
+The response is multipart MIME message containing SOAP response and attachments. An example of the corresponding [response](examples/getAttachmentsResponse.txt) (available in the `examples` directory).
