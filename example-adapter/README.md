@@ -10,6 +10,8 @@ a single class that implements four services:
 * `helloService` : returns a hello message with the given name
 * `listPeople` : returns a list of mock people
 * `personDetails` : returns a mock person based on the given `SSN`
+* `storeAttachments` : accepts the request with attachments and returns name and size of each attachment
+* `getAttachments` : returns the response with attachments. The number of attachments and their size are given in request. 
 
 The Example Adapter is meant to illustrate the basic level usage of the XRd4J library in processing X-Road messages.
 
