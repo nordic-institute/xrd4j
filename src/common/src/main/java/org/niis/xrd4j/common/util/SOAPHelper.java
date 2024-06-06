@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -699,14 +699,11 @@ public final class SOAPHelper {
      * @return cloned SOAP message with empty SOAP body
      */
     public static SOAPMessage cloneSOAPMsgWithoutBody(SOAPMessage source) {
-        SOAPMessage target = toSOAP(toString(source));
-        if (target == null) {
-            LOGGER.debug("Cloned SOAP message is null.");
-            return null;
-        }
         try {
-            target.getSOAPBody().removeContents();
-            return target;
+            SOAPMessage msg = createSOAPMessage();
+            msg.getSOAPPart().setContent(source.getSOAPPart().getContent());
+            msg.getSOAPBody().removeContents();
+            return msg;
         } catch (SOAPException ex) {
             LOGGER.error(ex.getMessage(), ex);
             return null;
