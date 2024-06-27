@@ -1,6 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
+    checkstyle
 }
 
 repositories {
@@ -40,4 +41,10 @@ tasks.withType<JavaCompile>() {
 
 tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
+}
+
+checkstyle {
+    // TODO: update to latest version
+    toolVersion = "6.11.2"
+
 }
