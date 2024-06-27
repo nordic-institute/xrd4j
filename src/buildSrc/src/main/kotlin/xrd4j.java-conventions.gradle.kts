@@ -21,7 +21,12 @@ dependencies {
 
 group = "org.niis"
 version = "0.5.0-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    withJavadocJar()
+    withSourcesJar()
+}
 
 publishing {
     publications.create<MavenPublication>("maven") {
