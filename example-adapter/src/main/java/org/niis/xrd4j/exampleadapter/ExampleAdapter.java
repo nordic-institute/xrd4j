@@ -34,22 +34,22 @@ import org.niis.xrd4j.server.deserializer.AbstractCustomRequestDeserializer;
 import org.niis.xrd4j.server.deserializer.CustomRequestDeserializer;
 import org.niis.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import org.niis.xrd4j.server.serializer.ServiceResponseSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
 
 /**
  * This class implements four simple X-Road 6 and X-Road 7 compatible services:
@@ -223,10 +223,10 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             response.getProducer().setNamespacePrefix(this.prefix);
             logger.debug("Do message prosessing...");
 
-            Map<String, Integer> attachments =  new HashMap<>();
+            Map<String, Integer> attachments =  new LinkedHashMap<>();
             List<Integer> requestedSizes = (List<Integer>) request.getRequestData();
             for (int i = 0; i < requestedSizes.size(); i++) {
-                attachments.put(String.format("attachment_%d_%d", i, requestedSizes.get(i)), requestedSizes.get(i));
+                attachments.put(String.format("attachment_%d", i), requestedSizes.get(i));
             }
             response.setResponseData(attachments);
 
@@ -253,7 +253,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             response.getProducer().setNamespacePrefix(this.prefix);
             logger.debug("Do message prosessing...");
 
-            Map<String, Integer> attachments =  new HashMap<>();
+            Map<String, Integer> attachments = new LinkedHashMap<>();
             Iterator it = request.getSoapMessage().getAttachments();
             if (it != null) {
                 while (it.hasNext()) {
