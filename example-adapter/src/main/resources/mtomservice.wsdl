@@ -1,0 +1,121 @@
+<wsdl:definitions
+        name="MessageGeneratorImplService"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:xrd="http://x-road.eu/xsd/xroad.xsd"
+        xmlns:tns="http://test.niis.com/test/messagegen"
+        targetNamespace="http://test.niis.com/test/messagegen">
+
+    <wsdl:types xmlns:xs="http://www.w3.org/2001/XMLSchema">
+        <xs:schema xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+            elementFormDefault="qualified" targetNamespace="http://test.niis.com/test/messagegen" version="1.0">
+            <xs:import namespace="http://www.w3.org/2005/05/xmlmime"/>
+            <xs:import namespace="http://x-road.eu/xsd/xroad.xsd" schemaLocation="xroad.xsd"/>
+
+            <xs:complexType name="GenerateMtomRequestType">
+                <xs:sequence> 
+                    <xs:element name="payloadSize" type="xs:int"/>
+                    <xs:element name="attachmentSize" type="xs:int"/>
+                    <xs:element name="delay" type="xs:int" minOccurs="0"/>
+                    <xs:element name="attachment" minOccurs="0" type="xs:base64Binary"
+                                xmime:expectedContentTypes="application/octet-stream"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="GenerateMtomResponseType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="message" type="tns:MessageType"/>
+                    <xs:element name="attachment" minOccurs="0" type="xs:base64Binary"
+                                xmime:expectedContentTypes="application/octet-stream"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="MessageType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="items">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:element maxOccurs="unbounded" minOccurs="0" name="item" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:complexType>
+                    </xs:element>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="ErrorResponseType">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="error" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:element name="generateMtom" type="tns:GenerateMtomRequestType"/>
+            <xs:element name="generateMtomResponse" type="tns:GenerateMtomResponseType"/>
+
+            <xs:element name="attachment" type="xs:base64Binary" xmime:expectedContentTypes="application/octet-stream"/>
+            <xs:element name="errorResponse" type="tns:ErrorResponseType" />
+        </xs:schema>
+    </wsdl:types>
+
+    <wsdl:message name="headers">
+        <wsdl:part name="client" element="xrd:client"/>
+        <wsdl:part name="service" element="xrd:service"/>
+        <wsdl:part name="userId" element="xrd:userId"/>
+        <wsdl:part name="id" element="xrd:id"/>
+        <wsdl:part name="protocolVersion" element="xrd:protocolVersion"/>
+    </wsdl:message>
+
+    <wsdl:message name="generateMtom">
+        <wsdl:part element="tns:generateMtom" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:message name="generateMtomResponse">
+        <wsdl:part element="tns:generateMtomResponse" name="payloadMtom"/>
+    </wsdl:message>
+
+    <wsdl:message name="errorResponse">
+        <wsdl:part name="fault" element="tns:errorResponse" />
+    </wsdl:message>
+
+    <wsdl:portType name="MessageMtomGenerator">
+        <wsdl:operation name="generateMtom">
+            <wsdl:input message="tns:generateMtom" name="generateMtom">
+            </wsdl:input>
+            <wsdl:output message="tns:generateMtomResponse" name="generateMtomResponse">
+            </wsdl:output>
+            <wsdl:fault name="errorResponse" message="tns:errorResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="MessageMtomGeneratorImplServiceSoapBinding" type="tns:MessageMtomGenerator">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="generateMtom">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="generateMtom">
+                <soap:body use="literal"/>
+                <soap:header message="tns:headers" part="client" use="literal"/>
+                <soap:header message="tns:headers" part="service" use="literal"/>
+                <soap:header message="tns:headers" part="userId" use="literal"/>
+                <soap:header message="tns:headers" part="id" use="literal"/>
+                <soap:header message="tns:headers" part="protocolVersion" use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="generateMtomResponse">
+                <soap:body parts="payloadMtom" use="literal"/>
+                <soap:header message="tns:headers" part="client" use="literal"/>
+                <soap:header message="tns:headers" part="service" use="literal"/>
+                <soap:header message="tns:headers" part="userId" use="literal"/>
+                <soap:header message="tns:headers" part="id" use="literal"/>
+                <soap:header message="tns:headers" part="protocolVersion" use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="errorResponse">
+                <soap:fault name="errorResponse" use="literal" />
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="MessageMtomGeneratorImplService">
+        <wsdl:port binding="tns:MessageMtomGeneratorImplServiceSoapBinding" name="MessageMtomGeneratorImplPort">
+            <soap:address location="http://localhost:8080/mtomgenerator"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>
