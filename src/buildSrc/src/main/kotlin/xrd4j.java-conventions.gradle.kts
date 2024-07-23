@@ -44,6 +44,12 @@ tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
 }
 
+tasks.withType<Jar>() {
+    from(rootProject.files("../LICENSE", "../3RD-PARTY-NOTICES.txt")) {
+        into("META-INF")
+    }
+}
+
 checkstyle {
     // TODO: update to latest version
     toolVersion = "6.11.2"
