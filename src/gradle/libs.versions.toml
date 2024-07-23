@@ -11,6 +11,7 @@ javax-servlet-servlet-api = { module = "javax.servlet:servlet-api", version.ref 
 org-apache-httpcomponents-httpclient = { module = "org.apache.httpcomponents:httpclient", version.ref = "org-apache-httpcomponents-httpclient" }
 org-apache-httpcomponents-httpcore = { module = "org.apache.httpcomponents:httpcore", version.ref = "org-apache-httpcomponents-httpcore" }
 org-json-json = { module = "org.json:json", version.ref = "org-json-json" }
+licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version = "0.16.1" }
 
 [plugins]
 dependencyCheck = { id = "org.owasp.dependencycheck", version = "9.2.0" }

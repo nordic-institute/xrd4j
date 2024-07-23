@@ -2,6 +2,7 @@ plugins {
     `java-library`
     `maven-publish`
     checkstyle
+    id("com.github.hierynomus.license")
 }
 
 repositories {
@@ -47,4 +48,10 @@ checkstyle {
     // TODO: update to latest version
     toolVersion = "6.11.2"
 
+}
+
+license {
+    header = rootProject.file("../LICENSE")
+    include("**/*.java")
+    mapping("java", "SLASHSTAR_STYLE")
 }
