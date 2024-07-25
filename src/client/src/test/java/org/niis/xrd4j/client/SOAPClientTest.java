@@ -30,7 +30,8 @@ import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPElement;
@@ -38,13 +39,15 @@ import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * Test cases for SOAPClientImpl class. Test cases cover only cases where SOAP
  * server is not needed.
  *
  * @author Petteri Kivimäki
  */
-public class SOAPClientTest extends TestCase {
+class SOAPClientTest {
 
     private ServiceRequest<String> request;
     private ServiceRequestSerializer serializer;
@@ -55,9 +58,8 @@ public class SOAPClientTest extends TestCase {
      *
      * @throws Exception
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    void setUp() throws Exception {
         ConsumerMember consumer = new ConsumerMember("FI", "GOV", "MEMBER1", "subsystem");
         ProducerMember producer = new ProducerMember("FI", "COM", "MEMBER2", "subsystem", "getRandom", "v1");
         producer.setNamespacePrefix("ns1");
@@ -77,7 +79,8 @@ public class SOAPClientTest extends TestCase {
      *
      * @throws SOAPException
      */
-    public void testException1() throws SOAPException {
+    @Test
+    void testException1() throws SOAPException {
         try {
             SOAPClient client = new SOAPClientImpl();
             client.send(request.getSoapMessage(), "test.com");
@@ -92,7 +95,8 @@ public class SOAPClientTest extends TestCase {
      *
      * @throws SOAPException
      */
-    public void testException2() throws SOAPException {
+    @Test
+    void testException2() throws SOAPException {
         try {
             SOAPClient client = new SOAPClientImpl();
             client.send(request.getSoapMessage(), "");
@@ -108,7 +112,8 @@ public class SOAPClientTest extends TestCase {
      * @throws RuntimeException
      * @throws SOAPException
      */
-    public void testException3() throws RuntimeException, SOAPException {
+    @Test
+    void testException3() throws RuntimeException, SOAPException {
         try {
             SOAPClient client = new SOAPClientImpl();
             client.send(request.getSoapMessage(), null);
@@ -123,7 +128,8 @@ public class SOAPClientTest extends TestCase {
      *
      * @throws SOAPException
      */
-    public void testException4() throws SOAPException {
+    @Test
+    void testException4() throws SOAPException {
         try {
             SOAPClient client = new SOAPClientImpl();
             client.send(request.getSoapMessage(), "htp://test.com");

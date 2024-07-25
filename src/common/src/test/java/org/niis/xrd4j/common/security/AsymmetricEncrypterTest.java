@@ -22,7 +22,7 @@
  */
 package org.niis.xrd4j.common.security;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -32,12 +32,14 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableEntryException;
 import java.security.cert.CertificateException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Test cases for AsymmetricEncrypter class. The cases cover decryption too.
  *
  * @author Petteri Kivimäki
  */
-public class AsymmetricEncrypterTest extends TestCase {
+class AsymmetricEncrypterTest {
 
     // Public key
     private static final String PUBLIC_KEY_FILE = "src/test/resources/mytruststore1.jks";
@@ -60,7 +62,8 @@ public class AsymmetricEncrypterTest extends TestCase {
      * @throws CertificateException
      * @throws UnrecoverableEntryException
      */
-    public void testEncryption1() throws KeyStoreException, IOException, FileNotFoundException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
+    @Test
+    void testEncryption1() throws KeyStoreException, IOException, FileNotFoundException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
         Encrypter ae = new AsymmetricEncrypter(PUBLIC_KEY_FILE, PUBLIC_KEY_FILE_PASS, PUBLIC_KEY_ALIAS);
         Key key = CryptoHelper.generateAESKey(128);
         String sessionKey = CryptoHelper.encodeBase64(key.getEncoded());
@@ -85,7 +88,8 @@ public class AsymmetricEncrypterTest extends TestCase {
      * @throws CertificateException
      * @throws UnrecoverableEntryException
      */
-    public void testEncryption2() throws KeyStoreException, IOException, FileNotFoundException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
+    @Test
+    void testEncryption2() throws KeyStoreException, IOException, FileNotFoundException, NoSuchAlgorithmException, CertificateException, UnrecoverableEntryException {
         String msg = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>getRandom</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><ns1:getRandomResponse xmlns:ns1=\"http://producer.x-road.ee\"><request><data>1234567890 Каллио</data></request><response><data>9876543210</data></response></ns1:getRandomResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
         //##############################
         // BEGIN: encrypt data

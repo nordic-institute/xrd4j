@@ -27,14 +27,19 @@ import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.util.MessageHelper;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for ServiceResponse class.
  *
  * @author Petteri Kivimäki
  */
-public class ServiceResponseTest extends TestCase {
+class ServiceResponseTest {
 
     private ConsumerMember consumer;
     private ProducerMember producer;
@@ -44,9 +49,8 @@ public class ServiceResponseTest extends TestCase {
      *
      * @throws Exception
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    void setUp() throws Exception {
         this.consumer = new ConsumerMember("FI", "COM", "12345-5", "system");
         this.producer = new ProducerMember("FI", "GOV", "12345-6", "system", "TestService", "v1");
     }
@@ -56,13 +60,14 @@ public class ServiceResponseTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testToString() throws XRd4JException {
+    @Test
+    void testToString() throws XRd4JException {
         String id = MessageHelper.generateId();
         ServiceResponse response = new ServiceResponse(consumer, producer, "12345");
         assertEquals("12345", response.toString());
         response = new ServiceResponse(consumer, producer, id);
         assertEquals(id, response.toString());
-        ServiceResponseTest.assertFalse(response.toString().equals(id + "1"));
+        assertFalse(response.toString().equals(id + "1"));
         assertEquals("4.0", response.getProtocolVersion());
         response.setProtocolVersion("5.0");
         assertEquals("5.0", response.getProtocolVersion());
@@ -73,11 +78,12 @@ public class ServiceResponseTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testEquals() throws XRd4JException {
+    @Test
+    void testEquals() throws XRd4JException {
         String id = MessageHelper.generateId();
         assertEquals(new ServiceResponse(consumer, producer, "12345"), new ServiceResponse(consumer, producer, "12345"));
         assertEquals(new ServiceResponse(consumer, producer, id), new ServiceResponse(consumer, producer, id));
-        ServiceResponseTest.assertFalse(new ServiceResponse(consumer, producer, MessageHelper.generateId()).equals(new ServiceResponse(consumer, producer, MessageHelper.generateId())));
+        assertFalse(new ServiceResponse(consumer, producer, MessageHelper.generateId()).equals(new ServiceResponse(consumer, producer, MessageHelper.generateId())));
     }
 
     /**
@@ -85,7 +91,8 @@ public class ServiceResponseTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testException1() throws XRd4JException {
+    @Test
+    void testException1() throws XRd4JException {
         try {
             ServiceResponse response = new ServiceResponse(null, producer, "12345");
             fail("Should not reach this");
@@ -99,7 +106,8 @@ public class ServiceResponseTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testException2() throws XRd4JException {
+    @Test
+    void testException2() throws XRd4JException {
         try {
             ServiceResponse response = new ServiceResponse(consumer, null, "12345");
             fail("Should not reach this");
@@ -113,7 +121,8 @@ public class ServiceResponseTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testException3() throws XRd4JException {
+    @Test
+    void testException3() throws XRd4JException {
         try {
             ServiceResponse response = new ServiceResponse(consumer, producer, null);
             fail("Should not reach this");
@@ -127,7 +136,8 @@ public class ServiceResponseTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testException4() throws XRd4JException {
+    @Test
+    void testException4() throws XRd4JException {
         try {
             ServiceResponse response = new ServiceResponse(consumer, producer, "");
             fail("Should not reach this");

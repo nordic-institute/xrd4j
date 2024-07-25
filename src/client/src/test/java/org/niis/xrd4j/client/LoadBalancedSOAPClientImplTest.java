@@ -22,12 +22,15 @@
  */
 package org.niis.xrd4j.client;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.soap.SOAPException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for LoadBalancedSOAPClientImpl class. Test cases cover only cases
@@ -35,13 +38,14 @@ import java.util.List;
  *
  * @author Petteri Kivimäki
  */
-public class LoadBalancedSOAPClientImplTest extends TestCase {
+class LoadBalancedSOAPClientImplTest {
 
     /**
      * Test that reading target url throws exception when given empty url list
      * @throws SOAPException
      */
-    public void test1() throws SOAPException {
+    @Test
+    void test1() throws SOAPException {
         List<String> urls = new ArrayList<>();
         LoadBalancedSOAPClientImpl client = new LoadBalancedSOAPClientImpl(urls);
         try {
@@ -58,7 +62,8 @@ public class LoadBalancedSOAPClientImplTest extends TestCase {
      * Test that reading target url keeps giving the same url
      * @throws SOAPException
      */
-    public void test2() throws SOAPException {
+    @Test
+    void test2() throws SOAPException {
         List<String> urls = new ArrayList<>();
         urls.add("http://server1.myhost.com");
         LoadBalancedSOAPClientImpl client = new LoadBalancedSOAPClientImpl(urls);
@@ -71,7 +76,8 @@ public class LoadBalancedSOAPClientImplTest extends TestCase {
      * Test that reading target url load balances between given urls
      * @throws SOAPException
      */
-    public void test3() throws SOAPException {
+    @Test
+    void test3() throws SOAPException {
         List<String> urls = new ArrayList<>();
         urls.add("http://server1.myhost.com");
         urls.add("http://server2.myhost.com");
@@ -87,7 +93,8 @@ public class LoadBalancedSOAPClientImplTest extends TestCase {
      * Test that reading target url load balances between given urls
      * @throws SOAPException
      */
-    public void test4() throws SOAPException {
+    @Test
+    void test4() throws SOAPException {
         List<String> urls = new ArrayList<>();
         urls.add("http://server1.myhost.com");
         urls.add("http://server2.myhost.com");

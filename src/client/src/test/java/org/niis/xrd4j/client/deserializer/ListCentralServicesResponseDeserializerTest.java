@@ -26,18 +26,20 @@ import org.niis.xrd4j.common.exception.XRd4JException;
 import org.niis.xrd4j.common.member.ObjectType;
 import org.niis.xrd4j.common.member.ProducerMember;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.soap.SOAPException;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for ListCentralServicesResponseDeserializer class.
  *
  * @author Petteri Kivimäki
  */
-public class ListCentralServicesResponseDeserializerTest extends TestCase {
+class ListCentralServicesResponseDeserializerTest {
 
     /**
      * Central service list with 1 service
@@ -45,7 +47,8 @@ public class ListCentralServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test1() throws XRd4JException, SOAPException {
+    @Test
+    void test1() throws XRd4JException, SOAPException {
         String soapString = "<?xml version=\"1.0\"?><xrd:centralServiceList xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\" xmlns:id=\"http://x-road.eu/xsd/identifiers\"><xrd:centralService id:objectType=\"CENTRALSERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:serviceCode>testService</id:serviceCode></xrd:centralService></xrd:centralServiceList>";
         List<ProducerMember> list = new ListCentralServicesResponseDeserializer().deserializeProducerList(soapString);
 
@@ -64,7 +67,8 @@ public class ListCentralServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test2() throws XRd4JException, SOAPException {
+    @Test
+    void test2() throws XRd4JException, SOAPException {
         String soapString = "<?xml version=\"1.0\"?><xrd:centralServiceList xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\" xmlns:id=\"http://x-road.eu/xsd/identifiers\"><xrd:centralService id:objectType=\"CENTRALSERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:serviceCode>testService</id:serviceCode></xrd:centralService><xrd:centralService id:objectType=\"CENTRALSERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:serviceCode>demo</id:serviceCode></xrd:centralService><xrd:centralService id:objectType=\"CENTRALSERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:serviceCode>service</id:serviceCode></xrd:centralService></xrd:centralServiceList>";
         List<ProducerMember> list = new ListCentralServicesResponseDeserializer().deserializeProducerList(soapString);
 
@@ -99,7 +103,8 @@ public class ListCentralServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test3() throws XRd4JException, SOAPException {
+    @Test
+    void test3() throws XRd4JException, SOAPException {
         String soapString = "<?xml version=\"1.0\"?><xrd:centralServiceList xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\" xmlns:id=\"http://x-road.eu/xsd/identifiers\"></xrd:centralServiceList>";
         List<ProducerMember> list = new ListCentralServicesResponseDeserializer().deserializeProducerList(soapString);
 
@@ -112,7 +117,8 @@ public class ListCentralServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test4() throws XRd4JException, SOAPException {
+    @Test
+    void test4() throws XRd4JException, SOAPException {
         String soapString = "<?xml version=\"1.0\"?><xrd:centralServiceList xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\" xmlns:id=\"http://x-road.eu/xsd/identifiers\"/>";
         List<ProducerMember> list = new ListCentralServicesResponseDeserializer().deserializeProducerList(soapString);
 

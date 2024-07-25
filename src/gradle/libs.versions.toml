@@ -15,13 +15,12 @@ org-json-json = { module = "org.json:json", version.ref = "org-json-json" }
 org-slf4j-slf4jApi = { module = "org.slf4j:slf4j-api", version = "1.7.30" }
 org-slf4j-slf4jLog4j12 = {module = "org.slf4j:slf4j-log4j12", version = "1.7.30" }
 org-apache-logging-log4j-log4jCore = { module = "org.apache.logging.log4j:log4j-core", version = "2.17.1" }
-junit-junit = { module = "junit:junit", version = "4.13.1" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version = "5.10.3" }
 
 licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version = "0.16.1" }
 
 [bundles]
-testImplementation = [ "junit-junit", "junit-jupiter", "org-slf4j-slf4jApi", "org-slf4j-slf4jLog4j12", "org-apache-logging-log4j-log4jCore" ]
+testImplementation = [ "junit-jupiter", "org-slf4j-slf4jApi", "org-slf4j-slf4jLog4j12", "org-apache-logging-log4j-log4jCore" ]
 
 
 [plugins]

@@ -29,20 +29,22 @@ import org.niis.xrd4j.common.message.ErrorMessageType;
 import org.niis.xrd4j.common.message.ServiceResponse;
 import org.niis.xrd4j.common.util.SOAPHelper;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Test cases for ListServicesResponseDeserializer class.
  *
  * @author Petteri Kivimäki
  */
-public class ListServicesResponseDeserializerTest extends TestCase {
-  
+class ListServicesResponseDeserializerTest {
+
 
     /**
      * ListMethods: Subsystem - Service (under subsystem). Response: 1 service
@@ -50,7 +52,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test1() throws XRd4JException, SOAPException {
+    @Test
+    void test1() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>client</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>listMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:listMethodsResponse><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-6</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>testService</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service></xrd:listMethodsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -95,7 +98,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test2() throws XRd4JException, SOAPException {
+    @Test
+    void test2() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"MEMBER\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>listMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:listMethodsResponse><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-6</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>testService</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-7</id:memberCode><id:subsystemCode>subsystem1</id:subsystemCode><id:serviceCode>testService1</id:serviceCode></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-8</id:memberCode><id:serviceCode>testService2</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-9</id:memberCode><id:serviceCode>testService3</id:serviceCode></xrd:service></xrd:listMethodsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -164,7 +168,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test3() throws XRd4JException, SOAPException {
+    @Test
+    void test3() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"MEMBER\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:serviceCode>listMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:listMethodsResponse><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-6</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>testService</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-7</id:memberCode><id:subsystemCode>subsystem1</id:subsystemCode><id:serviceCode>testService1</id:serviceCode></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-8</id:memberCode><id:serviceCode>testService2</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-9</id:memberCode><id:serviceCode>testService3</id:serviceCode></xrd:service></xrd:listMethodsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -234,7 +239,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test4() throws XRd4JException, SOAPException {
+    @Test
+    void test4() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>client</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>allowedMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:allowedMethodsResponse><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-6</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>testService</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service></xrd:allowedMethodsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -279,7 +285,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test5() throws XRd4JException, SOAPException {
+    @Test
+    void test5() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"MEMBER\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>allowedMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:allowedMethodsResponse><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-6</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>testService</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-7</id:memberCode><id:subsystemCode>subsystem1</id:subsystemCode><id:serviceCode>testService1</id:serviceCode></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-8</id:memberCode><id:serviceCode>testService2</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-9</id:memberCode><id:serviceCode>testService3</id:serviceCode></xrd:service></xrd:allowedMethodsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -348,7 +355,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test6() throws XRd4JException, SOAPException {
+    @Test
+    void test6() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"MEMBER\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:serviceCode>allowedMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:allowedMethodsResponse><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-6</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>testService</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-7</id:memberCode><id:subsystemCode>subsystem1</id:subsystemCode><id:serviceCode>testService1</id:serviceCode></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-8</id:memberCode><id:serviceCode>testService2</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-9</id:memberCode><id:serviceCode>testService3</id:serviceCode></xrd:service></xrd:allowedMethodsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -417,7 +425,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test7() throws XRd4JException, SOAPException {
+    @Test
+    void test7() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>client</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>listMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:listMethodsResponse></xrd:listMethodsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -456,7 +465,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test8() throws XRd4JException, SOAPException {
+    @Test
+    void test8() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>client</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>listMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:listMethodsResponse/></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -496,7 +506,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test9() throws XRd4JException, SOAPException {
+    @Test
+    void test9() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>client</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>allowedMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:allowedMethodsResponse></xrd:allowedMethodsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -536,7 +547,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test10() throws XRd4JException, SOAPException {
+    @Test
+    void test10() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>client</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>allowedMethods</id:serviceCode></xrd:service><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:allowedMethodsResponse/></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -575,7 +587,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void test11() throws XRd4JException, SOAPException {
+    @Test
+    void test11() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:id=\"http://x-road.eu/xsd/identifiers\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Header><xrd:client id:objectType=\"SUBSYSTEM\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:subsystemCode>client</id:subsystemCode></xrd:client><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>COM</id:memberClass><id:memberCode>MEMBER2</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>listMethods</id:serviceCode></xrd:service><xrd:securityServer><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>GOV</id:memberClass><id:memberCode>MEMBER1</id:memberCode><id:serverCode>server1</id:serverCode></xrd:securityServer><xrd:userId>EE1234567890</xrd:userId><xrd:id>ID-1234567890</xrd:id><xrd:protocolVersion>4.0</xrd:protocolVersion><xrd:requestHash algorithmId=\"SHA-512\">ZPbWPAOcJxzE81EmSk//R3DUQtqwMcuMMF9tsccJypdNcukzICQtlhhr3a/bTmexDrn8e/BrBVyl2t0ni/cUvw==</xrd:requestHash></SOAP-ENV:Header><SOAP-ENV:Body><xrd:listMethodsResponse><xrd:service id:objectType=\"SERVICE\"><id:xRoadInstance>FI</id:xRoadInstance><id:memberClass>PRI</id:memberClass><id:memberCode>12345-6</id:memberCode><id:subsystemCode>subsystem</id:subsystemCode><id:serviceCode>testService</id:serviceCode><id:serviceVersion>v1</id:serviceVersion></xrd:service></xrd:listMethodsResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>";
 
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
@@ -624,7 +637,8 @@ public class ListServicesResponseDeserializerTest extends TestCase {
      * @throws XRd4JException
      * @throws SOAPException
      */
-    public void testTechError1() throws XRd4JException, SOAPException {
+    @Test
+    void testTechError1() throws XRd4JException, SOAPException {
         String soapString = "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:xrd=\"http://x-road.eu/xsd/xroad.xsd\"><SOAP-ENV:Body><SOAP-ENV:Fault><faultcode>Server.ClientProxy.LoggingFailed.TimestamperFailed</faultcode><faultstring>Cannot time-stamp messages</faultstring><faultactor></faultactor><detail><xrd:faultDetail>TimestamperFailed</xrd:faultDetail></detail></SOAP-ENV:Fault></SOAP-ENV:Body></SOAP-ENV:Envelope>";
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
 

@@ -23,7 +23,6 @@ java {
 }
 
 dependencies {
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
