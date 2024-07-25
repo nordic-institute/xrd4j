@@ -7,5 +7,7 @@ dependencies {
     compileOnly(libs.javax.servlet.servlet.api)
 }
 
-group = "org.niis.xrd4j"
-description = "XRd4J :: Server"
+pomSettings {
+    name = "XRd4J :: Server"
+    description = "This module provides an abstract servlet that can be use as a base class for Adapter Server implementation."
+}

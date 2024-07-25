@@ -7,6 +7,9 @@ dependencies {
     api(project(":rest"))
 }
 
-group = "org.niis.xrd4j"
-description = "XRd4J :: Client"
+
+pomSettings {
+    name = "XRd4J :: Client"
+    description = "This module provides a SOAP client that generates X-Road v6 SOAP messages that can be sent to X-Road Security Server."
+}
 

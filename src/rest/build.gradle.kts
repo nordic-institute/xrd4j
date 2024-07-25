@@ -9,5 +9,7 @@ dependencies {
     testImplementation(project(":common"))
 }
 
-group = "org.niis.xrd4j"
-description = "XRd4J :: Rest"
+pomSettings {
+    name = "XRd4J :: Rest"
+    description = "This module provides HTTP clients that can be used for sending requests to web services from Adapter Server."
+}

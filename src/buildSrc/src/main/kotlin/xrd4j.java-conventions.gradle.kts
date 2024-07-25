@@ -21,8 +21,7 @@ dependencies {
     testImplementation("junit:junit:4.13.1")
 }
 
-group = "org.niis"
-version = "0.5.0-SNAPSHOT"
+group = "org.niis.xrd4j"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -30,9 +29,46 @@ java {
     withSourcesJar()
 }
 
+interface PomSettings {
+    val name: Property<String>
+    val description: Property<String>
+}
+val pomSettingsExtension = project.extensions.create<PomSettings>("pomSettings")
+
 publishing {
     publications.create<MavenPublication>("maven") {
         from(components["java"])
+
+        pom {
+            url = "https://github.com/nordic-institute/xrd4j"
+            licenses {
+                license {
+                    name = "MIT License"
+                    url = "http://www.opensource.org/licenses/mit-license.php"
+                }
+            }
+
+            scm {
+                connection = "scm:git:https://github.com/nordic-institute/xrd4j.git"
+                developerConnection = "scm:git:git@github.com:nordic-institute/xrd4j.git"
+                url = "https://github.com/nordic-institute/xrd4j"
+            }
+        }
+
+        afterEvaluate {
+            pom {
+                name = pomSettingsExtension.name
+                description = pomSettingsExtension.description
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            val releasesRepoUrl = uri("https://artifactory.niis.org/xroad-maven-releases/")
+            val snapshotsRepoUrl = uri("https://artifactory.niis.org/xroad-maven-snapshots/")
+            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+        }
     }
 }
 
