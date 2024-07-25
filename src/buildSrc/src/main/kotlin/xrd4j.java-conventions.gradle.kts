@@ -1,6 +1,7 @@
 plugins {
     `java-library`
     `maven-publish`
+    jacoco
     checkstyle
     id("com.github.hierynomus.license")
 }
@@ -15,10 +16,15 @@ repositories {
 group = "org.niis.xrd4j"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    toolchain.languageVersion = JavaLanguageVersion.of(8)
+    sourceCompatibility = JavaVersion.VERSION_11
+    toolchain.languageVersion = JavaLanguageVersion.of(11)
     withJavadocJar()
     withSourcesJar()
+}
+
+dependencies {
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 interface PomSettings {
@@ -76,6 +82,10 @@ tasks.withType<Jar>() {
     from(rootProject.files("../LICENSE", "../3RD-PARTY-NOTICES.txt")) {
         into("META-INF")
     }
+}
+
+tasks.withType<Test>() {
+    useJUnitPlatform()
 }
 
 checkstyle {
