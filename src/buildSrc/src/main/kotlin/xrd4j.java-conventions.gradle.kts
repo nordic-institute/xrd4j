@@ -12,19 +12,11 @@ repositories {
     }
 }
 
-dependencies {
-    api("com.sun.xml.messaging.saaj:saaj-impl:1.3.28")
-    api("org.slf4j:slf4j-api:1.7.30")
-
-    testImplementation("org.slf4j:slf4j-log4j12:1.7.30")
-    testImplementation("org.apache.logging.log4j:log4j-core:2.17.1")
-    testImplementation("junit:junit:4.13.1")
-}
-
 group = "org.niis.xrd4j"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
+    toolchain.languageVersion = JavaLanguageVersion.of(8)
     withJavadocJar()
     withSourcesJar()
 }

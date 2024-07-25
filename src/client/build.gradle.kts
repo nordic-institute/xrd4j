@@ -5,6 +5,8 @@ plugins {
 dependencies {
     api(project(":common"))
     api(project(":rest"))
+
+    testImplementation(libs.bundles.testImplementation)
 }
 
 

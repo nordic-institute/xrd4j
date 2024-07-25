@@ -4,7 +4,9 @@ plugins {
 
 dependencies {
     api(project(":common"))
-    compileOnly(libs.javax.servlet.servlet.api)
+    compileOnly(libs.javax.servlet.servletApi)
+
+    testImplementation(libs.bundles.testImplementation)
 }
 
 pomSettings {
