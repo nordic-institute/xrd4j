@@ -334,10 +334,20 @@
                          message="tns:personDetailsResponse"/>
         </wsdl:operation>
         <wsdl:operation name="storeAttachments">
+            <wsdl:documentation>
+                <xrd:title xml:lang="en">Store attachments service</xrd:title>
+                <xrd:notes>This service accepts attachments in request and returns name and size in the response.
+                    No attachments are actually stored.
+                </xrd:notes>
+            </wsdl:documentation>
             <wsdl:input name="storeAttachments" message="tns:storeAttachments"/>
             <wsdl:output name="storeAttachmentsResponse" message="tns:storeAttachmentsResponse"/>
         </wsdl:operation>
         <wsdl:operation name="getAttachments">
+            <wsdl:documentation>
+                <xrd:title xml:lang="en">Get attachments service</xrd:title>
+                <xrd:notes>This service generates and returns random attachments with the provided sizes.</xrd:notes>
+            </wsdl:documentation>
             <wsdl:input name="getAttachments" message="tns:getAttachments"/>
             <wsdl:output name="getAttachmentsResponse" message="tns:getAttachmentsResponse"/>
         </wsdl:operation>
