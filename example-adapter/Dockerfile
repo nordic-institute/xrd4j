@@ -5,7 +5,7 @@ FROM eclipse-temurin:11-jre
 ADD target/example-adapter-*.war example-adapter.war
 
 # Entry in json format
-ENTRYPOINT ["java", "-jar", "/example-adapter.war"]
+ENTRYPOINT ["java", "-Xms64m", "-Xmx256m", "-jar", "/example-adapter.war"]
 
 # Expose Tomcat
 EXPOSE 8080
