@@ -36,8 +36,8 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPHeader;
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPHeader;
 
 import java.util.Map;
 

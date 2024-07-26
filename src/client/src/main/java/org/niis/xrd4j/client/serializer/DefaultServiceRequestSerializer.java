@@ -24,9 +24,9 @@ package org.niis.xrd4j.client.serializer;
 
 import org.niis.xrd4j.common.message.ServiceRequest;
 
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPEnvelope;
+import jakarta.xml.soap.SOAPException;
 
 /**
  * This class offers default implementation for the abstract

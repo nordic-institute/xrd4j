@@ -25,7 +25,7 @@ package org.niis.xrd4j.common.util;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.NodeList;
 
-import javax.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPElement;
 
 import java.util.ArrayList;
 import java.util.List;

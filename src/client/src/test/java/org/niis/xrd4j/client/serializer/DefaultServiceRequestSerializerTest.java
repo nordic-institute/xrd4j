@@ -33,8 +33,8 @@ import org.niis.xrd4j.common.util.SOAPHelper;
 
 import org.junit.jupiter.api.Test;
 
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

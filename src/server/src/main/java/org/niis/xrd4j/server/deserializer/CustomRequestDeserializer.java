@@ -25,7 +25,7 @@ package org.niis.xrd4j.server.deserializer;
 import org.niis.xrd4j.common.exception.XRd4JException;
 import org.niis.xrd4j.common.message.ServiceRequest;
 
-import javax.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPException;
 
 /**
  * This class defines an interface for deserializing SOAP body's request

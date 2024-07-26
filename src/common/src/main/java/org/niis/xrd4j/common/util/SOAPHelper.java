@@ -31,14 +31,14 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.soap.AttachmentPart;
-import javax.xml.soap.MessageFactory;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+import jakarta.xml.soap.AttachmentPart;
+import jakarta.xml.soap.MessageFactory;
+import jakarta.xml.soap.MimeHeaders;
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPBody;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -259,7 +259,7 @@ public final class SOAPHelper {
      */
     public static void nodesToMap(NodeList list, boolean upperCase, Map<String, String> map) {
         for (int i = 0; i < list.getLength(); i++) {
-            if (list.item(i).getNodeType() == javax.xml.soap.Node.ELEMENT_NODE && list.item(i).hasChildNodes()) {
+            if (list.item(i).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && list.item(i).hasChildNodes()) {
                 nodesToMap(list.item(i).getChildNodes(), upperCase, map);
             } else {
                 processMapNode(list, i, upperCase, map);
@@ -276,10 +276,10 @@ public final class SOAPHelper {
      * @param map Map for the results
      */
     private static void processMapNode(NodeList list, int index, boolean upperCase, Map<String, String> map) {
-        if (list.item(index).getNodeType() == javax.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
+        if (list.item(index).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
             String key = list.item(index).getLocalName();
             map.put(upperCase ? key.toUpperCase() : key, "");
-        } else if (list.item(index).getNodeType() == javax.xml.soap.Node.TEXT_NODE) {
+        } else if (list.item(index).getNodeType() == jakarta.xml.soap.Node.TEXT_NODE) {
             String key = list.item(index).getParentNode().getLocalName();
             String value = list.item(index).getNodeValue();
             value = value.trim();
@@ -313,7 +313,7 @@ public final class SOAPHelper {
      */
     public static void nodesToMultiMap(NodeList list, Map<String, List<String>> map) {
         for (int i = 0; i < list.getLength(); i++) {
-            if (list.item(i).getNodeType() == javax.xml.soap.Node.ELEMENT_NODE && list.item(i).hasChildNodes()) {
+            if (list.item(i).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && list.item(i).hasChildNodes()) {
                 nodesToMultiMap(list.item(i).getChildNodes(), map);
             } else {
                 processMultiMapNode(list, i, map);
@@ -329,13 +329,13 @@ public final class SOAPHelper {
      * @param map Map for the results
      */
     private static void processMultiMapNode(NodeList list, int index, Map<String, List<String>> map) {
-        if (list.item(index).getNodeType() == javax.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
+        if (list.item(index).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
             String key = list.item(index).getLocalName();
             if (!map.containsKey(key)) {
                 map.put(key, new ArrayList<>());
             }
             map.get(key).add("");
-        } else if (list.item(index).getNodeType() == javax.xml.soap.Node.TEXT_NODE) {
+        } else if (list.item(index).getNodeType() == jakarta.xml.soap.Node.TEXT_NODE) {
             String key = list.item(index).getParentNode().getLocalName();
             String value = list.item(index).getNodeValue();
             value = value.trim();
@@ -596,7 +596,7 @@ public final class SOAPHelper {
      * @return updated Node
      */
     public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
-        if (node.getNodeType() == javax.xml.soap.Node.ELEMENT_NODE) {
+        if (node.getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE) {
             if (prefix != null && !prefix.isEmpty()) {
                 node = (Node) node.getOwnerDocument().renameNode(node, namespace, prefix + ":" + node.getLocalName());
             } else if (namespace != null && !namespace.isEmpty()) {
