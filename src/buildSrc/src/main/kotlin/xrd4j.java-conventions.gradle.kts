@@ -85,6 +85,7 @@ tasks.withType<Jar>() {
 
 tasks.withType<Test>() {
     useJUnitPlatform()
+    // testLogging.showStandardStreams = true
 }
 
 checkstyle {
