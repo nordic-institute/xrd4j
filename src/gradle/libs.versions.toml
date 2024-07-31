@@ -1,7 +1,7 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 
 [versions]
-javax-servlet-servlet-api = "2.5"
+jakarta-servlet-servlet-api = "6.1.0"
 org-apache-httpcomponents-httpclient = "4.5.14"
 org-apache-httpcomponents-httpcore = "4.4.16"
 org-json-json = "20220924"
@@ -10,7 +10,7 @@ log4j = "2.23.1"
 
 [libraries]
 com-sun-xml-messaging-saaj-saajImpl = { module = "com.sun.xml.messaging.saaj:saaj-impl", version = "3.0.4" }
-javax-servlet-servletApi = { module = "javax.servlet:servlet-api", version.ref = "javax-servlet-servlet-api" }
+jakarta-servlet-servletApi = { module = "jakarta.servlet:jakarta.servlet-api", version.ref = "jakarta-servlet-servlet-api" }
 org-apache-httpcomponents-httpclient = { module = "org.apache.httpcomponents:httpclient", version.ref = "org-apache-httpcomponents-httpclient" }
 org-apache-httpcomponents-httpcore = { module = "org.apache.httpcomponents:httpcore", version.ref = "org-apache-httpcomponents-httpcore" }
 org-json-json = { module = "org.json:json", version.ref = "org-json-json" }
