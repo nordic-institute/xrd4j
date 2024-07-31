@@ -22,15 +22,6 @@
  */
 package org.niis.xrd4j.common.util;
 
-import org.niis.xrd4j.common.message.AbstractMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilderFactory;
 import jakarta.xml.soap.AttachmentPart;
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.MimeHeaders;
@@ -39,6 +30,15 @@ import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.niis.xrd4j.common.message.AbstractMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import javax.xml.XMLConstants;
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -87,7 +87,7 @@ public final class SOAPHelper {
      * child that matches the given name. If no child with the given is found,
      * null is returned.
      *
-     * @param node parent node
+     * @param node     parent node
      * @param nodeName name of the node to be searched
      * @return node with the given name or null
      */
@@ -238,7 +238,7 @@ public final class SOAPHelper {
      * key-value-pairs, localName as the key and NodeValue as the value. Each
      * key can have only one value. The given NodeList is parsed recursively.
      *
-     * @param list NodeList to be transfered
+     * @param list      NodeList to be transfered
      * @param upperCase store all keys in upper case
      * @return Map that contains all the list items as key-value-pairs
      */
@@ -253,9 +253,9 @@ public final class SOAPHelper {
      * key-value-pairs, localName as the key and NodeValue as the value. Each
      * key can have only one value. The given NodeList is parsed recursively.
      *
-     * @param list NodeList to be transfered
+     * @param list      NodeList to be transfered
      * @param upperCase store all keys in upper case
-     * @param map Map for the results
+     * @param map       Map for the results
      */
     public static void nodesToMap(NodeList list, boolean upperCase, Map<String, String> map) {
         for (int i = 0; i < list.getLength(); i++) {
@@ -270,10 +270,10 @@ public final class SOAPHelper {
     /**
      * Transfers the given Node to a Map as key - value pair.
      *
-     * @param list NodeList containing the node to be transfered
-     * @param index index of the node to be transfered
+     * @param list      NodeList containing the node to be transfered
+     * @param index     index of the node to be transfered
      * @param upperCase store all keys in upper case
-     * @param map Map for the results
+     * @param map       Map for the results
      */
     private static void processMapNode(NodeList list, int index, boolean upperCase, Map<String, String> map) {
         if (list.item(index).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
@@ -309,7 +309,7 @@ public final class SOAPHelper {
      * are stored in a list. The given NodeList is parsed recursively.
      *
      * @param list NodeList to be transfered
-     * @param map Map for the results
+     * @param map  Map for the results
      */
     public static void nodesToMultiMap(NodeList list, Map<String, List<String>> map) {
         for (int i = 0; i < list.getLength(); i++) {
@@ -324,9 +324,9 @@ public final class SOAPHelper {
     /**
      * Transfers the given Node to a MultiMap as key - value list pair.
      *
-     * @param list NodeList containing the Node to be transfered
+     * @param list  NodeList containing the Node to be transfered
      * @param index index of the Node to be transfered
-     * @param map Map for the results
+     * @param map   Map for the results
      */
     private static void processMultiMapNode(NodeList list, int index, Map<String, List<String>> map) {
         if (list.item(index).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
@@ -354,27 +354,32 @@ public final class SOAPHelper {
      * have another namespace, the old namespace is first removed and the new
      * namespace is added after that.
      *
-     * @param node Node to be modified
+     * @param node    Node to be modified
      * @param message Message that contains the ProviderMember which namespace
-     * URI and prefix are used
+     * @return changed SOAPElement with added namespace URI and prefix of the ProviderMember
      */
-    public static void addNamespace(Node node, AbstractMessage message) {
+    public static SOAPElement addNamespace(SOAPElement node, AbstractMessage message) {
         if (node.getNodeType() == Node.ELEMENT_NODE) {
-            node.getOwnerDocument().renameNode(node, null, node.getLocalName());
-            if (message.getProducer().getNamespacePrefix() != null
-                    && !message.getProducer().getNamespacePrefix().isEmpty()) {
-                node = (Node) node.getOwnerDocument().renameNode(node, message.getProducer().getNamespaceUrl(),
-                        message.getProducer().getNamespacePrefix() + ":" + node.getNodeName());
-            } else {
-                node = (Node) node.getOwnerDocument().renameNode(node, message.getProducer().getNamespaceUrl(),
-                        node.getNodeName());
-            }
-        }
+            var soapEl = (SOAPElement) node;
 
-        NodeList list = node.getChildNodes();
-        for (int i = 0; i < list.getLength(); i++) {
-            SOAPHelper.addNamespace((Node) list.item(i), message);
+            try {
+                soapEl = soapEl.setElementQName(new QName(soapEl.getLocalName()));
+                var prefix = message.getProducer().getNamespacePrefix() != null ? message.getProducer().getNamespacePrefix() : "";
+                soapEl = soapEl.addNamespaceDeclaration(prefix, message.getProducer().getNamespaceUrl())
+                        .setElementQName(soapEl.createQName(soapEl.getLocalName(), prefix));
+            } catch (SOAPException e) {
+                LOGGER.error("Failed to add provider namespace", e);
+                throw new RuntimeException(e);
+            }
+
+            soapEl.getChildElements().forEachRemaining(n -> {
+                if (n instanceof SOAPElement) {
+                    addNamespace((SOAPElement) n, message);
+                }
+            });
+            return soapEl;
         }
+        return node;
     }
 
     /**
@@ -397,7 +402,7 @@ public final class SOAPHelper {
      * contents. If there's no attachment with the given content id or its value
      * is not a string, null is returned.
      *
-     * @param contentId content id of the attachment
+     * @param contentId   content id of the attachment
      * @param attachments list of attachments to be searched
      * @return string value of the attachment or null
      */
@@ -548,11 +553,11 @@ public final class SOAPHelper {
      * URI yet, to elements namespace URI and prefix are recursively copied to
      * them.
      *
-     * @param from source element
-     * @param to target element
+     * @param from                     source element
+     * @param to                       target element
      * @param updateNamespaceAndPrefix should elements namespace URI and prefix
-     * be applied to all the copied elements if they do not have namespace URI
-     * yet
+     *                                 be applied to all the copied elements if they do not have namespace URI
+     *                                 yet
      * @throws SOAPException if there's an error
      */
     public static void moveChildren(SOAPElement from, SOAPElement to, boolean updateNamespaceAndPrefix) throws SOAPException {
@@ -572,9 +577,9 @@ public final class SOAPHelper {
      * node does not have namespace URI yet. The list is updated recursively, so
      * also the children of children (and so on) will be updated.
      *
-     * @param list list of nodes to be updated
+     * @param list      list of nodes to be updated
      * @param namespace target namespace
-     * @param prefix target prefix
+     * @param prefix    target prefix
      */
     public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
         for (int i = 0; i < list.getLength(); i++) {
@@ -590,9 +595,9 @@ public final class SOAPHelper {
      * Updates the namespace URI and prefix of the given node with the given
      * values. If prefix is null or empty, only namespace URI is updated.
      *
-     * @param node Node to be updated
+     * @param node      Node to be updated
      * @param namespace target namespace
-     * @param prefix target prefix
+     * @param prefix    target prefix
      * @return updated Node
      */
     public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
@@ -611,7 +616,7 @@ public final class SOAPHelper {
      * monitoring metrics.
      *
      * @param metrics NodeList containing "metricSet" element returned by
-     * environmental monitoring service
+     *                environmental monitoring service
      * @return installed X-Road packages as key-value pairs
      */
     public static Map<String, String> getXRdVersionInfo(NodeList metrics) {
@@ -652,7 +657,7 @@ public final class SOAPHelper {
      * Helper function for creating new SOAP messages
      *
      * @param mimeHeaders needed for creating SOAP message
-     * @param is needed for creating SOAP message
+     * @param is          needed for creating SOAP message
      * @return New SOAP message
      * @throws IOException   on IO error
      * @throws SOAPException on soap error
@@ -669,8 +674,8 @@ public final class SOAPHelper {
      * monitoring metrics.
      *
      * @param packages NodeList containing "metricSet" element which children
-     * all the installed packages are
-     * @param results Map object for results
+     *                 all the installed packages are
+     * @param results  Map object for results
      */
     private static void getXRdPackages(NodeList packages, Map<String, String> results) {
         // Loop through packages

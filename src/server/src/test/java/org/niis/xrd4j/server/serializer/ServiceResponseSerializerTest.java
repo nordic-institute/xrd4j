@@ -1163,6 +1163,10 @@ class ServiceResponseSerializerTest {
         @Override
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement data = soapResponse.addChildElement((SOAPElement) response.getResponseData());
+            // As of saaj-impl:3.0.4 addChildElement causes element namespace declaration without prefix to be added
+            // even if element has namespace prefix and namespace declaration with this prefix is already present.
+            // This is a workaround to remove this unnecessary namespace declaration.
+            data.removeNamespaceDeclaration("");
         }
     }
 

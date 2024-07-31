@@ -22,18 +22,6 @@
  */
 package org.niis.xrd4j.server.serializer;
 
-import org.niis.xrd4j.common.exception.XRd4JException;
-import org.niis.xrd4j.common.message.ErrorMessage;
-import org.niis.xrd4j.common.message.ErrorMessageType;
-import org.niis.xrd4j.common.message.ServiceRequest;
-import org.niis.xrd4j.common.message.ServiceResponse;
-import org.niis.xrd4j.common.serializer.AbstractHeaderSerializer;
-import org.niis.xrd4j.common.util.SOAPHelper;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
-
 import jakarta.xml.soap.Name;
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPBody;
@@ -42,6 +30,21 @@ import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.niis.xrd4j.common.exception.XRd4JException;
+import org.niis.xrd4j.common.message.ErrorMessage;
+import org.niis.xrd4j.common.message.ErrorMessageType;
+import org.niis.xrd4j.common.message.ServiceRequest;
+import org.niis.xrd4j.common.message.ServiceResponse;
+import org.niis.xrd4j.common.serializer.AbstractHeaderSerializer;
+import org.niis.xrd4j.common.util.SOAPHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Spliterators;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * This abstract class serves as base class for serializer classes that
@@ -191,10 +194,11 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
     private void processRequestNode(final SOAPBodyElement body, final ServiceResponse response,
                                     final SOAPMessage soapRequest, final SOAPEnvelope envelope) throws SOAPException {
         boolean requestFound = false;
-        NodeList list = soapRequest.getSOAPBody().getElementsByTagNameNS("*", response.getProducer().getServiceCode());
-        if (list.getLength() == 1) {
+        var list = childElementsByLocalName(soapRequest.getSOAPBody(), response.getProducer().getServiceCode());
+
+        if (list.size() == 1) {
             // Copy request from soapRequest
-            requestFound = copyRequestNode((Node) list.item(0), body, response);
+            requestFound = copyRequestNode(list.get(0), body, response);
         }
         // It was not possible to copy the request element, so we must create it
         if (!requestFound) {
@@ -206,18 +210,35 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
         }
     }
 
-    private boolean copyRequestNode(final Node node, final SOAPBodyElement body, final ServiceResponse response) {
-        for (int i = 0; i < node.getChildNodes().getLength(); i++) {
-            if (node.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE
-                    && "request".equals(node.getChildNodes().item(i).getLocalName())) {
-                Node requestNode = (Node) node.getChildNodes().item(i).cloneNode(true);
-                Node importNode = (Node) body.getOwnerDocument().importNode(requestNode, true);
-                body.appendChild(importNode);
-                if (response.isAddNamespaceToRequest()) {
-                    LOGGER.debug("Add provider namespace to request element.");
-                    SOAPHelper.addNamespace(importNode, response);
+    private List<SOAPElement> childElementsByLocalName(SOAPElement soapElement, String localName) {
+        var childElementsIterator = soapElement.getChildElements();
+        var stream = StreamSupport.stream(Spliterators.spliteratorUnknownSize(childElementsIterator, 0), false);
+        return stream
+                .filter(node -> node.getNodeType() == Node.ELEMENT_NODE)
+                .filter(node -> node.getLocalName().equals(localName))
+                .filter(node -> node instanceof SOAPElement)
+                .map(node -> (SOAPElement) node)
+                .collect(Collectors.toList());
+    }
+
+    private boolean copyRequestNode(final SOAPElement node, final SOAPBodyElement body, final ServiceResponse response) {
+        for (Iterator<Node> it = node.getChildElements(); it.hasNext(); ) {
+            var childNode = it.next();
+            if (childNode.getNodeType() == Node.ELEMENT_NODE
+                    && childNode instanceof SOAPElement
+                    && "request".equals(childNode.getLocalName())) {
+                try {
+                    var childElement = (SOAPElement) childNode;
+                    childElement = body.addChildElement(childElement);
+                    if (response.isAddNamespaceToRequest()) {
+                        LOGGER.debug("Add provider namespace to request element.");
+                        SOAPHelper.addNamespace(childElement, response);
+                    }
+                    return true;
+                } catch (SOAPException e) {
+                    LOGGER.error("Failed to copy request element.", e);
+                    throw new RuntimeException(e);
                 }
-                return true;
             }
         }
         return false;
@@ -225,23 +246,24 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
 
     private void processBodyContent(final SOAPElement soapResponse, final ServiceResponse response, final SOAPEnvelope envelope) throws SOAPException {
         // Check if there's a non-technical SOAP error
+        var sr = soapResponse;
         if (response.hasError()) {
             // Add namespace to the response element only, children excluded
             if (response.isAddNamespaceToResponse()) {
                 LOGGER.debug("Add provider namespace to response element.");
-                SOAPHelper.addNamespace(soapResponse, response);
+                sr = SOAPHelper.addNamespace(sr, response);
             }
             LOGGER.warn("Non-technical SOAP error detected.");
             LOGGER.debug("Generate error message.");
             ErrorMessage errorMessage = response.getErrorMessage();
             if (errorMessage.getFaultCode() != null) {
                 LOGGER.trace("Add \"faultcode\" element.");
-                SOAPElement elem = soapResponse.addChildElement(envelope.createName("faultcode"));
+                SOAPElement elem = sr.addChildElement(envelope.createName("faultcode"));
                 elem.addTextNode(errorMessage.getFaultCode());
             }
             if (errorMessage.getFaultString() != null) {
                 LOGGER.trace("Add \"faultstring\" element.");
-                SOAPElement elem = soapResponse.addChildElement(envelope.createName("faultstring"));
+                SOAPElement elem = sr.addChildElement(envelope.createName("faultstring"));
                 elem.addTextNode(errorMessage.getFaultString());
             }
             LOGGER.debug("Error message was generated succesfully.");
@@ -251,16 +273,16 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
             if (response.isAddNamespaceToResponse()) {
                 LOGGER.debug("Add provider namespace to response element.");
                 if (!response.isForceNamespaceToResponseChildren()) {
-                    SOAPHelper.addNamespace(soapResponse, response);
-                    this.serializeResponse(response, soapResponse, envelope);
+                    sr = SOAPHelper.addNamespace(sr, response);
+                    this.serializeResponse(response, sr, envelope);
                 } else {
                     LOGGER.debug("Add provider namespace to all the response element's child elements.");
-                    this.serializeResponse(response, soapResponse, envelope);
-                    SOAPHelper.addNamespace(soapResponse, response);
+                    this.serializeResponse(response, sr, envelope);
+                    SOAPHelper.addNamespace(sr, response);
                 }
             } else {
                 LOGGER.debug("Don't add provider namespace to response element.");
-                this.serializeResponse(response, soapResponse, envelope);
+                this.serializeResponse(response, sr, envelope);
             }
         }
     }
