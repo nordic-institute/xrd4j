@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
     api(libs.org.apache.httpcomponents.httpclient)
-    api(libs.org.apache.httpcomponents.httpcore)
     api(libs.org.json.json)
     api(libs.org.slf4j.slf4jApi)
 

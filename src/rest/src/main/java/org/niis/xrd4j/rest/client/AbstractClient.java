@@ -24,14 +24,13 @@ package org.niis.xrd4j.rest.client;
 
 import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.util.ClientUtil;
-
-import org.apache.http.Header;
-import org.apache.http.HttpHost;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +64,7 @@ public abstract class AbstractClient implements RESTClient {
      * @param port
      */
     public void setProxy(String hostName, int port) {
-        HttpHost proxy = new HttpHost(hostName, port, "http");
+        HttpHost proxy = new HttpHost("http", hostName, port);
         requestConfig = RequestConfig.custom()
                 .setProxy(proxy)
                 .build();
@@ -114,9 +113,9 @@ public abstract class AbstractClient implements RESTClient {
                 contentType = contentTypeHeader[0].getValue();
             }
             // Get Status Code
-            int statusCode = response.getStatusLine().getStatusCode();
+            int statusCode = response.getCode();
             // Get reason phrase
-            String reasonPhrase = response.getStatusLine().getReasonPhrase();
+            String reasonPhrase = response.getReasonPhrase();
 
             // Get response payload
             String responseStr = ClientUtil.getResponseString(response.getEntity());

@@ -22,9 +22,9 @@
  */
 package org.niis.xrd4j.rest.client;
 
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.config.RequestConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,8 @@ public class GetClient extends AbstractClient {
     @Override
     protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers, RequestConfig config) {
         LOGGER.debug("Build new HTTP GET request.");
-        // Create a new post request
-        return RequestBuilder.get().setConfig(config).setUri(url).build();
+        HttpGet request = new HttpGet(url);
+        request.setConfig(config);
+        return request;
     }
 }

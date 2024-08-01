@@ -22,13 +22,14 @@
  */
 package org.niis.xrd4j.rest.client;
 
-import org.apache.http.Consts;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * This abstract class offers method for adding HTTP request body to the HTTP
@@ -70,7 +71,7 @@ public abstract class AbstractBodyHandler extends AbstractClient {
                 }
             }
             // Create request entity that's used as request body
-            return new StringEntity(requestBody, ContentType.create(reqContentType, Consts.UTF_8));
+            return new StringEntity(requestBody, ContentType.create(reqContentType, UTF_8));
         }
         LOGGER.debug("No request body found for request. Null is returned");
         return null;

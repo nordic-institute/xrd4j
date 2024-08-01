@@ -22,10 +22,10 @@
  */
 package org.niis.xrd4j.rest.client;
 
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.entity.StringEntity;
+import org.apache.hc.client5.http.classic.methods.HttpDelete;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,17 +49,15 @@ public class DeleteClient extends AbstractBodyHandler {
     @Override
     protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers, RequestConfig config) {
         LOGGER.debug("Build new HTTP DELETE request.");
-        HttpUriRequest request;
+        HttpDelete request = new HttpDelete(url);
         // Create request entity that's used as request body
         StringEntity requestEntity = super.buildRequestEntity(requestBody, headers);
-        RequestBuilder builder = RequestBuilder.delete().setConfig(config);
+        request.setConfig(config);
         if (requestEntity != null) {
-            request = builder.setUri(url).setEntity(requestEntity).build();
+            request.setEntity(requestEntity);
         } else {
             LOGGER.debug("No request body found for HTTP DELETE request.");
-            request = builder.setUri(url).build();
         }
-        // Return request
         return request;
     }
 }

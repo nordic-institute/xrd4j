@@ -2,8 +2,7 @@
 
 [versions]
 jakarta-servlet-servlet-api = "6.1.0"
-org-apache-httpcomponents-httpclient = "4.5.14"
-org-apache-httpcomponents-httpcore = "4.4.16"
+org-apache-httpcomponents-httpclient = "5.3.1"
 org-json-json = "20220924"
 slf4j = "2.0.13"
 log4j = "2.23.1"
@@ -11,8 +10,7 @@ log4j = "2.23.1"
 [libraries]
 com-sun-xml-messaging-saaj-saajImpl = { module = "com.sun.xml.messaging.saaj:saaj-impl", version = "3.0.4" }
 jakarta-servlet-servletApi = { module = "jakarta.servlet:jakarta.servlet-api", version.ref = "jakarta-servlet-servlet-api" }
-org-apache-httpcomponents-httpclient = { module = "org.apache.httpcomponents:httpclient", version.ref = "org-apache-httpcomponents-httpclient" }
-org-apache-httpcomponents-httpcore = { module = "org.apache.httpcomponents:httpcore", version.ref = "org-apache-httpcomponents-httpcore" }
+org-apache-httpcomponents-httpclient = { module = "org.apache.httpcomponents.client5:httpclient5", version.ref = "org-apache-httpcomponents-httpclient" }
 org-json-json = { module = "org.json:json", version.ref = "org-json-json" }
 org-slf4j-slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 org-apache-logging-log4j-log4jCore = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
