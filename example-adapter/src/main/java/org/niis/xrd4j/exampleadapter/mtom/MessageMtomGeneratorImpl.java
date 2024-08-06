@@ -32,12 +32,12 @@ package org.niis.xrd4j.exampleadapter.mtom;
 import com.niis.test.test.messagegen.*;
 import org.apache.cxf.headers.Header;
 
-import javax.activation.DataHandler;
-import javax.annotation.Resource;
-import javax.jws.WebService;
-import javax.xml.ws.Holder;
-import javax.xml.ws.WebServiceContext;
-import javax.xml.ws.soap.MTOM;
+import jakarta.activation.DataHandler;
+import jakarta.annotation.Resource;
+import jakarta.jws.WebService;
+import jakarta.xml.ws.Holder;
+import jakarta.xml.ws.WebServiceContext;
+import jakarta.xml.ws.soap.MTOM;
 import java.util.List;
 
 @WebService(targetNamespace = "http://test.niis.com/test/messagegen", wsdlLocation = "mtomservice.wsdl")
