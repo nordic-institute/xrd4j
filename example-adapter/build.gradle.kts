@@ -1,21 +1,22 @@
 import io.mateo.cxf.codegen.wsdl2java.Wsdl2Java
 
 plugins {
-    `java-library`
+    java
     `maven-publish`
+    id("org.springframework.boot") version "3.3.2"
     id("io.mateo.cxf-codegen") version "2.4.0"
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
-//    maven {
-//        url = uri("https://artifactory.niis.org/xroad-maven-releases")
-//    }
-//
-//    maven {
-//        url = uri("https://artifactory.niis.org/xroad-maven-snapshots")
-//    }
+    maven {
+        url = uri("https://artifactory.niis.org/xroad-maven-releases")
+    }
+
+    maven {
+        url = uri("https://artifactory.niis.org/xroad-maven-snapshots")
+    }
 
 }
 
@@ -26,10 +27,9 @@ dependencies {
     implementation("org.niis.xrd4j:common:0.5.0-SNAPSHOT")
     implementation("org.niis.xrd4j:server:0.5.0-SNAPSHOT")
 
-    implementation("org.slf4j:slf4j-api:2.0.12")
-    implementation("org.slf4j:slf4j-reload4j:2.0.13")
-
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
+
+    runtimeOnly("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.26")
 
     cxfCodegen("org.apache.cxf:cxf-rt-transports-http:4.0.5")
 }
