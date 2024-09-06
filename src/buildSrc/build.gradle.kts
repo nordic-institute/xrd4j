@@ -9,4 +9,5 @@ repositories {
 
 dependencies {
     implementation(libs.licenseGradlePlugin)
+    implementation(libs.dependencyCheckGradlePlugin)
 }

@@ -20,10 +20,7 @@ org-apache-logging-log4j-log4jSlf4j2Impl = { module = "org.apache.logging.log4j:
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
 
 licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version = "0.16.1" }
+dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version = "10.0.4" }
 
 [bundles]
 testImplementation = [ "junit-jupiter", "org-slf4j-slf4jApi", "org-apache-logging-log4j-log4jSlf4j2Impl", "org-apache-logging-log4j-log4jCore" ]
-
-
-[plugins]
-dependencyCheck = { id = "org.owasp.dependencycheck", version = "9.2.0" }

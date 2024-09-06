@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.dependencyCheck)
+    id("org.owasp.dependencycheck")
 }
 
 
