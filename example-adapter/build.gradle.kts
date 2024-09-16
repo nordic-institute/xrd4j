@@ -37,7 +37,8 @@ dependencies {
 group = "org.niis"
 version = "0.0.6-SNAPSHOT"
 description = "Example Adapter for X-Road"
-java.sourceCompatibility = JavaVersion.VERSION_17
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 publishing {
     publications.create<MavenPublication>("maven") {

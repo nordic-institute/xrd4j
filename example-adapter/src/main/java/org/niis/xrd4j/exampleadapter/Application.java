@@ -46,15 +46,15 @@ public class Application extends SpringBootServletInitializer {
     }
 
     @Bean
-    public ServletRegistrationBean endpointBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new ExampleAdapter(), "/Endpoint");
+    public ServletRegistrationBean<ExampleAdapter> endpointBean() {
+        ServletRegistrationBean<ExampleAdapter> bean = new ServletRegistrationBean<>(new ExampleAdapter(), "/Endpoint");
         bean.setLoadOnStartup(1);
         return bean;
     }
 
     @Bean
-    public ServletRegistrationBean servletRegistrationBean() {
-        return new ServletRegistrationBean(new CXFServlet(), "/cxf/*");
+    public ServletRegistrationBean<CXFServlet> servletRegistrationBean() {
+        return new ServletRegistrationBean<>(new CXFServlet(), "/cxf/*");
     }
 
     @Bean

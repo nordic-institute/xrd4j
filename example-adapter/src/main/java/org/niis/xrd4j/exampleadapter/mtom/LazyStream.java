@@ -28,7 +28,7 @@ import java.util.Random;
 
 public class LazyStream extends InputStream {
     private volatile long size;
-    private Random rnd = new Random();
+    private final Random rnd = new Random();
 
     public LazyStream(long size) {
         this.size = size;
