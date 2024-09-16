@@ -5,6 +5,7 @@ plugins {
     `maven-publish`
     id("org.springframework.boot") version "3.3.2"
     id("io.mateo.cxf-codegen") version "2.4.0"
+    id("com.github.hierynomus.license") version "0.16.1"
 }
 
 repositories {
@@ -56,6 +57,13 @@ tasks.withType<Javadoc>() {
 
 cxfCodegen {
     cxfVersion = "4.0.5"
+}
+
+license {
+    header = rootProject.file("../LICENSE")
+    include("src/**/*.java")
+    mapping("java", "SLASHSTAR_STYLE")
+    strictCheck = true
 }
 
 tasks.register("wsdlSources", Wsdl2Java::class) {

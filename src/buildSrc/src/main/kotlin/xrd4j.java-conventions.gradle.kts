@@ -97,4 +97,5 @@ license {
     header = rootProject.file("../LICENSE")
     include("**/*.java")
     mapping("java", "SLASHSTAR_STYLE")
+    strictCheck = true
 }
