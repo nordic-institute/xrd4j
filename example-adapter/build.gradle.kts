@@ -45,6 +45,13 @@ publishing {
     publications.create<MavenPublication>("maven") {
         from(components["java"])
     }
+    repositories {
+        maven {
+            val releasesRepoUrl = uri("https://artifactory.niis.org/xroad-maven-releases/")
+            val snapshotsRepoUrl = uri("https://artifactory.niis.org/xroad-maven-snapshots/")
+            url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+        }
+    }
 }
 
 tasks.withType<JavaCompile>() {
@@ -53,6 +60,12 @@ tasks.withType<JavaCompile>() {
 
 tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
+}
+
+tasks.withType<Jar>() {
+    from(rootProject.files("../LICENSE", "3RD-PARTY-NOTICES.txt")) {
+        into("META-INF")
+    }
 }
 
 cxfCodegen {
