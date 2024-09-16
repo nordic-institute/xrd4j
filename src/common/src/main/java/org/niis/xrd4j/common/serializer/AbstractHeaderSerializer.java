@@ -28,13 +28,12 @@ import org.niis.xrd4j.common.message.ErrorMessageType;
 import org.niis.xrd4j.common.util.Constants;
 import org.niis.xrd4j.common.util.MessageHelper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This abstract class contains methods for adding valid X-Road version 6 SOAP

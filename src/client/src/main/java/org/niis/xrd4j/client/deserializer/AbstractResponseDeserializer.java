@@ -33,10 +33,6 @@ import org.niis.xrd4j.common.message.ServiceResponse;
 import org.niis.xrd4j.common.util.Constants;
 import org.niis.xrd4j.common.util.SOAPHelper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
-
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPEnvelope;
@@ -44,6 +40,9 @@ import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPHeader;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.soap.SOAPPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
 
 import java.util.Map;
 

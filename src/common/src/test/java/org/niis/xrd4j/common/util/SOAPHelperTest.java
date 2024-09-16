@@ -22,10 +22,9 @@
  */
 package org.niis.xrd4j.common.util;
 
+import jakarta.xml.soap.SOAPElement;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.NodeList;
-
-import jakarta.xml.soap.SOAPElement;
 
 import java.util.ArrayList;
 import java.util.List;

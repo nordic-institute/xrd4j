@@ -27,11 +27,10 @@ import org.niis.xrd4j.common.member.ObjectType;
 import org.niis.xrd4j.common.message.ServiceResponse;
 import org.niis.xrd4j.common.util.SOAPHelper;
 
-import org.junit.jupiter.api.Test;
-import org.w3c.dom.NodeList;
-
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.junit.jupiter.api.Test;
+import org.w3c.dom.NodeList;
 
 import java.util.Map;
 

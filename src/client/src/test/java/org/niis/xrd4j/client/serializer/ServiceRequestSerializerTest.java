@@ -29,12 +29,11 @@ import org.niis.xrd4j.common.member.SecurityServer;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.util.SOAPHelper;
 
-import org.junit.jupiter.api.Test;
-
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -595,7 +594,7 @@ class ServiceRequestSerializerTest {
         assertEquals(correctRequest, SOAPHelper.toString(msg));
     }
 
-    private class TestRequestSerializer extends AbstractServiceRequestSerializer {
+    private final class TestRequestSerializer extends AbstractServiceRequestSerializer {
 
         protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement data = soapRequest.addChildElement(envelope.createName("data"));
@@ -603,7 +602,7 @@ class ServiceRequestSerializerTest {
         }
     }
 
-    private class TestRequestSerializer1 extends AbstractServiceRequestSerializer {
+    private final class TestRequestSerializer1 extends AbstractServiceRequestSerializer {
 
         protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement data = soapRequest.addChildElement("data", request.getProducer().getNamespacePrefix());
@@ -611,7 +610,7 @@ class ServiceRequestSerializerTest {
         }
     }
 
-    private class TestRequestSerializer2 extends AbstractServiceRequestSerializer {
+    private final class TestRequestSerializer2 extends AbstractServiceRequestSerializer {
 
         protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement data = soapRequest.addChildElement("data", "ts", "http://www.test.com/ns");

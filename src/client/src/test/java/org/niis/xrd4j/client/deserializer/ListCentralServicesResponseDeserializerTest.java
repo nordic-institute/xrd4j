@@ -26,9 +26,8 @@ import org.niis.xrd4j.common.exception.XRd4JException;
 import org.niis.xrd4j.common.member.ObjectType;
 import org.niis.xrd4j.common.member.ProducerMember;
 
-import org.junit.jupiter.api.Test;
-
 import jakarta.xml.soap.SOAPException;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

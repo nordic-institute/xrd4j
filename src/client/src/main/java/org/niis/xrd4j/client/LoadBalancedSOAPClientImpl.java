@@ -29,11 +29,10 @@ import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.message.ServiceResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 

@@ -31,12 +31,11 @@ import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.message.ServiceResponse;
 import org.niis.xrd4j.common.util.SOAPHelper;
 
-import org.junit.jupiter.api.Test;
-
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.junit.jupiter.api.Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -1140,7 +1139,7 @@ class ServiceResponseSerializerTest {
         assertEquals(correctResponse, SOAPHelper.toString(msg));
     }
 
-    private class ServiceResponseSerializerImpl extends AbstractServiceResponseSerializer {
+    private final class ServiceResponseSerializerImpl extends AbstractServiceResponseSerializer {
 
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement data = soapResponse.addChildElement(envelope.createName("data"));
@@ -1148,7 +1147,7 @@ class ServiceResponseSerializerTest {
         }
     }
 
-    private class ServiceResponseSerializerImpl1 extends AbstractServiceResponseSerializer {
+    private final class ServiceResponseSerializerImpl1 extends AbstractServiceResponseSerializer {
 
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             for (String key : ((Map<String, String>) response.getResponseData()).keySet()) {
@@ -1158,7 +1157,7 @@ class ServiceResponseSerializerTest {
         }
     }
 
-    private class XMLServiceResponseSerializer extends AbstractServiceResponseSerializer {
+    private final class XMLServiceResponseSerializer extends AbstractServiceResponseSerializer {
 
         @Override
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
@@ -1170,7 +1169,7 @@ class ServiceResponseSerializerTest {
         }
     }
 
-    private class ServiceResponseSerializerImpl2 extends AbstractServiceResponseSerializer {
+    private final class ServiceResponseSerializerImpl2 extends AbstractServiceResponseSerializer {
 
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement data = soapResponse.addChildElement("data", "ns1");

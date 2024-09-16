@@ -24,13 +24,12 @@ package org.niis.xrd4j.client.deserializer;
 
 import org.niis.xrd4j.common.util.Constants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.NodeList;
-
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
 
 /**
  * This class is used for deserializing responses of getSecurityServerMetrics

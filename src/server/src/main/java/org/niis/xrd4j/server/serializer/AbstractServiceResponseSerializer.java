@@ -22,6 +22,14 @@
  */
 package org.niis.xrd4j.server.serializer;
 
+import org.niis.xrd4j.common.exception.XRd4JException;
+import org.niis.xrd4j.common.message.ErrorMessage;
+import org.niis.xrd4j.common.message.ErrorMessageType;
+import org.niis.xrd4j.common.message.ServiceRequest;
+import org.niis.xrd4j.common.message.ServiceResponse;
+import org.niis.xrd4j.common.serializer.AbstractHeaderSerializer;
+import org.niis.xrd4j.common.util.SOAPHelper;
+
 import jakarta.xml.soap.Name;
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPBody;
@@ -30,13 +38,6 @@ import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-import org.niis.xrd4j.common.exception.XRd4JException;
-import org.niis.xrd4j.common.message.ErrorMessage;
-import org.niis.xrd4j.common.message.ErrorMessageType;
-import org.niis.xrd4j.common.message.ServiceRequest;
-import org.niis.xrd4j.common.message.ServiceResponse;
-import org.niis.xrd4j.common.serializer.AbstractHeaderSerializer;
-import org.niis.xrd4j.common.util.SOAPHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -222,7 +223,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
     }
 
     private boolean copyRequestNode(final SOAPElement node, final SOAPBodyElement body, final ServiceResponse response) {
-        for (Iterator<Node> it = node.getChildElements(); it.hasNext(); ) {
+        for (Iterator<Node> it = node.getChildElements(); it.hasNext();) {
             var childNode = it.next();
             if (childNode.getNodeType() == Node.ELEMENT_NODE
                     && childNode instanceof SOAPElement

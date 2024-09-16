@@ -88,9 +88,7 @@ tasks.withType<Test>() {
 }
 
 checkstyle {
-    // TODO: update to latest version
-    toolVersion = "6.11.2"
-
+    toolVersion = "10.18.1"
 }
 
 license {

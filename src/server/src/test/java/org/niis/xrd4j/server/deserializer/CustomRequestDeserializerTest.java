@@ -27,11 +27,10 @@ import org.niis.xrd4j.common.member.ObjectType;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.util.SOAPHelper;
 
-import org.junit.jupiter.api.Test;
-
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
@@ -290,7 +289,7 @@ class CustomRequestDeserializerTest {
         assertEquals(true, request.getSoapMessage() != null);
     }
 
-    private class CustomRequestDeserializerImpl extends AbstractCustomRequestDeserializer<String> {
+    private final class CustomRequestDeserializerImpl extends AbstractCustomRequestDeserializer<String> {
 
         protected String deserializeRequest(Node requestNode, SOAPMessage message) throws SOAPException {
             for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {
@@ -303,7 +302,7 @@ class CustomRequestDeserializerTest {
         }
     }
 
-    private class CustomRequestDeserializerImpl1 extends AbstractCustomRequestDeserializer<Map> {
+    private final class CustomRequestDeserializerImpl1 extends AbstractCustomRequestDeserializer<Map> {
 
         protected Map deserializeRequest(Node requestNode, SOAPMessage message) throws SOAPException {
             if (requestNode == null) {

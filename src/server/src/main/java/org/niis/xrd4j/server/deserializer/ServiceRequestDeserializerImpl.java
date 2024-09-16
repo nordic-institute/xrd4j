@@ -30,14 +30,13 @@ import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.member.SecurityServer;
 import org.niis.xrd4j.common.message.ServiceRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPHeader;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.soap.SOAPPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class offers methods for deserializing SOAPMessages to ServiceRequest

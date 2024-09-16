@@ -22,17 +22,17 @@
  */
 package org.niis.xrd4j.exampleadapter;
 
+import org.niis.xrd4j.exampleadapter.mtom.MessageMtomGeneratorImpl;
+
+import jakarta.xml.ws.Endpoint;
 import org.apache.cxf.Bus;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.niis.xrd4j.exampleadapter.mtom.MessageMtomGeneratorImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import jakarta.xml.ws.Endpoint;
 
 /**
  * X-Road Example Adapter application entry point

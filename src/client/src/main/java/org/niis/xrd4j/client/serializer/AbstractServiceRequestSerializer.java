@@ -27,9 +27,6 @@ import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.serializer.AbstractHeaderSerializer;
 import org.niis.xrd4j.common.util.SOAPHelper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.Name;
 import jakarta.xml.soap.SOAPBody;
@@ -38,6 +35,8 @@ import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This abstract class serves as base class for serializer classes that

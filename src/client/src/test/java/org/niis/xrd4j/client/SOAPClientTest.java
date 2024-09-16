@@ -30,14 +30,13 @@ import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -199,7 +198,7 @@ class SOAPClientTest {
      // OK
      }
      }*/
-    private class TestRequestSerializer extends AbstractServiceRequestSerializer {
+    private final class TestRequestSerializer extends AbstractServiceRequestSerializer {
 
         protected void serializeRequest(ServiceRequest serviceRequest, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement data = soapRequest.addChildElement(envelope.createName("data"));
@@ -207,7 +206,7 @@ class SOAPClientTest {
         }
     }
 
-    private class TestResponseDeserializer extends AbstractResponseDeserializer<String, String> {
+    private final class TestResponseDeserializer extends AbstractResponseDeserializer<String, String> {
 
         protected String deserializeRequestData(Node requestNode) throws SOAPException {
             for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {

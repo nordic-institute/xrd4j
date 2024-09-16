@@ -35,9 +35,6 @@ import org.niis.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import org.niis.xrd4j.server.serializer.ServiceResponseSerializer;
 import org.niis.xrd4j.server.utils.AdapterUtils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,6 +44,8 @@ import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -344,7 +343,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
      * class. It's needed only for generating SOAP Fault messages.
      * SerializeResponse method gets never called.
      */
-    private class DummyServiceResponseSerializer extends AbstractServiceResponseSerializer {
+    private final class DummyServiceResponseSerializer extends AbstractServiceResponseSerializer {
 
         @Override
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {

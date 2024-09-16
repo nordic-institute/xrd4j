@@ -40,13 +40,12 @@ import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.client.RESTClient;
 import org.niis.xrd4j.rest.client.RESTClientFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.xml.soap.SOAPConnection;
 import jakarta.xml.soap.SOAPConnectionFactory;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;

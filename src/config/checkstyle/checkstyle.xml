@@ -27,18 +27,23 @@
         <property name="message" value="Line has trailing spaces."/>
     </module>
 
+    <module name="LineLength">
+        <property name="max" value="160"/>
+    </module>
+
     <module name="TreeWalker">
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
 
         <module name="JavadocMethod">
-            <property name="scope" value="public"/>
+            <property name="accessModifiers" value="public"/>
             <property name="allowMissingParamTags" value="true"/>
-            <property name="allowMissingThrowsTags" value="true"/>
             <property name="allowMissingReturnTag" value="true"/>
-            <property name="minLineCount" value="2"/>
             <property name="allowedAnnotations" value="Bean, Override, Test"/>
-            <property name="allowThrowsTagsForSubclasses" value="true"/>
+        </module>
+
+        <module name="MissingJavadocMethod">
+            <property name="minLineCount" value="2"/>
         </module>
 
         <module name="JavadocType">
@@ -68,9 +73,7 @@
         <module name="UnusedImports"/>
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength">
-            <property name="max" value="160"/>
-        </module>
+
         <module name="MethodLength"/>
         <module name="ParameterNumber">
             <property name="max" value="12"/>
@@ -134,6 +137,7 @@
             <property name="separated" value="true"/>
             <property name="option" value="bottom"/>
         </module>
+
         <module name="Indentation">
             <property name="severity" value="info"/>
             <property name="basicOffset" value="4"/>

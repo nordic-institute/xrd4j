@@ -24,13 +24,14 @@ package org.niis.xrd4j.rest.client;
 
 import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.util.ClientUtil;
+
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HttpHost;
-import org.apache.hc.client5.http.config.RequestConfig;
-import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

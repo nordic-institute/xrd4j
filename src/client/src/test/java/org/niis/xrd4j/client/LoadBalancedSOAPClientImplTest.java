@@ -22,9 +22,8 @@
  */
 package org.niis.xrd4j.client;
 
-import org.junit.jupiter.api.Test;
-
 import jakarta.xml.soap.SOAPException;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -29,10 +29,9 @@ import org.niis.xrd4j.common.message.ErrorMessageType;
 import org.niis.xrd4j.common.message.ServiceResponse;
 import org.niis.xrd4j.common.util.SOAPHelper;
 
-import org.junit.jupiter.api.Test;
-
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
