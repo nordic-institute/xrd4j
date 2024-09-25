@@ -129,11 +129,12 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         }
 
         // Get incoming SOAP message
-        if (request.getContentType().toLowerCase().startsWith(Constants.TEXT_XML)) {
+        var requestContentType = request.getContentType();
+        if (contentTypeMatches(requestContentType, Constants.TEXT_XML)) {
             // Regular SOAP message without attachments
             LOGGER.info("Request's content type is \"{}\".", Constants.TEXT_XML);
             soapRequest = SOAPHelper.toSOAP(request.getInputStream());
-        } else if (request.getContentType().toLowerCase().startsWith(Constants.MULTIPART_RELATED)) {
+        } else if (contentTypeMatches(requestContentType, Constants.MULTIPART_RELATED)) {
             // SOAP message with attachments
             LOGGER.info("Request's content type is \"{}\".", Constants.MULTIPART_RELATED);
             MimeHeaders mh = AdapterUtils.getHeaders(request);
@@ -141,8 +142,8 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
             LOGGER.trace(AdapterUtils.getAttachmentsInfo(soapRequest));
         } else {
             // Invalid content type -> message is not processed
-            LOGGER.warn("Invalid content type : \"{}\".", request.getContentType());
-            errString = "Invalid content type : \"" + request.getContentType() + "\".";
+            LOGGER.warn("Invalid content type : \"{}\".", requestContentType);
+            errString = "Invalid content type : \"" + requestContentType + "\".";
         }
 
         // Conversion has failed if soapRequest is null. Return SOAP Fault.
@@ -171,6 +172,10 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         }
         // Write the SOAP response to output stream
         writeResponse(soapResponse, response);
+    }
+
+    private boolean contentTypeMatches(String contentType, String expected) {
+        return contentType != null && contentType.toLowerCase().startsWith(expected);
     }
 
     /**
@@ -343,11 +348,11 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
      * class. It's needed only for generating SOAP Fault messages.
      * SerializeResponse method gets never called.
      */
-    private final class DummyServiceResponseSerializer extends AbstractServiceResponseSerializer {
+    private static final class DummyServiceResponseSerializer extends AbstractServiceResponseSerializer {
 
         @Override
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
-            /**
+            /*
              * This is needed only for generating SOAP Fault messages.
              * SerializeResponse method gets never called.
              */
