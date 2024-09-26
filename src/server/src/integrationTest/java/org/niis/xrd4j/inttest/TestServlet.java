@@ -1,7 +1,6 @@
 package org.niis.xrd4j.inttest;
 
 import org.niis.xrd4j.common.exception.XRd4JException;
-import org.niis.xrd4j.common.message.ErrorMessage;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.message.ServiceResponse;
 import org.niis.xrd4j.server.AbstractAdapterServlet;
@@ -13,6 +12,7 @@ import org.niis.xrd4j.server.serializer.ServiceResponseSerializer;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.xml.soap.AttachmentPart;
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
@@ -21,6 +21,12 @@ import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Test servlet implementation copied and modified from example-adapter.
@@ -58,22 +64,72 @@ class TestServlet extends AbstractAdapterServlet {
             // Set namespace of the SOAP response
             response.getProducer().setNamespaceUrl(this.namespaceSerialize);
             response.getProducer().setNamespacePrefix(this.prefix);
-            logger.debug("Do message prosessing...");
-            if (request.getRequestData() != null) {
-                // If request data is not null, add response data to the
-                // response object
-                response.setResponseData("Hello " + request.getRequestData() + "!");
-            } else {
-                // No request data is found - an error message is returned
-                logger.warn("No \"name\" parameter found. Return a non-techinal error message.");
-                ErrorMessage error = new ErrorMessage("422", "422 Unprocessable Entity. Missing \"name\" element.");
-                response.setErrorMessage(error);
-            }
-            logger.debug("Message prosessing done!");
+            response.setResponseData("Hello " + request.getRequestData() + "!");
             // Serialize the response to SOAP
             serializer.serialize(response, request);
             // Return the response - AbstractAdapterServlet takes care of
             // the rest
+            return response;
+        } else if ("getAttachments".equals(request.getProducer().getServiceCode())) {
+            logger.info("Process \"getAttachments\" service.");
+            // Create a new response serializer that serializes the response
+            // to SOAP
+            serializer = new AttachmentsResponseSerializer();
+            // Create a custom request deserializer that parses the request
+            // data from the SOAP request
+            CustomRequestDeserializer customDeserializer = new GetAttachmentsRequestDeserializer();
+            // Parse the request data from the request
+            customDeserializer.deserialize(request, this.namespaceDeserialize);
+            // Create a new ServiceResponse object
+            ServiceResponse<String, Map<String,Integer>> response = createResponse(request);
+            // Set namespace of the SOAP response
+            response.getProducer().setNamespaceUrl(this.namespaceSerialize);
+            response.getProducer().setNamespacePrefix(this.prefix);
+            logger.debug("Do message prosessing...");
+
+            Map<String, Integer> attachments =  new LinkedHashMap<>();
+            List<Integer> requestedSizes = (List<Integer>) request.getRequestData();
+            for (int i = 0; i < requestedSizes.size(); i++) {
+                attachments.put(String.format("attachment_%d", i), requestedSizes.get(i));
+            }
+            response.setResponseData(attachments);
+
+            logger.debug("Message prosessing done!");
+            // Serialize the response to SOAP
+            serializer.serialize(response, request);
+            // add the attachment parts
+            for (Map.Entry<String, Integer> file: attachments.entrySet()) {
+                AttachmentPart attachmentPart = response.getSoapMessage().createAttachmentPart(generateCharacters(file.getValue()),
+                        "application/octet-stream");
+                attachmentPart.setContentId(file.getKey());
+                response.getSoapMessage().addAttachmentPart(attachmentPart);
+            }
+            return response;
+        } else if ("storeAttachments".equals(request.getProducer().getServiceCode())) {
+            logger.info("Process \"storeAttachments\" service.");
+            // Create a new response serializer that serializes the response
+            // to SOAP
+            serializer = new AttachmentsResponseSerializer();
+            // Create a new ServiceResponse object
+            ServiceResponse<String, Map<String, Integer>> response = createResponse(request);
+            // Set namespace of the SOAP response
+            response.getProducer().setNamespaceUrl(this.namespaceSerialize);
+            response.getProducer().setNamespacePrefix(this.prefix);
+            logger.debug("Do message prosessing...");
+
+            Map<String, Integer> attachments = new LinkedHashMap<>();
+            Iterator it = request.getSoapMessage().getAttachments();
+            if (it != null) {
+                while (it.hasNext()) {
+                    AttachmentPart attachment = (AttachmentPart) it.next();
+                    attachments.put(attachment.getContentId(), attachment.getSize());
+                }
+            }
+            response.setResponseData(attachments);
+
+            logger.debug("Message prosessing done!");
+            // Serialize the response to SOAP
+            serializer.serialize(response, request);
             return response;
         }
 
@@ -88,6 +144,17 @@ class TestServlet extends AbstractAdapterServlet {
 
     private <T1, T2> ServiceResponse<T1, T2> createResponse(ServiceRequest<?> request) throws XRd4JException {
         return new ServiceResponse<>(request.getConsumer(), request.getProducer(), request.getId());
+    }
+
+    private String generateCharacters(Integer size) {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            // Generate a random ASCII code of character between 'a' and 'z'
+            char randomChar = (char) ('a' + random.nextInt('z' - 'a' + 1));
+            sb.append(randomChar);
+        }
+        return sb.toString();
     }
 
     /**
@@ -144,6 +211,42 @@ class TestServlet extends AbstractAdapterServlet {
             }
             logger.warn("No \"name\" element found. Null is returned.");
             return null;
+        }
+    }
+
+    private static class AttachmentsResponseSerializer extends AbstractServiceResponseSerializer {
+
+        @Override
+        protected void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
+            Map<String, Integer> attachments = (Map<String, Integer>) response.getResponseData();
+            for (Map.Entry<String, Integer> file : attachments.entrySet()) {
+                SOAPElement fileElement = soapResponse.addChildElement(envelope.createName("attachment"));
+
+                SOAPElement name = fileElement.addChildElement(envelope.createName("name"));
+                name.addTextNode(file.getKey());
+
+                SOAPElement size = fileElement.addChildElement(envelope.createName("size"));
+                size.addTextNode(Long.toString(file.getValue()));
+            }
+        }
+    }
+
+    private static class GetAttachmentsRequestDeserializer extends AbstractCustomRequestDeserializer<List<Integer>> {
+
+        @Override
+        protected List<Integer> deserializeRequest(Node requestNode, SOAPMessage message) throws SOAPException {
+            if (requestNode == null) {
+                logger.warn("\"requestNode\" is null. Null is returned.");
+                return null;
+            }
+            List<Integer> sizes = new ArrayList<>();
+            for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {
+                org.w3c.dom.Node node = requestNode.getChildNodes().item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE && "size".equals(node.getLocalName())) {
+                    sizes.add(Integer.parseInt(node.getTextContent()));
+                }
+            }
+            return sizes;
         }
     }
 }

@@ -34,12 +34,19 @@ testing {
                 implementation("org.assertj:assertj-core:3.26.3")
                 implementation("org.xmlunit:xmlunit-assertj3:2.10.0")
                 implementation("org.xmlunit:xmlunit-placeholders:2.10.0")
+                implementation(libs.org.apache.james.mime4jCore)
             }
 
             targets {
                 all {
                     testTask.configure {
                         shouldRunAfter(test)
+                        jvmArgs(
+                            "--add-opens=java.base/java.lang=ALL-UNNAMED",
+                            "--add-opens=java.base/java.io=ALL-UNNAMED",
+                            "--add-opens=java.rmi/sun.rmi.transport=ALL-UNNAMED"
+                        )
+
                     }
                 }
             }

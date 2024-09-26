@@ -3,10 +3,18 @@ package org.niis.xrd4j.inttest;
 import org.apache.catalina.Context;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.james.mime4j.MimeException;
+import org.apache.james.mime4j.parser.AbstractContentHandler;
+import org.apache.james.mime4j.parser.ContentHandler;
+import org.apache.james.mime4j.parser.MimeStreamParser;
+import org.apache.james.mime4j.stream.BodyDescriptor;
+import org.apache.james.mime4j.stream.MimeConfig;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.platform.commons.util.StringUtils;
+import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xmlunit.assertj3.XmlAssert;
@@ -14,17 +22,22 @@ import org.xmlunit.placeholder.PlaceholderDifferenceEvaluator;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.catalina.startup.Tomcat.addServlet;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ServletTest {
     private static final Logger logger = LoggerFactory.getLogger(ServletTest.class);
+    public static final String TEST_DATA_DIR = "src/integrationTest/resources/test-data/";
 
     @TempDir
     private static Path tomcatBaseDir;
@@ -54,70 +67,6 @@ public class ServletTest {
 
 
     @Test
-    void successfulRequest() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .header("Content-Type", "text/xml")
-                .uri(getServerUri())
-                .POST(HttpRequest.BodyPublishers.ofFile(Path.of("src/integrationTest/resources/test-data/hello-request.xml")))
-                .build();
-
-        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        assertThat(response.statusCode()).isEqualTo(200);
-        XmlAssert.assertThat(response.body())
-                .and(Path.of("src/integrationTest/resources/test-data/hello-response.xml"))
-                .ignoreWhitespace()
-                .areIdentical();
-
-    }
-
-    @Test
-    void invalidContentType() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .header("Content-Type", "invalid")
-                .uri(getServerUri())
-                .POST(HttpRequest.BodyPublishers.ofFile(Path.of("src/integrationTest/resources/test-data/hello-request.xml")))
-                .build();
-
-        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        assertThat(response.statusCode()).isEqualTo(200);
-
-        assertSoapFaultClientError(response, "Invalid content type : \"invalid\".");
-
-    }
-
-    @Test
-    void noContentType() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                // no content type in request
-                .uri(getServerUri())
-                .POST(HttpRequest.BodyPublishers.ofFile(Path.of("src/integrationTest/resources/test-data/hello-request.xml")))
-                .build();
-
-        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        assertThat(response.statusCode()).isEqualTo(200);
-        assertSoapFaultClientError(response, "Invalid content type : \"null\".");
-
-    }
-
-    private void assertSoapFaultClientError(HttpResponse<String> response, String expected) {
-        XmlAssert.assertThat(response.body())
-                .and(Path.of("src/integrationTest/resources/test-data/fault-client-error.xml"))
-                .ignoreWhitespace()
-                .withDifferenceEvaluator(new PlaceholderDifferenceEvaluator())
-                .areIdentical();
-
-        XmlAssert.assertThat(response.body())
-                .valueByXPath("//faultstring")
-                .isEqualTo(expected);
-    }
-
-    @Test
     void getWSDL() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -128,15 +77,171 @@ public class ServletTest {
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         assertThat(response.statusCode()).isEqualTo(200);
-        XmlAssert.assertThat(response.body())
-                .and(Path.of("src/integrationTest/resources/test-servlet.wsdl"))
+    }
+
+    @Test
+    void successfulRequest() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .header("Content-Type", "text/xml")
+                .uri(getServerUri())
+                .POST(HttpRequest.BodyPublishers.ofFile(testData("hello-request.xml")))
+                .build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertResponseSuccess(response, "hello-response.xml");
+
+    }
+
+    @Test
+    void multipartRequest() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .headers("Content-Type", "multipart/related; start=\"<rootpart>\"; boundary=MIME_boundary")
+                .uri(getServerUri())
+                .POST(HttpRequest.BodyPublishers.ofFile(testData("store-attachments-request.txt")))
+                .build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertResponseSuccess(response, "store-attachments-response.xml");
+
+    }
+
+    @Test
+    void multipartResponse() throws IOException, InterruptedException, MimeException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .header("Content-Type", "text/xml")
+                .uri(getServerUri())
+                .POST(HttpRequest.BodyPublishers.ofFile(testData("get-attachments-request.xml")))
+                .build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
+
+        assertThat(response.statusCode()).isEqualTo(200);
+        var parts = parseMultipart(response);
+        assertThat(parts).satisfiesExactly(
+                part -> assertXmlIdentical(part, "get-attachments-response.xml"),
+                part -> assertThat(part).hasSize(100),
+                part -> assertThat(part).hasSize(50)
+        );
+
+
+    }
+
+    private List<String> parseMultipart(HttpResponse<InputStream> response) throws MimeException, IOException {
+        var contentType = response.headers().firstValue("Content-Type")
+                .orElseThrow(() -> new AssertionFailedError("No Content-Type header"));
+        List<String> parts = new ArrayList<>();
+        MimeStreamParser mimeStreamParser = new MimeStreamParser(MimeConfig.custom().setHeadlessParsing(contentType).build());
+        ContentHandler contentHandler = new AbstractContentHandler() {
+            @Override
+            public void body(BodyDescriptor bd, InputStream is) throws MimeException, IOException {
+                parts.add(new String(is.readAllBytes(), UTF_8));
+            }
+        };
+        mimeStreamParser.setContentHandler(contentHandler);
+        mimeStreamParser.parse(response.body());
+        return parts;
+    }
+
+
+    @Test
+    void invalidServiceCode() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .header("Content-Type", "text/xml")
+                .uri(getServerUri())
+                .POST(HttpRequest.BodyPublishers.ofFile(testData("invalid-service-code-request.xml")))
+                .build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertThat(response.statusCode()).isEqualTo(200);
+
+        assertSoapFaultClientError(response, "Unknown service code.");
+    }
+
+    @Test
+    void invalidRequestBody() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .header("Content-Type", "text/xml")
+                .uri(getServerUri())
+                .POST(HttpRequest.BodyPublishers.ofString("<invalid>xml</invalid>"))
+                .build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertThat(response.statusCode()).isEqualTo(200);
+
+        assertSoapFaultClientError(response, "Invalid X-Road SOAP message. Unable to parse the request.");
+    }
+
+    @Test
+    void invalidContentType() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .header("Content-Type", "invalid")
+                .uri(getServerUri())
+                .POST(HttpRequest.BodyPublishers.ofFile(testData("hello-request.xml")))
+                .build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertThat(response.statusCode()).isEqualTo(200);
+
+        assertSoapFaultClientError(response, "Invalid content type : \"invalid\".");
+    }
+
+    @Test
+    void noContentType() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                // no content type in request
+                .uri(getServerUri())
+                .POST(HttpRequest.BodyPublishers.ofFile(testData("hello-request.xml")))
+                .build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertSoapFaultClientError(response, "Invalid content type : \"null\".");
+    }
+
+    private void assertResponseSuccess(HttpResponse<String> response, String expectedContentFilename) {
+        assertThat(response.statusCode()).isEqualTo(200);
+        assertXmlIdentical(response.body(), expectedContentFilename);
+    }
+
+    private void assertXmlIdentical(String actualXml, String expectedContentFilename) {
+        XmlAssert.assertThat(actualXml)
+                .and(testData(expectedContentFilename))
                 .ignoreWhitespace()
                 .areIdentical();
+    }
 
+    private void assertSoapFaultClientError(HttpResponse<String> response, String expected) {
+        XmlAssert.assertThat(response.body())
+                .and(testData("fault-client-error.xml"))
+                .withNodeFilter(node -> StringUtils.isNotBlank(node.getTextContent()))
+                .ignoreWhitespace()
+                .withDifferenceEvaluator(new PlaceholderDifferenceEvaluator())
+                .areIdentical();
+
+        XmlAssert.assertThat(response.body())
+                .valueByXPath("//faultstring")
+                .isEqualTo(expected);
     }
 
     private URI getServerUri() {
         return URI.create("http://localhost:" + serverPort + "/");
+    }
+
+    private Path testData(String filename) {
+        return Path.of(TEST_DATA_DIR + filename);
     }
 
 

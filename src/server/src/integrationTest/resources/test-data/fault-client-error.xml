@@ -4,8 +4,6 @@
         <SOAP-ENV:Fault>
             <faultcode>SOAP-ENV:Client</faultcode>
             <faultstring>${xmlunit.ignore}</faultstring>
-            <faultactor/>
-            <detail/>
         </SOAP-ENV:Fault>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>

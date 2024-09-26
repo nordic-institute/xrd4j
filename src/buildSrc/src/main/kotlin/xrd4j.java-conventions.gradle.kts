@@ -97,3 +97,11 @@ license {
     mapping("java", "SLASHSTAR_STYLE")
     strictCheck = true
 }
+
+
+tasks.withType(JacocoReport::class) {
+    executionData(tasks.withType<Test>())
+    reports {
+        xml.required.set(true)
+    }
+}
