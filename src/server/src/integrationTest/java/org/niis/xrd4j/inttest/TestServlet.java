@@ -1,3 +1,25 @@
+/*
+ * The MIT License
+ * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package org.niis.xrd4j.inttest;
 
 import org.niis.xrd4j.common.exception.XRd4JException;
@@ -33,7 +55,7 @@ import java.util.Random;
  */
 class TestServlet extends AbstractAdapterServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(TestServlet.class);
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TestServlet.class);
     private final String namespaceSerialize = "http://test.x-road.global/consumer";
     private final String namespaceDeserialize = "http://test.x-road.global/producer";
     private final String prefix = "xrdtest";
@@ -41,7 +63,7 @@ class TestServlet extends AbstractAdapterServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        logger.debug("GET request received.");
+        LOGGER.debug("GET request received.");
         super.doGet(request, response);
     }
 
@@ -50,7 +72,7 @@ class TestServlet extends AbstractAdapterServlet {
         ServiceResponseSerializer serializer;
         if ("helloService".equals(request.getProducer().getServiceCode())) {
             // Process "helloService" service
-            logger.info("Process \"helloService\" service.");
+            LOGGER.info("Process \"helloService\" service.");
             // Create a new response serializer that serializes the response
             // to SOAP
             serializer = new HelloServiceResponseSerializer();
@@ -71,7 +93,7 @@ class TestServlet extends AbstractAdapterServlet {
             // the rest
             return response;
         } else if ("getAttachments".equals(request.getProducer().getServiceCode())) {
-            logger.info("Process \"getAttachments\" service.");
+            LOGGER.info("Process \"getAttachments\" service.");
             // Create a new response serializer that serializes the response
             // to SOAP
             serializer = new AttachmentsResponseSerializer();
@@ -81,11 +103,11 @@ class TestServlet extends AbstractAdapterServlet {
             // Parse the request data from the request
             customDeserializer.deserialize(request, this.namespaceDeserialize);
             // Create a new ServiceResponse object
-            ServiceResponse<String, Map<String,Integer>> response = createResponse(request);
+            ServiceResponse<String, Map<String, Integer>> response = createResponse(request);
             // Set namespace of the SOAP response
             response.getProducer().setNamespaceUrl(this.namespaceSerialize);
             response.getProducer().setNamespacePrefix(this.prefix);
-            logger.debug("Do message prosessing...");
+            LOGGER.debug("Do message prosessing...");
 
             Map<String, Integer> attachments =  new LinkedHashMap<>();
             List<Integer> requestedSizes = (List<Integer>) request.getRequestData();
@@ -94,7 +116,7 @@ class TestServlet extends AbstractAdapterServlet {
             }
             response.setResponseData(attachments);
 
-            logger.debug("Message prosessing done!");
+            LOGGER.debug("Message prosessing done!");
             // Serialize the response to SOAP
             serializer.serialize(response, request);
             // add the attachment parts
@@ -106,7 +128,7 @@ class TestServlet extends AbstractAdapterServlet {
             }
             return response;
         } else if ("storeAttachments".equals(request.getProducer().getServiceCode())) {
-            logger.info("Process \"storeAttachments\" service.");
+            LOGGER.info("Process \"storeAttachments\" service.");
             // Create a new response serializer that serializes the response
             // to SOAP
             serializer = new AttachmentsResponseSerializer();
@@ -115,7 +137,7 @@ class TestServlet extends AbstractAdapterServlet {
             // Set namespace of the SOAP response
             response.getProducer().setNamespaceUrl(this.namespaceSerialize);
             response.getProducer().setNamespacePrefix(this.prefix);
-            logger.debug("Do message prosessing...");
+            LOGGER.debug("Do message prosessing...");
 
             Map<String, Integer> attachments = new LinkedHashMap<>();
             Iterator it = request.getSoapMessage().getAttachments();
@@ -127,7 +149,7 @@ class TestServlet extends AbstractAdapterServlet {
             }
             response.setResponseData(attachments);
 
-            logger.debug("Message prosessing done!");
+            LOGGER.debug("Message prosessing done!");
             // Serialize the response to SOAP
             serializer.serialize(response, request);
             return response;
@@ -161,7 +183,7 @@ class TestServlet extends AbstractAdapterServlet {
      * This class is responsible for serializing response data of helloService
      * service responses.
      */
-    private static class HelloServiceResponseSerializer extends AbstractServiceResponseSerializer {
+    private static final class HelloServiceResponseSerializer extends AbstractServiceResponseSerializer {
 
         /**
          * Serializes the response data.
@@ -186,7 +208,7 @@ class TestServlet extends AbstractAdapterServlet {
      * service requests. The type declaration "<String>" defines the type of the
      * request data, which in this case is String.
      */
-    private static class CustomRequestDeserializerImpl extends AbstractCustomRequestDeserializer<String> {
+    private static final class CustomRequestDeserializerImpl extends AbstractCustomRequestDeserializer<String> {
 
         /**
          * Deserializes the "request" element.
@@ -197,24 +219,24 @@ class TestServlet extends AbstractAdapterServlet {
         @Override
         protected String deserializeRequest(Node requestNode, SOAPMessage message) {
             if (requestNode == null) {
-                logger.warn("\"requestNode\" is null. Null is returned.");
+                LOGGER.warn("\"requestNode\" is null. Null is returned.");
                 return null;
             }
             for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {
                 // Request data is inside of "name" element
                 if (requestNode.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE
                         && "name".equals(requestNode.getChildNodes().item(i).getLocalName())) {
-                    logger.debug("Found \"name\" element.");
+                    LOGGER.debug("Found \"name\" element.");
                     // "name" element was found - return the text content
                     return requestNode.getChildNodes().item(i).getTextContent();
                 }
             }
-            logger.warn("No \"name\" element found. Null is returned.");
+            LOGGER.warn("No \"name\" element found. Null is returned.");
             return null;
         }
     }
 
-    private static class AttachmentsResponseSerializer extends AbstractServiceResponseSerializer {
+    private static final class AttachmentsResponseSerializer extends AbstractServiceResponseSerializer {
 
         @Override
         protected void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
@@ -231,12 +253,12 @@ class TestServlet extends AbstractAdapterServlet {
         }
     }
 
-    private static class GetAttachmentsRequestDeserializer extends AbstractCustomRequestDeserializer<List<Integer>> {
+    private static final class GetAttachmentsRequestDeserializer extends AbstractCustomRequestDeserializer<List<Integer>> {
 
         @Override
         protected List<Integer> deserializeRequest(Node requestNode, SOAPMessage message) throws SOAPException {
             if (requestNode == null) {
-                logger.warn("\"requestNode\" is null. Null is returned.");
+                LOGGER.warn("\"requestNode\" is null. Null is returned.");
                 return null;
             }
             List<Integer> sizes = new ArrayList<>();
