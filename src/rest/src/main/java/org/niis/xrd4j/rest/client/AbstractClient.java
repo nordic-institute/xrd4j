@@ -61,8 +61,8 @@ public abstract class AbstractClient implements RESTClient {
 
     /**
      * Configures requestConfig so that a http proxy is used for requests
-     * @param hostName
-     * @param port
+     * @param hostName proxy hostname
+     * @param port proxy port
      */
     public void setProxy(String hostName, int port) {
         HttpHost proxy = new HttpHost("http", hostName, port);
