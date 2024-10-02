@@ -1,7 +1,9 @@
 import io.mateo.cxf.codegen.wsdl2java.Wsdl2Java
+import org.springframework.boot.gradle.tasks.bundling.BootWar
 
 plugins {
     java
+    war
     `maven-publish`
     id("org.springframework.boot") version "3.3.2"
     id("io.mateo.cxf-codegen") version "2.4.0"
@@ -30,7 +32,8 @@ dependencies {
 
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
 
-    runtimeOnly("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.26")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:3.3.2")
+    providedRuntime("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.26")
 
     cxfCodegen("org.apache.cxf:cxf-rt-transports-http:4.0.5")
 }
@@ -66,6 +69,14 @@ tasks.withType<Jar>() {
     from(rootProject.files("../LICENSE", "3RD-PARTY-NOTICES.txt")) {
         into("META-INF")
     }
+}
+
+tasks.named<War>("war") {
+    archiveClassifier = ""
+}
+
+tasks.named<BootWar>("bootWar") {
+    archiveClassifier = "boot"
 }
 
 cxfCodegen {
