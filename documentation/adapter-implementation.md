@@ -27,7 +27,7 @@ to and processing responses from X-Road;
 from and producing responses for X-Road. 
 
 The X-Road-capability of applications within the context of this document refers to the capability of producing and
-consuming requests and responses compatible with the [X-Road v6 Message Protocol Version 4.0](https://github.com/ria-ee/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md)
+consuming requests and responses compatible with the [X-Road: Message Protocol v4.0](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md)
 utilizing the XRd4J-library.
 
 The examples and code in this document present a simple and minimal implementation that is meant to overview
@@ -255,15 +255,15 @@ Server application must implement three classes:
 A working example of an application implementing a test service with a server adapter utilizing XRd4J can be found under directory `example-adapter` ([documentation](../example-adapter/README.md)). It implements the adapter server with four classes:
   
 * `servlet`:
-  * [ExampleAdapter](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L53-L152)
-    * Implements the servlet requirement of the server adapter. It provides handling for `helloService` and `getRandom` requests as well as the `getWsdlPath` method.
+  * [ExampleAdapter](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L55-L280)
+    * Implements the servlet requirement of the server adapter. It provides handling for example requests as well as the `getWsdlPath` method.
 * `request deserializer`: 
-  * [CustomRequestDeserializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L207-L233)
+  * [CustomRequestDeserializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L350-L376)
     * Implements the required request deserializer that searches for the expected `name` element containing request data necessary for the creation of the `helloService` response. `getRandom` response can be constructed without parsing further data from the request.
 * `response serializer`:
-  * [ServiceResponseSerializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L158-L176)
+  * [ServiceResponseSerializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L301-L319)
     * Implements the required response serialization for the `getRandom` response. It creates a `data` element for the response value in the response message. 
-  * [HelloServiceResponseSerializer](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L182-L200) 
+  * [HelloServiceResponseSerializer](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L325-L343) 
     * Another implementation for response serialization that is used for creating the `message` element for the `helloService` response data.
  
 With these class implementations the example adapter creates a server adapter that has two extremely simple built-in services responding to two types of service requests.

@@ -50,6 +50,10 @@ Setting up an environment for example-related development is explained [here](Se
 
 ## Building
 
+> **Note:** To use locally built XRd4J library in Example Adapter, the XRd4J library has to be built and published to
+> the local Maven repository. See
+> the [XRd4J documentation](../documentation/Setting-up-Development-Environment.md#using-local-builds-in-your-project)
+> for details.
 
 X-Road Example Adapter can be built using the provided Gradle wrapper. The following command will build the project.
 
