@@ -50,6 +50,7 @@ Setting up an environment for example-related development is explained [here](Se
 
 ## Building
 
+
 X-Road Example Adapter can be built using the provided Gradle wrapper. The following command will build the project.
 
 ```bash
