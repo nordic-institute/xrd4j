@@ -1,4 +1,25 @@
-# X-Road Example Adapter
+# X-Road Example Adapter <!-- omit in toc -->
+
+## Table of Contents <!-- omit in toc -->
+
+<!-- toc -->
+- [Try It Out](#try-it-out)
+- [Software Requirements](#software-requirements)
+- [Development Environment](#development-environment)
+- [Building](#building)
+- [Installation](#installation)
+  - [Web container](#web-container)
+  - [Spring Boot Executable WAR File](#spring-boot-executable-war-file)
+    - [Docker](#docker)
+- [Access the application](#access-the-application)
+- [Usage](#usage)
+  - [getRandom](#getrandom)
+  - [helloService](#helloservice)
+  - [listPeople](#listpeople)
+  - [personDetails](#persondetails)
+  - [storeAttachments](#storeattachments)
+  - [getAttachments](#getattachments)
+<!-- tocstop -->
 
 X-Road Example Adapter provides an example implementation of a web service that is compatible with X-Road 7. The
 Example Adapter support the X-Road Message Protocol for SOAP

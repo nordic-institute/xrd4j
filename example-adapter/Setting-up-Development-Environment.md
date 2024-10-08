@@ -1,4 +1,14 @@
+# Setting Up an Environment For Example Adapter Development <!-- omit in toc -->
+
 This document describes how a developer's workstation can be setup.
+
+### Table of Contents <!-- omit in toc -->
+
+<!-- toc -->
+- [Software Requirements](#software-requirements)
+- [Getting the code](#getting-the-code)
+- [Building the code](#building-the-code)
+<!-- tocstop -->
 
 ### Software Requirements
 

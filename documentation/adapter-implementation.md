@@ -1,20 +1,18 @@
-# Implementing an X-Road adapter using XRd4J
+# Implementing an X-Road adapter using XRd4J <!-- omit in toc -->
 
-## Table of Contents
+## Table of Contents <!-- omit in toc -->
 
 <!-- toc -->
 
-- [Implementing an X-Road adapter using XRd4J](#implementing-an-x-road-adapter-using-xrd4j)
-  - [Table of Contents](#table-of-contents)
-  - [1 Introduction](#1-introduction)
-  - [2 Client](#2-client)
-    - [2.1 Client Requirements](#21-client-requirements)
-    - [2.2 Client Example](#22-client-example)
-      - [2.2.1 Receiving an Image from Server](#221-receiving-an-image-from-server)
-  - [3 Server](#3-server)
-    - [3.1 Server requirements](#31-server-requirements)
-    - [3.2 Server example](#32-server-example)
-      - [3.2.1 Returning an Image From Server](#321-returning-an-image-from-server)
+- [1 Introduction](#1-introduction)
+- [2 Client](#2-client)
+  - [2.1 Client Requirements](#21-client-requirements)
+  - [2.2 Client Example](#22-client-example)
+    - [2.2.1 Receiving an Image from Server](#221-receiving-an-image-from-server)
+- [3 Server](#3-server)
+  - [3.1 Server requirements](#31-server-requirements)
+  - [3.2 Server example](#32-server-example)
+    - [3.2.1 Returning an Image From Server](#321-returning-an-image-from-server)
 
 <!-- tocstop -->
 
