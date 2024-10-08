@@ -5,6 +5,7 @@ plugins {
     java
     war
     `maven-publish`
+    id("org.owasp.dependencycheck") version "10.0.4"
     id("org.springframework.boot") version "3.3.2"
     id("io.mateo.cxf-codegen") version "2.4.0"
     id("com.github.hierynomus.license") version "0.16.1"
@@ -94,5 +95,15 @@ tasks.register("wsdlSources", Wsdl2Java::class) {
     toolOptions {
         wsdl = "${projectDir}/src/main/resources/mtomservice.wsdl"
         markGenerated = true
+    }
+}
+
+dependencyCheck {
+    suppressionFile = "dependency-check-suppressions.xml"
+    formats = listOf("HTML", "XML")
+    nvd.validForHours = 24
+
+    if (project.hasProperty("nvdApiKey")) {
+        nvd.apiKey = project.property("nvdApiKey") as String
     }
 }
