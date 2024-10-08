@@ -58,6 +58,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import static org.w3c.dom.Node.ELEMENT_NODE;
+import static org.w3c.dom.Node.TEXT_NODE;
+
 /**
  * This class offers some helper methods for handling SOAPMessage objects.
  *
@@ -94,7 +97,7 @@ public final class SOAPHelper {
      */
     public static Node getNode(Node node, String nodeName) {
         for (int i = 0; i < node.getChildNodes().getLength(); i++) {
-            if (node.getChildNodes().item(i).getNodeType() == Node.ELEMENT_NODE
+            if (node.getChildNodes().item(i).getNodeType() == ELEMENT_NODE
                     && node.getChildNodes().item(i).getLocalName().equals(nodeName)) {
                 return (Node) node.getChildNodes().item(i);
             }
@@ -260,7 +263,7 @@ public final class SOAPHelper {
      */
     public static void nodesToMap(NodeList list, boolean upperCase, Map<String, String> map) {
         for (int i = 0; i < list.getLength(); i++) {
-            if (list.item(i).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && list.item(i).hasChildNodes()) {
+            if (list.item(i).getNodeType() == ELEMENT_NODE && list.item(i).hasChildNodes()) {
                 nodesToMap(list.item(i).getChildNodes(), upperCase, map);
             } else {
                 processMapNode(list, i, upperCase, map);
@@ -277,10 +280,10 @@ public final class SOAPHelper {
      * @param map       Map for the results
      */
     private static void processMapNode(NodeList list, int index, boolean upperCase, Map<String, String> map) {
-        if (list.item(index).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
+        if (list.item(index).getNodeType() == ELEMENT_NODE && !list.item(index).hasChildNodes()) {
             String key = list.item(index).getLocalName();
             map.put(upperCase ? key.toUpperCase() : key, "");
-        } else if (list.item(index).getNodeType() == jakarta.xml.soap.Node.TEXT_NODE) {
+        } else if (list.item(index).getNodeType() == TEXT_NODE) {
             String key = list.item(index).getParentNode().getLocalName();
             String value = list.item(index).getNodeValue();
             value = value.trim();
@@ -314,7 +317,7 @@ public final class SOAPHelper {
      */
     public static void nodesToMultiMap(NodeList list, Map<String, List<String>> map) {
         for (int i = 0; i < list.getLength(); i++) {
-            if (list.item(i).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && list.item(i).hasChildNodes()) {
+            if (list.item(i).getNodeType() == ELEMENT_NODE && list.item(i).hasChildNodes()) {
                 nodesToMultiMap(list.item(i).getChildNodes(), map);
             } else {
                 processMultiMapNode(list, i, map);
@@ -330,13 +333,13 @@ public final class SOAPHelper {
      * @param map   Map for the results
      */
     private static void processMultiMapNode(NodeList list, int index, Map<String, List<String>> map) {
-        if (list.item(index).getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE && !list.item(index).hasChildNodes()) {
+        if (list.item(index).getNodeType() == ELEMENT_NODE && !list.item(index).hasChildNodes()) {
             String key = list.item(index).getLocalName();
             if (!map.containsKey(key)) {
                 map.put(key, new ArrayList<>());
             }
             map.get(key).add("");
-        } else if (list.item(index).getNodeType() == jakarta.xml.soap.Node.TEXT_NODE) {
+        } else if (list.item(index).getNodeType() == TEXT_NODE) {
             String key = list.item(index).getParentNode().getLocalName();
             String value = list.item(index).getNodeValue();
             value = value.trim();
@@ -360,8 +363,8 @@ public final class SOAPHelper {
      * @return changed SOAPElement with added namespace URI and prefix of the ProviderMember
      */
     public static SOAPElement addNamespace(SOAPElement node, AbstractMessage message) {
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
-            var soapEl = (SOAPElement) node;
+        if (node.getNodeType() == ELEMENT_NODE) {
+            var soapEl = node;
 
             try {
                 soapEl = soapEl.setElementQName(new QName(soapEl.getLocalName()));
@@ -389,7 +392,7 @@ public final class SOAPHelper {
      * @param node Node to be modified
      */
     public static void removeNamespace(Node node) {
-        if (node.getNodeType() == Node.ELEMENT_NODE) {
+        if (node.getNodeType() == ELEMENT_NODE) {
             node.getOwnerDocument().renameNode(node, null, node.getLocalName());
         }
         NodeList list = node.getChildNodes();
@@ -435,7 +438,7 @@ public final class SOAPHelper {
         if (message.countAttachments() == 0) {
             return null;
         }
-        AttachmentPart att = (AttachmentPart) message.getAttachments().next();
+        AttachmentPart att = message.getAttachments().next();
         return att.getContentType();
 
     }
@@ -602,7 +605,7 @@ public final class SOAPHelper {
      * @return updated Node
      */
     public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
-        if (node.getNodeType() == jakarta.xml.soap.Node.ELEMENT_NODE) {
+        if (node.getNodeType() == ELEMENT_NODE) {
             if (prefix != null && !prefix.isEmpty()) {
                 node = (Node) node.getOwnerDocument().renameNode(node, namespace, prefix + ":" + node.getLocalName());
             } else if (namespace != null && !namespace.isEmpty()) {

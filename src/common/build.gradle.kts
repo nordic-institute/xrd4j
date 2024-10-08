@@ -11,5 +11,5 @@ dependencies {
 
 pomSettings {
     name = "XRd4J :: Common"
-    description = "This module provides general purpose utilities for processing SOAP messages and it also contains X-Road v6 message data models."
+    description = "This module provides general purpose utilities for processing SOAP messages and it also contains X-Road v7 message data models."
 }

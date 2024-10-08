@@ -53,6 +53,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import static jakarta.servlet.http.HttpServletResponse.SC_OK;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.catalina.startup.Tomcat.addServlet;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,7 +75,7 @@ public class ServletTest {
         tomcat.setPort(0);
         Context context = tomcat.addContext("", new File(".").getAbsolutePath());
 
-        addServlet(context, "TestServlet", new TestServlet()).addMapping("/");
+        addServlet(context, "TestServlet", new ExampleServletImpl()).addMapping("/");
 
         tomcat.start();
         serverPort = tomcat.getConnector().getLocalPort();
@@ -181,7 +182,7 @@ public class ServletTest {
 
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(SC_OK);
 
         assertSoapFaultClientError(response, "Unknown service code.");
     }
@@ -197,7 +198,7 @@ public class ServletTest {
 
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(SC_OK);
 
         assertSoapFaultClientError(response, "Invalid X-Road SOAP message. Unable to parse the request.");
     }
@@ -213,7 +214,7 @@ public class ServletTest {
 
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(SC_OK);
 
         assertSoapFaultClientError(response, "Invalid content type : \"invalid\".");
     }
@@ -229,12 +230,12 @@ public class ServletTest {
 
         var response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(SC_OK);
         assertSoapFaultClientError(response, "Invalid content type : \"null\".");
     }
 
     private void assertResponseSuccess(HttpResponse<String> response, String expectedContentFilename) {
-        assertThat(response.statusCode()).isEqualTo(200);
+        assertThat(response.statusCode()).isEqualTo(SC_OK);
         assertXmlIdentical(response.body(), expectedContentFilename);
     }
 

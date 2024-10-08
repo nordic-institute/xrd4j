@@ -25,7 +25,7 @@ The code is located in the `src` folder and the application is made up of four m
 
 XRd4J uses gradle as the build management tool. In order to build the whole project and generate the four jar files (
 client-x.x.x-SNAPSHOT.jar, common-x.x.x-SNAPSHOT.jar, server-x.x.x-SNAPSHOT.jar, rest-x.x.x-SNAPSHOT.jar), you must run
-the maven command below from the `src` directory.
+the gradle command below from the `src` directory.
 
 ```
 ./gradlew build

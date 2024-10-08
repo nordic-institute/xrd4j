@@ -53,9 +53,9 @@ import java.util.Random;
 /**
  * Test servlet implementation copied and modified from example-adapter.
  */
-class TestServlet extends AbstractAdapterServlet {
+class ExampleServletImpl extends AbstractAdapterServlet {
     private static final long serialVersionUID = 1L;
-    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TestServlet.class);
+    private static final Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ExampleServletImpl.class);
     private final String namespaceSerialize = "http://test.x-road.global/consumer";
     private final String namespaceDeserialize = "http://test.x-road.global/producer";
     private final String prefix = "xrdtest";
