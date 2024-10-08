@@ -6,7 +6,7 @@ plugins {
     war
     `maven-publish`
     id("org.owasp.dependencycheck") version "10.0.4"
-    id("org.springframework.boot") version "3.3.2"
+    id("org.springframework.boot") version "3.3.4"
     id("io.mateo.cxf-codegen") version "2.4.0"
     id("com.github.hierynomus.license") version "0.16.1"
 }
@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web:3.3.2")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.3.4")
     implementation("org.apache.cxf:cxf-spring-boot-starter-jaxws:4.0.5")
 
     implementation("org.niis.xrd4j:common:0.6.0-SNAPSHOT")
@@ -102,6 +102,8 @@ dependencyCheck {
     suppressionFile = "dependency-check-suppressions.xml"
     formats = listOf("HTML", "XML")
     nvd.validForHours = 24
+
+    skipConfigurations = listOf("cxfCodegen")
 
     if (project.hasProperty("nvdApiKey")) {
         nvd.apiKey = project.property("nvdApiKey") as String
