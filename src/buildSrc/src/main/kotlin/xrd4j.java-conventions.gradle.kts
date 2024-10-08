@@ -27,6 +27,7 @@ interface PomSettings {
     val name: Property<String>
     val description: Property<String>
 }
+
 val pomSettingsExtension = project.extensions.create<PomSettings>("pomSettings")
 
 publishing {
@@ -68,6 +69,16 @@ publishing {
 
 tasks.withType<JavaCompile>() {
     options.encoding = "UTF-8"
+    options.compilerArgs.addAll(
+        listOf(
+//            "-Xlint:unchecked",
+//            "-Xlint:deprecation",
+//            "-Xlint:rawtypes",
+            "-Xlint:fallthrough",
+            "-Xlint:finally",
+            "-parameters"
+        )
+    )
 }
 
 tasks.withType<Javadoc>() {
