@@ -1,6 +1,15 @@
-## Setting Up an Environment For XRd4J Development
+# Setting Up an Environment For XRd4J Development <!-- omit in toc -->
 
 This document describes the requirements and steps to set up an environment for XRd4J development.
+
+### Table of Contents <!-- omit in toc -->
+
+<!-- toc -->
+- [Software Requirements](#software-requirements)
+- [Getting the code](#getting-the-code)
+- [Building the code](#building-the-code)
+- [Using local builds in your project](#using-local-builds-in-your-project)
+<!-- tocstop -->
 
 ### Software Requirements
 

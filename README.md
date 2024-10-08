@@ -1,4 +1,4 @@
-# X-Road Library for Java (XRd4J)
+# X-Road Library for Java (XRd4J) <!-- omit in toc -->
 
 [![Go to X-Road Community Slack](https://img.shields.io/badge/Go%20to%20Community%20Slack-grey.svg)](https://jointxroad.slack.com/)
 [![Get invited](https://img.shields.io/badge/No%20Slack-Get%20invited-green.svg)](https://x-road.global/community)
@@ -11,7 +11,22 @@ and [Service Metadata Protocol](https://github.com/nordic-institute/X-Road/blob/
 The library takes care of serialization and deserialization of SOAP messages offering built-in support for standard
 X-Road SOAP headers; only processing of application specific request and response content remains to be implemented.
 
-The library is compatible with X-Road 6 and 7.
+The library is compatible with X-Road 7.
+
+## Table of Contents <!-- omit in toc -->
+
+<!-- toc -->
+- [Library Modules](#library-modules)
+- [Maven Repositories](#maven-repositories)
+  - [Release Repository](#release-repository)
+    - [Dependency Declaration](#dependency-declaration)
+    - [Snapshot Repository](#snapshot-repository)
+- [Development](#development)
+  - [XRd4J Development](#xrd4j-development)
+  - [Adapter Development Using XRd4J](#adapter-development-using-xrd4j)
+  - [Compatibility Mode With Older X-Road Versions](#compatibility-mode-with-older-x-road-versions)
+- [Credits](#credits)
+<!-- tocstop -->
 
 ## Library Modules
 
