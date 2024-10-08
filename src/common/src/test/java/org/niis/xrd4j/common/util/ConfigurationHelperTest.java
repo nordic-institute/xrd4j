@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -26,21 +26,24 @@ import org.niis.xrd4j.common.exception.XRd4JException;
 import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for ConfigurationHelper class.
  *
  * @author Petteri Kivimäki
  */
-public class ConfigurationHelperTest extends TestCase {
+class ConfigurationHelperTest {
 
     /**
      * Test parsing client ids from string.
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testParseConsumer1() throws XRd4JException {
+    @Test
+    void testParseConsumer1() throws XRd4JException {
         String clientId = "FI_PILOT.GOV.0245437-2";
         ConsumerMember consumer = ConfigurationHelper.parseConsumerMember(clientId);
 
@@ -76,7 +79,8 @@ public class ConfigurationHelperTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testParseProducer1() throws XRd4JException {
+    @Test
+    void testParseProducer1() throws XRd4JException {
         String serviceId = "FI_PILOT.GOV.0245437-2.ConsumerService.getOrganizationList.v1";
         ProducerMember producer = ConfigurationHelper.parseProducerMember(serviceId);
 

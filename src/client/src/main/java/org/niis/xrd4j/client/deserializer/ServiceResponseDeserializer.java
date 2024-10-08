@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -24,7 +24,7 @@ package org.niis.xrd4j.client.deserializer;
 
 import org.niis.xrd4j.common.message.ServiceResponse;
 
-import javax.xml.soap.SOAPMessage;
+import jakarta.xml.soap.SOAPMessage;
 
 /**
  * This class defines an interface for deserializing SOAPMessage objects

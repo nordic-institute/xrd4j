@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -22,16 +22,15 @@
  */
 package org.niis.xrd4j.server.utils;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.xml.soap.AttachmentPart;
+import jakarta.xml.soap.MimeHeader;
+import jakarta.xml.soap.MimeHeaders;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.soap.AttachmentPart;
-import javax.xml.soap.MimeHeader;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 
 import java.util.Enumeration;
 import java.util.Iterator;

@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -24,13 +24,12 @@ package org.niis.xrd4j.client.deserializer;
 
 import org.niis.xrd4j.common.util.Constants;
 
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.NodeList;
-
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 
 /**
  * This class is used for deserializing responses of getSecurityServerMetrics

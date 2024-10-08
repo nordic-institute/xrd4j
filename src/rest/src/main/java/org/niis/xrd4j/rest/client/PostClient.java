@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -22,10 +22,10 @@
  */
 package org.niis.xrd4j.rest.client;
 
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.apache.http.entity.StringEntity;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,16 +49,15 @@ public class PostClient extends AbstractBodyHandler {
     @Override
     protected HttpUriRequest buildtHttpRequest(String url, String requestBody, Map<String, String> headers, RequestConfig config) {
         LOGGER.debug("Build new HTTP POST request.");
-        HttpUriRequest request;
+        HttpPost request = new HttpPost(url);
         // Create request entity that's used as request body
         StringEntity requestEntity = super.buildRequestEntity(requestBody, headers);
+        request.setConfig(config);
         if (requestEntity != null) {
-            request = RequestBuilder.post().setConfig(config).setUri(url).setEntity(requestEntity).build();
+            request.setEntity(requestEntity);
         } else {
             LOGGER.debug("No request body found for HTTP POST request.");
-            request = RequestBuilder.post().setConfig(config).setUri(url).build();
         }
-        // Return request
         return request;
     }
 }

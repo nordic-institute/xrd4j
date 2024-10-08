@@ -1,17 +1,17 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
- * <p>
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p>
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * <p>
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,17 +22,17 @@
  */
 package org.niis.xrd4j.exampleadapter;
 
+import org.niis.xrd4j.exampleadapter.mtom.MessageMtomGeneratorImpl;
+
+import jakarta.xml.ws.Endpoint;
 import org.apache.cxf.Bus;
 import org.apache.cxf.transport.servlet.CXFServlet;
-import org.niis.xrd4j.exampleadapter.mtom.MessageMtomGeneratorImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.xml.ws.Endpoint;
 
 /**
  * X-Road Example Adapter application entry point
@@ -46,15 +46,15 @@ public class Application extends SpringBootServletInitializer {
     }
 
     @Bean
-    public ServletRegistrationBean endpointBean() {
-        ServletRegistrationBean bean = new ServletRegistrationBean(new ExampleAdapter(), "/Endpoint");
+    public ServletRegistrationBean<ExampleAdapter> endpointBean() {
+        ServletRegistrationBean<ExampleAdapter> bean = new ServletRegistrationBean<>(new ExampleAdapter(), "/Endpoint");
         bean.setLoadOnStartup(1);
         return bean;
     }
 
     @Bean
-    public ServletRegistrationBean servletRegistrationBean() {
-        return new ServletRegistrationBean(new CXFServlet(), "/cxf/*");
+    public ServletRegistrationBean<CXFServlet> servletRegistrationBean() {
+        return new ServletRegistrationBean<>(new CXFServlet(), "/cxf/*");
     }
 
     @Bean

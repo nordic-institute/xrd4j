@@ -1,10 +1,20 @@
+# Setting Up an Environment For Example Adapter Development <!-- omit in toc -->
+
 This document describes how a developer's workstation can be setup.
+
+### Table of Contents <!-- omit in toc -->
+
+<!-- toc -->
+- [Software Requirements](#software-requirements)
+- [Getting the code](#getting-the-code)
+- [Building the code](#building-the-code)
+<!-- tocstop -->
 
 ### Software Requirements
 
 * Linux / Windows / MacOS
-* Java 8 or Java 11
-* Maven 3.x
+* Java 17 or later
+* Gradle
 * Docker (*optional*)
 
 ### Getting the code
@@ -15,18 +25,23 @@ The Example Adapter project is a part of the XRd4J git repository. You can acces
 git clone https://github.com/nordic-institute/xrd4j.git
 ```
 
-The Example Adapter is a separate Maven project and can be found under the `example-adapter` directory.
+The Example Adapter is a separate Gradle project and can be found under the `example-adapter` directory.
 
 ### Building the code
 
-Example Adapter uses Maven as the build management tool. In order to build the whole project and generate the WAR-file (`example-adapter-x.x.x-SNAPSHOT.war`), you must run the maven command below from the project root directory.
+Example Adapter uses Gradle as the build management
+tool. [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html)
+is the recommended way of using Gradle to ensure the correct version.
+
+In order to build the whole project, you must run the command below from the `example-adapter`
+directory.
 
 ```bash
-mvn clean verify
+./gradlew build
 ```
 
-Running the above maven command generates the WAR-file under the directory presented below (`x.x.x` being replaced by the version):
+Running the above command generates the following WAR-files under the `build/libs` directory (`x.x.x` being replaced by
+the version):
 
-```
-target/example-adapter-x.x.x-SNAPSHOT.war
-```
+* `build/libs/example-adapter-x.x.x-SNAPSHOT.war` - a deployable WAR file
+* `build/libs/example-adapter-x.x.x-SNAPSHOT-boot.war` - a Spring Boot executable WAR file

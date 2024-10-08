@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -35,18 +35,17 @@ import org.niis.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import org.niis.xrd4j.server.serializer.ServiceResponseSerializer;
 import org.niis.xrd4j.server.utils.AdapterUtils;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.xml.soap.MimeHeaders;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPEnvelope;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.soap.MimeHeaders;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -130,11 +129,12 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         }
 
         // Get incoming SOAP message
-        if (request.getContentType().toLowerCase().startsWith(Constants.TEXT_XML)) {
+        var requestContentType = request.getContentType();
+        if (contentTypeMatches(requestContentType, Constants.TEXT_XML)) {
             // Regular SOAP message without attachments
             LOGGER.info("Request's content type is \"{}\".", Constants.TEXT_XML);
             soapRequest = SOAPHelper.toSOAP(request.getInputStream());
-        } else if (request.getContentType().toLowerCase().startsWith(Constants.MULTIPART_RELATED)) {
+        } else if (contentTypeMatches(requestContentType, Constants.MULTIPART_RELATED)) {
             // SOAP message with attachments
             LOGGER.info("Request's content type is \"{}\".", Constants.MULTIPART_RELATED);
             MimeHeaders mh = AdapterUtils.getHeaders(request);
@@ -142,8 +142,8 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
             LOGGER.trace(AdapterUtils.getAttachmentsInfo(soapRequest));
         } else {
             // Invalid content type -> message is not processed
-            LOGGER.warn("Invalid content type : \"{}\".", request.getContentType());
-            errString = "Invalid content type : \"" + request.getContentType() + "\".";
+            LOGGER.warn("Invalid content type : \"{}\".", requestContentType);
+            errString = "Invalid content type : \"" + requestContentType + "\".";
         }
 
         // Conversion has failed if soapRequest is null. Return SOAP Fault.
@@ -172,6 +172,10 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         }
         // Write the SOAP response to output stream
         writeResponse(soapResponse, response);
+    }
+
+    private boolean contentTypeMatches(String contentType, String expected) {
+        return contentType != null && contentType.toLowerCase().startsWith(expected);
     }
 
     /**
@@ -344,11 +348,11 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
      * class. It's needed only for generating SOAP Fault messages.
      * SerializeResponse method gets never called.
      */
-    private class DummyServiceResponseSerializer extends AbstractServiceResponseSerializer {
+    private static final class DummyServiceResponseSerializer extends AbstractServiceResponseSerializer {
 
         @Override
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
-            /**
+            /*
              * This is needed only for generating SOAP Fault messages.
              * SerializeResponse method gets never called.
              */

@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -40,13 +40,12 @@ import org.niis.xrd4j.rest.ClientResponse;
 import org.niis.xrd4j.rest.client.RESTClient;
 import org.niis.xrd4j.rest.client.RESTClientFactory;
 
+import jakarta.xml.soap.SOAPConnection;
+import jakarta.xml.soap.SOAPConnectionFactory;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.xml.soap.SOAPConnection;
-import javax.xml.soap.SOAPConnectionFactory;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
 
 import java.net.MalformedURLException;
 import java.net.URL;

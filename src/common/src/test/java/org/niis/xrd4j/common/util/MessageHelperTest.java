@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -22,7 +22,9 @@
  */
 package org.niis.xrd4j.common.util;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test cases for MessageHelper class. Test values have been calculated using
@@ -32,12 +34,13 @@ import junit.framework.TestCase;
  *
  * @author Petteri Kivimäki
  */
-public class MessageHelperTest extends TestCase {
+class MessageHelperTest {
 
     /**
      * Test for calculating Base64 encoded hash using SHA-512 algorithm.
      */
-    public void testCalculateHash() {
+    @Test
+    void testCalculateHash() {
         assertEquals("7iaw3Ur350mqGo7jwQrpkj9hiYB3Lkc/iBml1JQODbJ6wYX4oOHV+E+IvIh/1nsUNzLDBMxfqa2Ob1f1ACio/w==", MessageHelper.calculateHash("test"));
         assertEquals("VxRyq5GZc5xJZQFWKZsUobdzXqg8lwR9Cponu5m6XJgVMjhGVbxdbZBYEsQETnwIgsscb2h8j9rKvm40yqiuPg==", MessageHelper.calculateHash("string hash test"));
     }

@@ -1,0 +1,34 @@
+# https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
+
+[versions]
+jakarta-servlet-servlet-api = "6.1.0"
+org-apache-httpcomponents-httpclient = "5.3.1"
+org-json-json = "20240303"
+slf4j = "2.0.13"
+log4j = "2.23.1"
+saaj-impl = "3.0.4"
+junit-jupiter = "5.10.3"
+xmlunit = "2.10.0"
+assertj = "3.26.3"
+
+[libraries]
+com-sun-xml-messaging-saaj-saajImpl = { module = "com.sun.xml.messaging.saaj:saaj-impl", version.ref = "saaj-impl" }
+jakarta-servlet-servletApi = { module = "jakarta.servlet:jakarta.servlet-api", version.ref = "jakarta-servlet-servlet-api" }
+org-apache-httpcomponents-httpclient = { module = "org.apache.httpcomponents.client5:httpclient5", version.ref = "org-apache-httpcomponents-httpclient" }
+org-json-json = { module = "org.json:json", version.ref = "org-json-json" }
+org-slf4j-slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+org-apache-logging-log4j-log4jCore = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+org-apache-logging-log4j-log4jSlf4j2Impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
+org-apache-james-mime4jCore = { module = "org.apache.james:apache-mime4j-core", version = "0.8.7" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+org-apache-tomcat-embed-core = { group = "org.apache.tomcat.embed", name = "tomcat-embed-core", version = "10.1.30" }
+org-assertj-assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+org-xmlunit-xmlunitAssertj3 = { module = "org.xmlunit:xmlunit-assertj3", version.ref = "xmlunit" }
+org-xmlunit-xmlunitPlaceholders = { module = "org.xmlunit:xmlunit-placeholders", version.ref = "xmlunit" }
+
+licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version = "0.16.1" }
+dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version = "10.0.4" }
+javadocAggregateGradlePlugin = { module = "io.freefair.gradle:maven-plugin", version = "8.10" }
+
+[bundles]
+testImplementation = [ "junit-jupiter", "org-slf4j-slf4jApi", "org-apache-logging-log4j-log4jSlf4j2Impl", "org-apache-logging-log4j-log4jCore" ]

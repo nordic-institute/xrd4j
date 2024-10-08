@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -22,19 +22,23 @@
  */
 package org.niis.xrd4j.rest.converter;
 
-import junit.framework.TestCase;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for JSONToXMLConverter class.
  *
  * @author Markus Törnqvist
  */
-public class XMLToJSONConverterTest extends TestCase {
+class XMLToJSONConverterTest {
 
     private Converter converter;
 
@@ -43,16 +47,16 @@ public class XMLToJSONConverterTest extends TestCase {
      *
      * @throws Exception
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    void setUp() throws Exception {
         this.converter = new XMLToJSONConverter();
     }
 
     /**
      * Test converting single string element.
      */
-    public void testSingleStrElement() {
+    @Test
+    void testSingleStrElement() {
         String correctJsonString = "{\"key1\":\"value1\"}";
         JSONObject correctJson = new JSONObject(correctJsonString);
 
@@ -64,7 +68,8 @@ public class XMLToJSONConverterTest extends TestCase {
     /**
      * Test converting multiple string elements.
      */
-    public void testMultipleStrElements() {
+    @Test
+    void testMultipleStrElements() {
         String correctJsonString = "{\"key4\":\"value4\",\"key3\":\"value3\",\"key2\":\"value2\",\"key1\":\"value1\"}";
         JSONObject correctJson = new JSONObject(correctJsonString);
 
@@ -76,7 +81,8 @@ public class XMLToJSONConverterTest extends TestCase {
     /**
      * Test converting single string element.
      */
-    public void testSingleIntElement() {
+    @Test
+    void testSingleIntElement() {
         String correctJsonString = "{\"key1\":1}";
         JSONObject correctJson = new JSONObject(correctJsonString);
 
@@ -88,7 +94,8 @@ public class XMLToJSONConverterTest extends TestCase {
     /**
      * Test converting multiple string, int and boolean elements.
      */
-    public void testMultipleElements() {
+    @Test
+    void testMultipleElements() {
         String correctJsonString = "{\"key3\":\"value3\",\"key2\":true,\"key1\":1}";
         JSONObject correctJson = new JSONObject(correctJsonString);
 
@@ -100,7 +107,8 @@ public class XMLToJSONConverterTest extends TestCase {
     /**
      * Test converting nested element.
      */
-    public void testNestedElement() {
+    @Test
+    void testNestedElement() {
         String correctJsonString = "{\"request\":{\"key1\":\"value1\"}}";
         JSONObject correctJson = new JSONObject(correctJsonString);
 
@@ -112,7 +120,8 @@ public class XMLToJSONConverterTest extends TestCase {
     /**
      * Test converting nested elements.
      */
-    public void testNestedElements1() {
+    @Test
+    void testNestedElements1() {
         String correctJsonString = "{\"request\":{\"key3\":3,\"key2\":true,\"key1\":\"value1\"}}";
         JSONObject correctJson = new JSONObject(correctJsonString);
 
@@ -124,7 +133,8 @@ public class XMLToJSONConverterTest extends TestCase {
     /**
      * Test converting nested elements.
      */
-    public void testNestedElements2() {
+    @Test
+    void testNestedElements2() {
         String correctJsonString = "{\"menu\":{\"id\":\"file\",\"popup\":{\"menuitem\":[{\"value\":\"New\",\"onclick\":\"CreateNewDoc()\"},{\"value\":\"Open\",\"onclick\":\"OpenDoc()\"},{\"value\":\"Close\",\"onclick\":\"CloseDoc()\"}]},\"value\":\"File\"}}";
         JSONObject correctJson = new JSONObject(correctJsonString);
 
@@ -136,7 +146,8 @@ public class XMLToJSONConverterTest extends TestCase {
     /**
      * Test converting nested elements.
      */
-    public void testNestedElements3() {
+    @Test
+    void testNestedElements3() {
         String correctJsonString = "{\"id\":49,\"name_en\":\"City of Espoo\",\"name_sv\":\"Esbo stad\",\"data_source_url\":\"www.espoo.fi\",\"name_fi\":\"Espoon kaupunki\"}";
         JSONObject correctJson = new JSONObject(correctJsonString);
 
@@ -148,7 +159,8 @@ public class XMLToJSONConverterTest extends TestCase {
     /**
      * Test converting an array.
      */
-    public void testArray() {
+    @Test
+    void testArray() {
         List<String> elements = new ArrayList<>();
         elements.add("\"id\":48");
         elements.add("\"name_fi\":\"Espoon kaupunki\"");
@@ -182,7 +194,8 @@ public class XMLToJSONConverterTest extends TestCase {
      * Test normalizing subject array. This behavior could be considered a bug
      * in org.json.
      */
-    public void testNormalize() {
+    @Test
+    void testNormalize() {
         // This is what would happen if we didn't normalize
         // String correctJsonString = "{\"DATA\": {\"array\":[\"one\",\"two\",\"three\"]}}";
         String correctJsonString = "{\"DATA\": [\"one\",\"two\",\"three\"]}";
@@ -198,7 +211,8 @@ public class XMLToJSONConverterTest extends TestCase {
      * Test normalizing subject arrays. This behavior could be considered a bug
      * in org.json.
      */
-    public void testNormalize1() {
+    @Test
+    void testNormalize1() {
         String correctJsonString = "{\"DATA1\": [\"one\",\"two\",\"three\"], \"DATA2\": [1, 2, 3]}";
         JSONObject correctJson = new JSONObject(correctJsonString);
 
@@ -213,7 +227,8 @@ public class XMLToJSONConverterTest extends TestCase {
      * Test normalizing deep subject arrays. This behavior could be considered a
      * bug in org.json.
      */
-    public void testNormalize2() {
+    @Test
+    void testNormalize2() {
         List<String> elements = new ArrayList<>();
         elements.add("\"one\"");
         elements.add("\"two\"");
@@ -247,7 +262,8 @@ public class XMLToJSONConverterTest extends TestCase {
      * Test normalizing deep subject arrays. This behavior could be considered a
      * bug in org.json.
      */
-    public void testNormalize3() {
+    @Test
+    void testNormalize3() {
         List<String> elements = new ArrayList<>();
         elements.add("\"one\"");
         elements.add("\"two\"");
@@ -279,7 +295,8 @@ public class XMLToJSONConverterTest extends TestCase {
     /**
      * Test converting XML containing JSON-LD to JSON-LD.
      */
-    public void testJSONLD1() {
+    @Test
+    void testJSONLD1() {
         List<String> elements = new ArrayList<>();
         elements.add("\"@id\":\"http://dbpedia.org/resource/John_Lennon\"");
         elements.add("\"name\":\"John Lennon\"");

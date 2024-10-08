@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -22,7 +22,7 @@
  */
 package org.niis.xrd4j.exampleadapter.mtom;
 
-import javax.activation.DataSource;
+import jakarta.activation.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

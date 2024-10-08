@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -22,25 +22,28 @@
  */
 package org.niis.xrd4j.rest.util;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Test cases for JSONToXMLConverter class.
  *
  * @author Petteri Kivimäki
  */
-public class ClientUtilTest extends TestCase {
+class ClientUtilTest {
 
     /**
      * No parameters, no resource id, no slash in base URI, no question mark in
      * base uri.
      */
-    public void testBuildClientURL1() {
+    @Test
+    void testBuildClientURL1() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL;
         Map<String, String> params = new TreeMap<String, String>();
@@ -52,7 +55,8 @@ public class ClientUtilTest extends TestCase {
      * No parameters (null), no resource id, no slash in base URI, no question
      * mark in base uri.
      */
-    public void testBuildClientURL2() {
+    @Test
+    void testBuildClientURL2() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL;
         Map<String, String> params = null;
@@ -64,7 +68,8 @@ public class ClientUtilTest extends TestCase {
      * Three parameters, no resource id, no slash in base URI, no question mark
      * in base uri.
      */
-    public void testBuildClientURL3() {
+    @Test
+    void testBuildClientURL3() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL + "?key1=value1&key2=value2&key3=value3";
         Map<String, String> params = new TreeMap<String, String>();
@@ -79,7 +84,8 @@ public class ClientUtilTest extends TestCase {
      * Three parameters, no resource id, slash in base URI, no question mark in
      * base uri.
      */
-    public void testBuildClientURL4() {
+    @Test
+    void testBuildClientURL4() {
         String baseURL = "http://api.test.com/";
         String correctURL = baseURL + "?key1=value1&key2=value2&key3=value3";
         Map<String, String> params = new TreeMap<String, String>();
@@ -94,7 +100,8 @@ public class ClientUtilTest extends TestCase {
      * Three parameters, no resource id, no slash in base URI, question mark in
      * base uri.
      */
-    public void testBuildClientURL5() {
+    @Test
+    void testBuildClientURL5() {
         String baseURL = "http://api.test.com?";
         String correctURL = baseURL + "key1=value1&key2=value2&key3=value3";
         Map<String, String> params = new TreeMap<String, String>();
@@ -109,7 +116,8 @@ public class ClientUtilTest extends TestCase {
      * Three parameters, no resource id, slash in base URI, question mark in
      * base uri.
      */
-    public void testBuildClientURL6() {
+    @Test
+    void testBuildClientURL6() {
         String baseURL = "http://api.test.com/?";
         String correctURL = baseURL + "key1=value1&key2=value2&key3=value3";
         Map<String, String> params = new TreeMap<String, String>();
@@ -123,7 +131,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * No parameters, resource id, no slash in base URI.
      */
-    public void testBuildClientURL7() {
+    @Test
+    void testBuildClientURL7() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL + "/10";
         Map<String, String> params = new TreeMap<String, String>();
@@ -135,7 +144,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * No parameters, resource id, slash in base URI.
      */
-    public void testBuildClientURL8() {
+    @Test
+    void testBuildClientURL8() {
         String baseURL = "http://api.test.com/";
         String correctURL = baseURL + "10";
         Map<String, String> params = new TreeMap<String, String>();
@@ -147,7 +157,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * Two parameters, resource id, no slash in base URI.
      */
-    public void testBuildClientURL9() {
+    @Test
+    void testBuildClientURL9() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL + "/10?key2=value2&key3=value3";
         Map<String, String> params = new TreeMap<String, String>();
@@ -161,7 +172,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * Two parameters, resource id, slash in base URI.
      */
-    public void testBuildClientURL10() {
+    @Test
+    void testBuildClientURL10() {
         String baseURL = "http://api.test.com/";
         String correctURL = baseURL + "10?key2=value2&key3=value3";
         Map<String, String> params = new TreeMap<String, String>();
@@ -176,7 +188,8 @@ public class ClientUtilTest extends TestCase {
      * One parameter in base URI, two parameters, no resource id, no slash in
      * base URI.
      */
-    public void testBuildClientURL11() {
+    @Test
+    void testBuildClientURL11() {
         String baseURL = "http://api.test.com?param=1";
         String correctURL = baseURL + "&key2=value2&key3=value3";
         Map<String, String> params = new TreeMap<String, String>();
@@ -190,7 +203,8 @@ public class ClientUtilTest extends TestCase {
      * One parameter in base URI, two parameters, no resource id, slash in base
      * URI.
      */
-    public void testBuildClientURL12() {
+    @Test
+    void testBuildClientURL12() {
         String baseURL = "http://api.test.com/?param=1";
         String correctURL = baseURL + "&key2=value2&key3=value3";
         Map<String, String> params = new TreeMap<String, String>();
@@ -204,7 +218,8 @@ public class ClientUtilTest extends TestCase {
      * No parameters, no resource id, no slash in base URI, no question mark in
      * base uri.
      */
-    public void testBuildClientURL13() {
+    @Test
+    void testBuildClientURL13() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL;
         Map<String, List<String>> params = new TreeMap<>();
@@ -216,7 +231,8 @@ public class ClientUtilTest extends TestCase {
      * No parameters (null), no resource id, no slash in base URI, no question
      * mark in base uri.
      */
-    public void testBuildClientURL14() {
+    @Test
+    void testBuildClientURL14() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL;
         Map<String, List<String>> params = null;
@@ -228,7 +244,8 @@ public class ClientUtilTest extends TestCase {
      * Three parameters, no resource id, no slash in base URI, no question mark
      * in base uri.
      */
-    public void testBuildClientURL15() {
+    @Test
+    void testBuildClientURL15() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL + "?key1=value1&key2=value2&key3=value3";
         Map<String, List<String>> params = new TreeMap<>();
@@ -249,7 +266,8 @@ public class ClientUtilTest extends TestCase {
      * Three parameters, no resource id, slash in base URI, no question mark in
      * base uri.
      */
-    public void testBuildClientURL16() {
+    @Test
+    void testBuildClientURL16() {
         String baseURL = "http://api.test.com/";
         String correctURL = baseURL + "?key1=value1&key2=value2&key3=value3";
         Map<String, List<String>> params = new TreeMap<>();
@@ -270,7 +288,8 @@ public class ClientUtilTest extends TestCase {
      * Three parameters, no resource id, no slash in base URI, question mark in
      * base uri.
      */
-    public void testBuildClientURL17() {
+    @Test
+    void testBuildClientURL17() {
         String baseURL = "http://api.test.com?";
         String correctURL = baseURL + "key1=value1&key2=value2&key3=value3";
         Map<String, List<String>> params = new TreeMap<>();
@@ -291,7 +310,8 @@ public class ClientUtilTest extends TestCase {
      * Three parameters, no resource id, slash in base URI, question mark in
      * base uri.
      */
-    public void testBuildClientURL18() {
+    @Test
+    void testBuildClientURL18() {
         String baseURL = "http://api.test.com/?";
         String correctURL = baseURL + "key1=value1&key2=value2&key3=value3";
         Map<String, List<String>> params = new TreeMap<>();
@@ -311,7 +331,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * No parameters, resource id, no slash in base URI.
      */
-    public void testBuildClientURL19() {
+    @Test
+    void testBuildClientURL19() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL + "/10";
         Map<String, List<String>> params = new TreeMap<>();
@@ -325,7 +346,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * No parameters, resource id, slash in base URI.
      */
-    public void testBuildClientURL20() {
+    @Test
+    void testBuildClientURL20() {
         String baseURL = "http://api.test.com/";
         String correctURL = baseURL + "10";
         Map<String, List<String>> params = new TreeMap<>();
@@ -339,7 +361,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * Two parameters, resource id, no slash in base URI.
      */
-    public void testBuildClientURL21() {
+    @Test
+    void testBuildClientURL21() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL + "/10?key2=value2&key3=value3";
         Map<String, List<String>> params = new TreeMap<>();
@@ -359,7 +382,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * Two parameters, resource id, slash in base URI.
      */
-    public void testBuildClientURL22() {
+    @Test
+    void testBuildClientURL22() {
         String baseURL = "http://api.test.com/";
         String correctURL = baseURL + "10?key2=value2&key3=value3";
         Map<String, List<String>> params = new TreeMap<>();
@@ -380,7 +404,8 @@ public class ClientUtilTest extends TestCase {
      * One parameter in base URI, two parameters, no resource id, no slash in
      * base URI.
      */
-    public void testBuildClientURL23() {
+    @Test
+    void testBuildClientURL23() {
         String baseURL = "http://api.test.com?param=1";
         String correctURL = baseURL + "&key2=value2&key3=value3";
         Map<String, List<String>> params = new TreeMap<>();
@@ -398,7 +423,8 @@ public class ClientUtilTest extends TestCase {
      * One parameter in base URI, two parameters, no resource id, slash in base
      * URI.
      */
-    public void testBuildClientURL24() {
+    @Test
+    void testBuildClientURL24() {
         String baseURL = "http://api.test.com/?param=1";
         String correctURL = baseURL + "&key2=value2&key3=value3";
         Map<String, List<String>> params = new TreeMap<>();
@@ -415,7 +441,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * Two parameters with the same name, no resource id, slash in base URI.
      */
-    public void testBuildClientURL25() {
+    @Test
+    void testBuildClientURL25() {
         String baseURL = "http://api.test.com/";
         String correctURL = baseURL + "?key=value1&key=value2&key2=value3";
         Map<String, List<String>> params = new TreeMap<>();
@@ -433,7 +460,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * Two parameters with the same name, resource id, slash in base URI.
      */
-    public void testBuildClientURL26() {
+    @Test
+    void testBuildClientURL26() {
         String baseURL = "http://api.test.com/";
         String correctURL = baseURL + "10?key=value1&key=value2";
         Map<String, List<String>> params = new TreeMap<>();
@@ -451,7 +479,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * Two parameters with the same name, no resource id, no slash in base URI.
      */
-    public void testBuildClientURL27() {
+    @Test
+    void testBuildClientURL27() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL + "?key=value1&key=value2";
         Map<String, List<String>> params = new TreeMap<>();
@@ -466,7 +495,8 @@ public class ClientUtilTest extends TestCase {
     /**
      * Two parameters with the same name, resource id, no slash in base URI.
      */
-    public void testBuildClientURL28() {
+    @Test
+    void testBuildClientURL28() {
         String baseURL = "http://api.test.com";
         String correctURL = baseURL + "/10?key=value1&key=value2&key=value3&key=value4";
         Map<String, List<String>> params = new TreeMap<>();

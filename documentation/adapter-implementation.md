@@ -1,19 +1,18 @@
-# Implementing an X-Road adapter using XRd4J
+# Implementing an X-Road adapter using XRd4J <!-- omit in toc -->
 
-
-## Table of Contents
+## Table of Contents <!-- omit in toc -->
 
 <!-- toc -->
 
 - [1 Introduction](#1-introduction)
 - [2 Client](#2-client)
-  * [2.1 Client Requirements](#21-client-requirements)
-  * [2.2 Client Example](#22-client-example)
-    * [2.2.1 Receiving an Image From Server](#221-receiving-an-image-from-server)
+  - [2.1 Client Requirements](#21-client-requirements)
+  - [2.2 Client Example](#22-client-example)
+    - [2.2.1 Receiving an Image from Server](#221-receiving-an-image-from-server)
 - [3 Server](#3-server)
-  * [3.1 Server Requirements](#31-server-requirements)
-  * [3.2 Server Examples](#32-server-examples)
-    * [3.2.1 Returning an Image From Server](#321-returning-an-image-from-server)
+  - [3.1 Server requirements](#31-server-requirements)
+  - [3.2 Server example](#32-server-example)
+    - [3.2.1 Returning an Image From Server](#321-returning-an-image-from-server)
 
 <!-- tocstop -->
 
@@ -21,17 +20,20 @@
 
 This document aims to provide basic information on using the XRd4J-library for building and an application that is
 capable of communicating with X-Road. The document is divided into two parts:
+
 - [**Client**](#2-client) – describes the basic requirements for an application that is capable of producing requests
-to and processing responses from X-Road; 
+  to and processing responses from X-Road;
 - [**Server**](#3-server) – describes the basic requirements for an application that is capable for processing requests
-from and producing responses for X-Road. 
+  from and producing responses for X-Road.
 
 The X-Road-capability of applications within the context of this document refers to the capability of producing and
-consuming requests and responses compatible with the [X-Road v6 Message Protocol Version 4.0](https://github.com/ria-ee/X-Road/blob/master/doc/Protocols/pr-mess_x-road_message_protocol.md)
+consuming requests and responses compatible with
+the [X-Road: Message Protocol v4.0](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md)
 utilizing the XRd4J-library.
 
 The examples and code in this document present a simple and minimal implementation that is meant to overview
-the basic structure and idea of general adapter functionality. The examples do not constitute a reference/recommended implementation for a service adapter.
+the basic structure and idea of general adapter functionality. The examples do not constitute a reference/recommended
+implementation for a service adapter.
 
 ## 2 Client
 
@@ -40,18 +42,21 @@ the basic structure and idea of general adapter functionality. The examples do n
 A client application must implement two classes:
 
 * `request serializer` is responsible for converting the object representing the request payload to SOAP
-  * extends `AbstractServiceRequestSerializer`
-    * serializes all other parts of the SOAP message except request data content
-  * used through `ServiceRequestSerializer` interface
-  * must implement `serializeRequest` method that serializes request data content to SOAP
-* `response deserializer` parses the incoming SOAP response message and constructs the objects representing the response payload
-  * extends `AbstractResponseDeserializer<?, ?>`
-    * deserializes all the other parts of the incoming SOAP message except request and response data content
-	* type of the request and response data must be given as type parameters
-  * used through `ServiceResponseSerializer` interface
-  * must implement `deserializeRequestData` and `deserializeResponseData` methods
+    * extends `AbstractServiceRequestSerializer`
+        * serializes all other parts of the SOAP message except request data content
+    * used through `ServiceRequestSerializer` interface
+    * must implement `serializeRequest` method that serializes request data content to SOAP
+* `response deserializer` parses the incoming SOAP response message and constructs the objects representing the response
+  payload
+    * extends `AbstractResponseDeserializer<?, ?>`
+        * deserializes all the other parts of the incoming SOAP message except request and response data content
+        * type of the request and response data must be given as type parameters
+    * used through `ServiceResponseSerializer` interface
+    * must implement `deserializeRequestData` and `deserializeResponseData` methods
 
-**N.B.** If HTTPS is used between the client and the Security Server, the public key certificate of the Security Server MUST be imported into `cacerts` keystore. [Detailed instructions here](Import-a-Certificate-as-a-Trusted-Certificate.md).
+**N.B.** If HTTPS is used between the client and the Security Server, the public key certificate of the Security Server
+MUST be imported into `cacerts`
+keystore. [Detailed instructions here](Import-a-Certificate-as-a-Trusted-Certificate.md).
 
 ### 2.2 Client Example
 
@@ -193,13 +198,17 @@ Main class (generated [request](../examples/request1.xml), received [response](.
 }
 ```
 
-`HelloServiceResponseDeserializer`'s `deserializeRequestData` method reads `name` elements's value ("Test message") under request content:
+`HelloServiceResponseDeserializer`'s `deserializeRequestData` method reads `name` elements's value ("Test message")
+under request content:
+
 ```xml
   <ts:helloService xmlns:ts="http://test.x-road.fi/producer">
     <ts:name>Test message</ts:name>
   </ts:helloService>
 ```
-and `deserializeResponseData` method reads `message` element's value ("Hello Test message! Greetings from adapter server!") under response content:
+
+and `deserializeResponseData` method reads `message` element's value ("Hello Test message! Greetings from adapter
+server!") under response content:
 
 ```xml
   <ts:helloServiceResponse xmlns:ts="http://test.x-road.fi/producer">
@@ -207,11 +216,13 @@ and `deserializeResponseData` method reads `message` element's value ("Hello Tes
   </ts:helloServiceResponse>
 ```
 
-If compatibility mode for request and response wrappers is turned on, the `helloService` and `helloServiceResponse` elements would have `request` and/or `response` wrapper elements and the data elements would be placed within them.
+If compatibility mode for request and response wrappers is turned on, the `helloService` and `helloServiceResponse`
+elements would have `request` and/or `response` wrapper elements and the data elements would be placed within them.
 
 #### 2.2.1 Receiving an Image from Server
 
-The server returns images as base64 coded strings that are placed in SOAP attachments. Before being able to use the image the client must convert the base64 coded string to some other format. For example:
+The server returns images as base64 coded strings that are placed in SOAP attachments. Before being able to use the
+image the client must convert the base64 coded string to some other format. For example:
 
 ```java
 // Get the attached base64 coded image string
@@ -234,47 +245,58 @@ ImageIO.write(newImg, contentType, new File("/image/path"));
 Server application must implement three classes:
 
 * `servlet` is responsible for processing all the incoming SOAP requests and returning a valid SOAP response
-  * extends `AbstractAdapterServlet`
-    * serializes and deserializes SOAP headers, handles error processing
-  * incoming requests are passed as `ServiceRequest` objects
-  * outgoing responses must be returned as `ServiceResponse` objects
-  * must implement `handleRequest` and `getWSDLPath` methods
-* `request deserializer` parses the incoming SOAP request message and constructs the objects representing the request payload
-  * extends `AbstractCustomRequestDeserializer<?>`
-    * type of the request data must be given as type parameter
-  * used through `CustomRequestDeserializer` interface
-  * must implement `deserializeRequest` method that deserializes the request data content
+    * extends `AbstractAdapterServlet`
+        * serializes and deserializes SOAP headers, handles error processing
+    * incoming requests are passed as `ServiceRequest` objects
+    * outgoing responses must be returned as `ServiceResponse` objects
+    * must implement `handleRequest` and `getWSDLPath` methods
+* `request deserializer` parses the incoming SOAP request message and constructs the objects representing the request
+  payload
+    * extends `AbstractCustomRequestDeserializer<?>`
+        * type of the request data must be given as type parameter
+    * used through `CustomRequestDeserializer` interface
+    * must implement `deserializeRequest` method that deserializes the request data content
 * `response serializer`
-  * extends `AbstractServiceResponseSerializer`
-    * is responsible for converting the object representing the response payload to SOAP
-  * used through `ServiceResponseSerializer` interface
-  * must implement `serializeResponse` method that serializes the response data content to SOAP
+    * extends `AbstractServiceResponseSerializer`
+        * is responsible for converting the object representing the response payload to SOAP
+    * used through `ServiceResponseSerializer` interface
+    * must implement `serializeResponse` method that serializes the response data content to SOAP
 
 ### 3.2 Server example
 
-A working example of an application implementing a test service with a server adapter utilizing XRd4J can be found under directory `example-adapter` ([documentation](../example-adapter/README.md)). It implements the adapter server with four classes:
-  
+A working example of an application implementing a test service with a server adapter utilizing XRd4J can be found under
+directory `example-adapter` ([documentation](../example-adapter/README.md)). It implements the adapter server with four
+classes:
+
 * `servlet`:
-  * [ExampleAdapter](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L53-L152)
-    * Implements the servlet requirement of the server adapter. It provides handling for `helloService` and `getRandom` requests as well as the `getWsdlPath` method.
-* `request deserializer`: 
-  * [CustomRequestDeserializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L207-L233)
-    * Implements the required request deserializer that searches for the expected `name` element containing request data necessary for the creation of the `helloService` response. `getRandom` response can be constructed without parsing further data from the request.
+    * [ExampleAdapter](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L55-L280)
+        * Implements the servlet requirement of the server adapter. It provides handling for example requests as well as
+          the `getWsdlPath` method.
+* `request deserializer`:
+    * [CustomRequestDeserializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L350-L376)
+        * Implements the required request deserializer that searches for the expected `name` element containing request
+          data necessary for the creation of the `helloService` response. `getRandom` response can be constructed
+          without parsing further data from the request.
 * `response serializer`:
-  * [ServiceResponseSerializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L158-L176)
-    * Implements the required response serialization for the `getRandom` response. It creates a `data` element for the response value in the response message. 
-  * [HelloServiceResponseSerializer](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L182-L200) 
-    * Another implementation for response serialization that is used for creating the `message` element for the `helloService` response data.
- 
-With these class implementations the example adapter creates a server adapter that has two extremely simple built-in services responding to two types of service requests.
+    * [ServiceResponseSerializerImpl](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L301-L319)
+        * Implements the required response serialization for the `getRandom` response. It creates a `data` element for
+          the response value in the response message.
+    * [HelloServiceResponseSerializer](../example-adapter/src/main/java/org/niis/xrd4j/exampleadapter/ExampleAdapter.java#L325-L343)
+        * Another implementation for response serialization that is used for creating the `message` element for the
+          `helloService` response data.
+
+With these class implementations the example adapter creates a server adapter that has two extremely simple built-in
+services responding to two types of service requests.
 
 With default settings, the request and response messages would look something like these examples:
+
 * received [request](../examples/request1.xml),
 * generated [response](../examples/response1.xml).
 
 #### 3.2.1 Returning an Image From Server
 
-If the server needs to return images, this can be done converting images to base64 coded strings and returning them as SOAP attachments. For example:
+If the server needs to return images, this can be done converting images to base64 coded strings and returning them as
+SOAP attachments. For example:
 
 ```java
 // "img" can be BufferedImage or InputStream
