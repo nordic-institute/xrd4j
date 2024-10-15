@@ -60,7 +60,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: ./src
-        run: ./gradlew build jacocoTestReport sonar -Dsonar.projectKey=nordic-institute_xrd4j -Dsonar.projectName='nordic-institute' -Dsonar.host.url=https://sonarcloud.io
+        run: ./gradlew build jacocoTestReport sonar -Dsonar.projectKey=nordic-institute_xrd4j -Dsonar.organization=nordic-institute -Dsonar.host.url=https://sonarcloud.io --info
       - name: Test report
         uses: dorny/test-reporter@v1
         if: success() || failure()
