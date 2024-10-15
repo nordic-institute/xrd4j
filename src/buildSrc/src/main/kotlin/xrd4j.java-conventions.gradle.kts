@@ -15,7 +15,6 @@ group = "org.niis.xrd4j"
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(11)
-    withJavadocJar()
     withSourcesJar()
 }
 
