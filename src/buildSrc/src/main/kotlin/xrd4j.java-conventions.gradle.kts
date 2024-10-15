@@ -15,7 +15,6 @@ group = "org.niis.xrd4j"
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(11)
-    withJavadocJar()
     withSourcesJar()
 }
 
@@ -63,6 +62,10 @@ publishing {
             val releasesRepoUrl = uri("https://artifactory.niis.org/xroad-maven-releases/")
             val snapshotsRepoUrl = uri("https://artifactory.niis.org/xroad-maven-snapshots/")
             url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+            // 'publish' task expects xroadMavenRepositoryUsername xroadMavenRepositoryPassword gradle project
+            // properties to be present
+            name = "xroadMavenRepository"
+            credentials(PasswordCredentials::class)
         }
     }
 }
