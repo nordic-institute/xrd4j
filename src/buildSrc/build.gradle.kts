@@ -11,4 +11,5 @@ dependencies {
     implementation(libs.licenseGradlePlugin)
     implementation(libs.dependencyCheckGradlePlugin)
     implementation(libs.javadocAggregateGradlePlugin)
+    implementation(libs.sonarqubeGradlePlugin)
 }

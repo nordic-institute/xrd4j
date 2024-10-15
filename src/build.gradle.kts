@@ -1,6 +1,7 @@
 plugins {
     id("org.owasp.dependencycheck")
     id("io.freefair.aggregate-javadoc")
+    id("org.sonarqube")
 }
 
 repositories {
