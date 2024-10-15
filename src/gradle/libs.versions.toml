@@ -29,6 +29,7 @@ org-xmlunit-xmlunitPlaceholders = { module = "org.xmlunit:xmlunit-placeholders",
 licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version = "0.16.1" }
 dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version = "10.0.4" }
 javadocAggregateGradlePlugin = { module = "io.freefair.gradle:maven-plugin", version = "8.10" }
+sonarqubeGradlePlugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version="5.1.0.4882" }
 
 [bundles]
 testImplementation = [ "junit-jupiter", "org-slf4j-slf4jApi", "org-apache-logging-log4j-log4jSlf4j2Impl", "org-apache-logging-log4j-log4jCore" ]
