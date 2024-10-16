@@ -89,6 +89,7 @@ public class SymmetricEncrypter extends AbstractEncrypter implements Encrypter {
      * @throws BadPaddingException if there's an error
      */
     @Override
+    @SuppressWarnings("java:S3329")
     protected byte[] encrypt(byte[] plaintext) throws NoSuchAlgorithmException, InvalidKeyException,
         InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         Cipher cipher = Cipher.getInstance(this.transformation);

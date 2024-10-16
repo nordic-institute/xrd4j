@@ -7,6 +7,9 @@ dependencies {
     api(project(":rest"))
 
     testImplementation(libs.bundles.testImplementation)
+    testImplementation(libs.org.wiremock.wiremock)
+    implementation(libs.org.assertj.assertjCore)
+
 }
 
 

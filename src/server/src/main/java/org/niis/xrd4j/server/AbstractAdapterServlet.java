@@ -36,6 +36,7 @@ import org.niis.xrd4j.server.serializer.ServiceResponseSerializer;
 import org.niis.xrd4j.server.utils.AdapterUtils;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletInputStream;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -133,12 +134,12 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         if (contentTypeMatches(requestContentType, Constants.TEXT_XML)) {
             // Regular SOAP message without attachments
             LOGGER.info("Request's content type is \"{}\".", Constants.TEXT_XML);
-            soapRequest = SOAPHelper.toSOAP(request.getInputStream());
+            soapRequest = SOAPHelper.toSOAP(getInputStream(request));
         } else if (contentTypeMatches(requestContentType, Constants.MULTIPART_RELATED)) {
             // SOAP message with attachments
             LOGGER.info("Request's content type is \"{}\".", Constants.MULTIPART_RELATED);
             MimeHeaders mh = AdapterUtils.getHeaders(request);
-            soapRequest = SOAPHelper.toSOAP(request.getInputStream(), mh);
+            soapRequest = SOAPHelper.toSOAP(getInputStream(request), mh);
             LOGGER.trace(AdapterUtils.getAttachmentsInfo(soapRequest));
         } else {
             // Invalid content type -> message is not processed
@@ -149,7 +150,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         // Conversion has failed if soapRequest is null. Return SOAP Fault.
         if (soapRequest == null) {
             LOGGER.warn("Unable to deserialize the request to SOAP. SOAP Fault is returned.");
-            LOGGER.trace("Incoming message : \"{}\"", request.getInputStream().toString());
+            LOGGER.trace("Incoming message : \"{}\"", getInputStream(request));
             ErrorMessage errorMessage = new ErrorMessage(FAULT_CODE_CLIENT, errString, "", "");
             soapResponse = this.errorToSOAP(errorMessage, null);
         }
@@ -172,6 +173,15 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         }
         // Write the SOAP response to output stream
         writeResponse(soapResponse, response);
+    }
+
+    private ServletInputStream getInputStream(HttpServletRequest request) {
+        try {
+            return request.getInputStream();
+        } catch (IOException e) {
+            LOGGER.error("Error getting InputStream from request", e);
+            return null;
+        }
     }
 
     private boolean contentTypeMatches(String contentType, String expected) {
