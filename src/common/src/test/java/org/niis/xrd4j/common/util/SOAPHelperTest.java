@@ -401,5 +401,4 @@ class SOAPHelperTest {
 
         assertFalse(SOAPHelper.hasAttachments(msg));
     }
-
 }

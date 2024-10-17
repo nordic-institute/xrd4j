@@ -8,8 +8,8 @@ dependencies {
 
     testImplementation(libs.bundles.testImplementation)
     testImplementation(libs.org.wiremock.wiremock)
-    implementation(libs.org.assertj.assertjCore)
-
+    testImplementation(libs.org.assertj.assertjCore)
+    testImplementation(libs.org.mockito.mockitoCore)
 }
 
 

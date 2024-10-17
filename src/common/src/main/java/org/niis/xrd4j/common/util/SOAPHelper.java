@@ -59,7 +59,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.w3c.dom.Node.ELEMENT_NODE;
 import static org.w3c.dom.Node.TEXT_NODE;
@@ -518,27 +517,9 @@ public final class SOAPHelper {
             doc = builderFactory.newDocumentBuilder().parse(stream);
             LOGGER.debug("Converting XML string to XML document succeeded.");
         } catch (Exception e) {
-            // If exception starts with "Invalid byte", it means that ISO-8859-1
-            // character set is probably used. Try to convert the string to
-            // UTF-8.
-            if (e.getLocalizedMessage().startsWith("Invalid byte")) {
-                LOGGER.warn("Invalid characters detected.");
-                try {
-                    LOGGER.debug("Try to convert XML string from ISO-8859-1 to UTF-8.");
-                    stream = new ByteArrayInputStream(new String(xml.getBytes(), ISO_8859_1).getBytes(CHARSET));
-                    doc = builderFactory.newDocumentBuilder().parse(stream);
-                    LOGGER.debug("Converting XML string from ISO-8859-1 to UTF-8 succeeded.");
-                } catch (Exception ex) {
-                    LOGGER.error(ex.getMessage());
-                    LOGGER.warn("Converting XML string to XML document failed.");
-                    LOGGER.warn("Converting XML string from ISO-8859-1 to UTF-8 failed.");
-                    return null;
-                }
-            } else {
-                LOGGER.error(e.getMessage());
-                LOGGER.warn("Converting XML string to XML document failed.");
-                return null;
-            }
+            LOGGER.error(e.getMessage());
+            LOGGER.warn("Converting XML string to XML document failed.");
+            return null;
         }
         return doc;
     }

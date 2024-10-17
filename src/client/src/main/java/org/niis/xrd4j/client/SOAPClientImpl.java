@@ -70,7 +70,16 @@ public class SOAPClientImpl implements SOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     public SOAPClientImpl() throws SOAPException {
-        this.connectionFactory = SOAPConnectionFactory.newInstance();
+        this(SOAPConnectionFactory.newInstance());
+    }
+
+    /**
+     * Constructs and initializes a new SOAPClientImpl.
+     *
+     * @param connectionFactory SOAPConnectionFactory object
+     */
+    SOAPClientImpl(SOAPConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
     /**
