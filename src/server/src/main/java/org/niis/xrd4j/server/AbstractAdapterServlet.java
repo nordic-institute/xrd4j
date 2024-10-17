@@ -51,6 +51,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * This an abstract base class for Servlets that implement SOAP message
  * processing.
@@ -140,7 +142,9 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
             LOGGER.info("Request's content type is \"{}\".", Constants.MULTIPART_RELATED);
             MimeHeaders mh = AdapterUtils.getHeaders(request);
             soapRequest = SOAPHelper.toSOAP(getInputStream(request), mh);
-            LOGGER.trace(AdapterUtils.getAttachmentsInfo(soapRequest));
+            if (LOGGER.isTraceEnabled()) {
+                LOGGER.trace(AdapterUtils.getAttachmentsInfo(soapRequest));
+            }
         } else {
             // Invalid content type -> message is not processed
             LOGGER.warn("Invalid content type : \"{}\".", requestContentType);
@@ -150,7 +154,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         // Conversion has failed if soapRequest is null. Return SOAP Fault.
         if (soapRequest == null) {
             LOGGER.warn("Unable to deserialize the request to SOAP. SOAP Fault is returned.");
-            LOGGER.trace("Incoming message : \"{}\"", getInputStream(request));
+            logIncomingMessage(request);
             ErrorMessage errorMessage = new ErrorMessage(FAULT_CODE_CLIENT, errString, "", "");
             soapResponse = this.errorToSOAP(errorMessage, null);
         }
@@ -173,6 +177,22 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
         }
         // Write the SOAP response to output stream
         writeResponse(soapResponse, response);
+    }
+
+    private void logIncomingMessage(HttpServletRequest request) {
+        if (LOGGER.isTraceEnabled()) {
+            String msg = null;
+            try {
+                ServletInputStream inputStream = getInputStream(request);
+                if (inputStream != null) {
+                    msg = new String(inputStream.readAllBytes(), UTF_8)
+                            .replaceAll("[\r\n]", " "); // sonar javasecurity:S5145
+                }
+                LOGGER.trace("Incoming message : \"{}\"", msg);
+            } catch (IOException e) {
+                LOGGER.trace("Error reading incoming message", e);
+            }
+        }
     }
 
     private ServletInputStream getInputStream(HttpServletRequest request) {
