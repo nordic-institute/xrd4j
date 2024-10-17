@@ -277,7 +277,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
             }
         } catch (XRd4JException ex) {
             LOGGER.error(ex.getMessage(), ex);
-            if (serviceRequest.hasError()) {
+            if (serviceRequest != null && serviceRequest.hasError()) {
                 return this.errorToSOAP(this.cloneErrorMessage(serviceRequest.getErrorMessage()), null);
             } else {
                 return this.errorToSOAP(this.errInternalServerErr, null);
