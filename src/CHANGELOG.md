@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.0-SNAPSHOT 2024-10-03
+## 0.6.0 - 2024-10-18
 - Build migrated from Maven to Gradle 
 - Update dependencies from javax.* to jakarta.*
 - Java 17 and 21 support 
