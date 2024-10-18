@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -29,7 +29,7 @@ import org.niis.xrd4j.common.member.SecurityServer;
 import org.niis.xrd4j.common.util.Constants;
 import org.niis.xrd4j.common.util.ValidationHelper;
 
-import javax.xml.soap.SOAPMessage;
+import jakarta.xml.soap.SOAPMessage;
 
 /**
  * This class represents SOAP header fields that are used in both ServiceRequest

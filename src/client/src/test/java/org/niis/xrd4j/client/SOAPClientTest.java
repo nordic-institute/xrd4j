@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -29,14 +29,23 @@ import org.niis.xrd4j.client.serializer.ServiceRequestSerializer;
 import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
+import org.niis.xrd4j.common.util.SOAPHelper;
 
-import junit.framework.TestCase;
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPConnection;
+import jakarta.xml.soap.SOAPConnectionFactory;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPEnvelope;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test cases for SOAPClientImpl class. Test cases cover only cases where SOAP
@@ -44,7 +53,7 @@ import javax.xml.soap.SOAPMessage;
  *
  * @author Petteri Kivimäki
  */
-public class SOAPClientTest extends TestCase {
+class SOAPClientTest {
 
     private ServiceRequest<String> request;
     private ServiceRequestSerializer serializer;
@@ -55,14 +64,13 @@ public class SOAPClientTest extends TestCase {
      *
      * @throws Exception
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    void setUp() throws Exception {
         ConsumerMember consumer = new ConsumerMember("FI", "GOV", "MEMBER1", "subsystem");
         ProducerMember producer = new ProducerMember("FI", "COM", "MEMBER2", "subsystem", "getRandom", "v1");
         producer.setNamespacePrefix("ns1");
         producer.setNamespaceUrl("http://consumer.x-road.ee");
-        this.request = new ServiceRequest<String>(consumer, producer, "1234567890");
+        this.request = new ServiceRequest<>(consumer, producer, "1234567890");
         this.request.setUserId("EE1234567890");
         this.request.setRequestData("1234567890");
 
@@ -77,7 +85,8 @@ public class SOAPClientTest extends TestCase {
      *
      * @throws SOAPException
      */
-    public void testException1() throws SOAPException {
+    @Test
+    void testException1() throws SOAPException {
         try {
             SOAPClient client = new SOAPClientImpl();
             client.send(request.getSoapMessage(), "test.com");
@@ -92,7 +101,8 @@ public class SOAPClientTest extends TestCase {
      *
      * @throws SOAPException
      */
-    public void testException2() throws SOAPException {
+    @Test
+    void testException2() throws SOAPException {
         try {
             SOAPClient client = new SOAPClientImpl();
             client.send(request.getSoapMessage(), "");
@@ -108,7 +118,8 @@ public class SOAPClientTest extends TestCase {
      * @throws RuntimeException
      * @throws SOAPException
      */
-    public void testException3() throws RuntimeException, SOAPException {
+    @Test
+    void testException3() throws RuntimeException, SOAPException {
         try {
             SOAPClient client = new SOAPClientImpl();
             client.send(request.getSoapMessage(), null);
@@ -123,7 +134,8 @@ public class SOAPClientTest extends TestCase {
      *
      * @throws SOAPException
      */
-    public void testException4() throws SOAPException {
+    @Test
+    void testException4() throws SOAPException {
         try {
             SOAPClient client = new SOAPClientImpl();
             client.send(request.getSoapMessage(), "htp://test.com");
@@ -193,7 +205,29 @@ public class SOAPClientTest extends TestCase {
      // OK
      }
      }*/
-    private class TestRequestSerializer extends AbstractServiceRequestSerializer {
+
+
+    @Test
+    void testSendRequest() throws SOAPException {
+        var connectionFactory = mock(SOAPConnectionFactory.class);
+        var connection = mock(SOAPConnection.class);
+        when(connectionFactory.createConnection()).thenReturn(connection);
+        var response = SOAPHelper.toSOAP(
+                "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
+                        + "  <SOAP-ENV:Body>\n"
+                        + "    <data>1234567890</data>\n"
+                        + "  </SOAP-ENV:Body>\n"
+                        + "</SOAP-ENV:Envelope>");
+        when(connection.call(any(), any())).thenReturn(response);
+
+        var client = new SOAPClientImpl(connectionFactory);
+        var receivedResponse = client.send(request.getSoapMessage(), "http://localhost:8080");
+
+        Assertions.assertThat(receivedResponse).isEqualTo(response);
+    }
+
+
+    private final class TestRequestSerializer extends AbstractServiceRequestSerializer {
 
         protected void serializeRequest(ServiceRequest serviceRequest, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
             SOAPElement data = soapRequest.addChildElement(envelope.createName("data"));
@@ -201,7 +235,7 @@ public class SOAPClientTest extends TestCase {
         }
     }
 
-    private class TestResponseDeserializer extends AbstractResponseDeserializer<String, String> {
+    private final class TestResponseDeserializer extends AbstractResponseDeserializer<String, String> {
 
         protected String deserializeRequestData(Node requestNode) throws SOAPException {
             for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {

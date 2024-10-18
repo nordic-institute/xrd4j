@@ -1,144 +1,235 @@
-# X-Road Adapter Example
+# X-Road Example Adapter <!-- omit in toc -->
 
-This project provides an example implementation of a web service that is compatible with the X-Road v6 adapter server protocol version [4.0](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md). The implementation is based on the [XRd4J](https://github.com/nordic-institute/xrd4j) library. The example adapter contains a single class that
-implements two services:
+## Table of Contents <!-- omit in toc -->
+
+<!-- toc -->
+- [Try It Out](#try-it-out)
+- [Software Requirements](#software-requirements)
+- [Development Environment](#development-environment)
+- [Building](#building)
+- [Installation](#installation)
+  - [Web container](#web-container)
+  - [Spring Boot Executable WAR File](#spring-boot-executable-war-file)
+    - [Docker](#docker)
+- [Access the application](#access-the-application)
+- [Usage](#usage)
+  - [getRandom](#getrandom)
+  - [helloService](#helloservice)
+  - [listPeople](#listpeople)
+  - [personDetails](#persondetails)
+  - [storeAttachments](#storeattachments)
+  - [getAttachments](#getattachments)
+<!-- tocstop -->
+
+X-Road Example Adapter provides an example implementation of a web service that is compatible with X-Road 7. The
+Example Adapter support the X-Road Message Protocol for SOAP
+version [4.0](https://github.com/nordic-institute/X-Road/blob/develop/doc/Protocols/pr-mess_x-road_message_protocol.md).
+
+The implementation is based on the [XRd4J](https://github.com/nordic-institute/xrd4j) library. The Example Adapter
+contains
+a single class that implements the following services:
 
 * `getRandom` : returns a random number between 1-100
 * `helloService` : returns a hello message with the given name
 * `listPeople` : returns a list of mock people
 * `personDetails` : returns a mock person based on the given `SSN`
+* `storeAttachments` : accepts the request with attachments and returns name and size of each attachment
+* `getAttachments` : returns the response with attachments. The number of attachments and their size are given in
+  request.
 
-The example adapter is meant to illustrate the basic level usage of the XRd4J library in processing X-Road messages.
+The Example Adapter is meant to illustrate the basic level usage of the XRd4J library in processing X-Road messages.
 
 ## Try It Out
 
-### Docker
+The fastest and easiest way to try out the application is by using the Spring Boot Gradle plugin. The only requirement
+is to have Java 17 or later installed on your machine.
 
-The `example-adapter` directory contains a Dockerfile that can be used to create a container for running the example. Requires Docker to be installed and configured.
-
-Clone the repository to get access to the sources:
-
-```
-git clone https://github.com/nordic-institute/xrd4j.git
+```bash
+./gradlew bootRun
 ```
 
-The example adapter project root is under the `example-adapter` directory.
-
-Build the project from the project root with:
+After that the application is accessible at:
 
 ```
-mvn clean install
-```
-
-After a successful build, at project root directory run:
-
-```
-docker build -t example-adapter .
-```
-
-This will create a new docker image named `example-adapter`. A container based on the image can be run with:
-
-```
-docker run -p 8080:8080 example-adapter
-```
-
-This will start the container and listen to port `8080`. On Linux, the container should be available at `localhost`. On Windows use `docker-machine ip` command to get Docker host’s IP address.
-
-The example service can now be found at `http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint` where `x.x.x` needs to be replaced by the version that can be verified from the maven project file, or the archives produced by the build.
-Example requests can be found in the `examples` directory.
-
-See [Usage section](#usage) for further instructions.
-
-### Software Requirements
-
-* Java 8
-* Tomcat 6 or later
-
-### Development Environment
-
-Setting up an environment for example-related development is explained [here](Setting-up-Development-Environment.md).
-
-### Installation
-
-**N.B.** If you intend to connect the services to an X-Road Security Server you must update your server's IP address / host name to the WSDL file. Look for the below line and replace the default URL with your server's IP / host name.
-
-```XML
-<soap:address location="http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint" />
-```
-
-#### JAR
-
-* Build the project and produce `example-adapter-x.x.x-SNAPSHOT.jar` file (`x.x.x` being replaced by the actual version).
-* Run the application: `$ java -jar example-adapter-x.x.x-SNAPSHOT.jar`.
-
-#### WAR
-
-* Build the project and produce `example-adapter-x.x.x-SNAPSHOT.war` file.
-* Copy the file to `tomcat.home/webapps` folder.
-* Start/restart Tomcat.
-
-### Access the application
-
-After installation (both JAR and WAR) the application is accessible at:
-
-```
-http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
+http://localhost:8080/example-adapter/Endpoint
 ```
 
 The WSDL description is accessible at:
 
 ```
-http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint?wsdl
+http://localhost:8080/example-adapter/Endpoint?wsdl
 ```
 
-### Usage
+## Software Requirements
 
-This section provides examples for calling the service after it is deployed and running. The example commands require curl to be installed.
+* Java 17 or later
+* Docker (*optional*)
 
-#### getRandom
+## Development Environment
 
-An example [SOAP request](examples/xroad-6.4/getRandomRequest.xml) (available in the `examples` directory).
+Setting up an environment for example-related development is explained [here](Setting-up-Development-Environment.md).
 
-Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `getRandom` service:
+## Building
+
+> **Note:** To use locally built XRd4J library in Example Adapter, the XRd4J library has to be built and published to
+> the local Maven repository. See
+> the [XRd4J documentation](../documentation/Setting-up-Development-Environment.md#using-local-builds-in-your-project)
+> for details.
+
+X-Road Example Adapter can be built using the provided Gradle wrapper. The following command will build the project.
 
 ```bash
-curl -d @examples/xroad-6.4/getRandomRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
+./gradlew clean build
 ```
 
-An example of the corresponding [SOAP response](examples/xroad-6.4/getRandomResponse.xml) (available in the `examples` directory).
-
-#### helloService
-
-An example [SOAP request](examples/xroad-6.4/helloServiceRequest.xml) (available in the `examples` directory).
-
-Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `helloService`:
+To build the project with locally built XRd4J library, the following command can be used:
 
 ```bash
-curl -d @examples/xroad-6.4/helloServiceRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
+./gradlew --include-build ../src build
 ```
 
-An example of the corresponding [SOAP response](examples/xroad-6.4/helloServiceResponse.xml) (available in the `examples` directory).
+When successfully built, the following artifacts are produced in the `build/libs` directory:
 
-#### listPeople
+* `example-adapter-x.x.x.war` : a deployable WAR file
+* `example-adapter-x.x.x-boot.war` : a Spring Boot executable WAR file
 
-An example [SOAP request](examples/xroad-6.4/listPeopleRequest.xml) (available in the `examples` directory).
+## Installation
 
-Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `listPeople`:
+X-Road Example Adapter can be installed and run in the following ways:
+
+* Deploying `example-adapter-x.x.x.war` into a web container such as Tomcat.
+* Run the Spring Boot executable WAR file `example-adapter-x.x.x-boot.war` with java -jar command. This can also be done
+  using Docker.
+
+### Web container
+
+Build X-Road Example Adapter and deploy it to a Java application server, e.g., Tomcat.
+
+* Build the project and produce `example-adapter-x.x.x.war` file.
+* Copy the file `tomcat.home/webapps` folder.
+* Start/restart Tomcat.
+
+### Spring Boot Executable WAR File
+
+Spring Boot executable WAR file `example-adapter-x.x.x-boot.war` can be run with `java -jar` command:
 
 ```bash
-curl -d @examples/xroad-6.4/listPeopleRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
+java -jar example-adapter-x.x.x-boot.war
 ```
 
-An example of the corresponding [SOAP response](examples/xroad-6.4/listPeopleResponse.xml) (available in the `examples` directory).
+#### Docker
 
-#### personDetails
+You can create a Docker image to run X-Road Example Adapter inside a container, using the provided Dockerfile.
+Before building the Docker image, `example-adapter-x.x.x-boot.war` file has to be [built with Gradle](#building).
 
-An example [SOAP request](examples/xroad-6.4/personDetailsRequest.xml) (available in the `examples` directory).
-
-Be sure to replace `x.x.x` in the command with the actual version. If at the project root, the following command will call `personDetails`:
+While you are in the project root directory, build the image using the `docker build` command. The `-t` parameter gives
+your image a tag, so you can run it more easily later. Don’t forget the `.` command, which tells the `docker build`
+command to look in the current directory for a file called Dockerfile.
 
 ```bash
-curl -d @examples/xroad-6.4/personDetailsRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter-x.x.x-SNAPSHOT/Endpoint
+docker build -t example-adapter .
 ```
 
-An example of the corresponding [SOAP response](examples/xroad-6.4/personDetailsResponse.xml) (available in the `examples` directory).
+After building the image, you can run X-Road Test Service using it.
+
+```bash
+docker run -p 8080:8080 example-adapter
+```
+
+See [Usage section](#usage) for further instructions.
+
+## Access the application
+
+After installation the application is accessible at:
+
+```
+http://localhost:8080/example-adapter/Endpoint
+```
+
+The WSDL description is accessible at:
+
+```
+http://localhost:8080/example-adapter/Endpoint?wsdl
+```
+
+## Usage
+
+This section provides examples for calling the service after it is deployed and running. The example commands require
+`curl` to be installed.
+
+### getRandom
+
+An example [SOAP request](examples/getRandomRequest.xml) (available in the `examples` directory).
+
+At the project root, the following command will call `getRandom` service:
+
+```bash
+curl -d @examples/getRandomRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
+```
+
+An example of the corresponding [SOAP response](examples/getRandomResponse.xml) (available in the `examples` directory).
+
+### helloService
+
+An example [SOAP request](examples/helloServiceRequest.xml) (available in the `examples` directory).
+
+At the project root, the following command will call `helloService`:
+
+```bash
+curl -d @examples/helloServiceRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
+```
+
+An example of the corresponding [SOAP response](examples/helloServiceResponse.xml) (available in the `examples`
+directory).
+
+### listPeople
+
+An example [SOAP request](examples/listPeopleRequest.xml) (available in the `examples` directory).
+
+At the project root, the following command will call `listPeople`:
+
+```bash
+curl -d @examples/listPeopleRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
+```
+
+An example of the corresponding [SOAP response](examples/listPeopleResponse.xml) (available in the `examples`
+directory).
+
+### personDetails
+
+An example [SOAP request](examples/personDetailsRequest.xml) (available in the `examples` directory).
+
+At the project root, the following command will call `personDetails`:
+
+```bash
+curl -d @examples/personDetailsRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
+```
+
+An example of the corresponding [SOAP response](examples/personDetailsResponse.xml) (available in the `examples`
+directory).
+
+### storeAttachments
+
+An example [multipart MIME request](examples/storeAttachmentsRequest.txt) (available in the `examples` directory).
+
+At the project root, the following command will call `storeAttachments`:
+
+```bash
+curl -X POST -H "Content-Type: multipart/related; start=\"<rootpart>\"; boundary=MIME_boundary" --data-binary @examples/storeAttachmentsRequest.txt -X POST http://localhost:8080/example-adapter/Endpoint
+```
+
+An example of the corresponding [SOAP response](examples/storeAttachmentsResponse.xml) (available in the `examples`
+directory).
+
+### getAttachments
+
+An example [SOAP request](examples/getAttachmentsRequest.xml) (available in the `examples` directory).
+
+At the project root, the following command will call `getAttachments`:
+
+```bash
+curl -d @examples/getAttachmentsRequest.xml --header "Content-Type: text/xml" -X POST http://localhost:8080/example-adapter/Endpoint
+```
+
+The response is multipart MIME message containing SOAP response and attachments. An example of the
+corresponding [response](examples/getAttachmentsResponse.txt) (available in the `examples` directory).

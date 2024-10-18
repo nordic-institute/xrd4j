@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -28,14 +28,19 @@ import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.member.SecurityServer;
 import org.niis.xrd4j.common.util.MessageHelper;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Test cases for ServiceRequest class.
  *
  * @author Petteri Kivimäki
  */
-public class ServiceRequestTest extends TestCase {
+class ServiceRequestTest {
 
     private ConsumerMember consumer;
     private ProducerMember producer;
@@ -46,9 +51,8 @@ public class ServiceRequestTest extends TestCase {
      *
      * @throws Exception
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    void setUp() throws Exception {
         this.consumer = new ConsumerMember("FI", "COM", "12345-5", "system");
         this.producer = new ProducerMember("FI", "GOV", "12345-6", "system", "TestService", "v1");
         this.securityServer = new SecurityServer("FI", "GOV", "12345-6", "myserver");
@@ -59,13 +63,14 @@ public class ServiceRequestTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testToString() throws XRd4JException {
+    @Test
+    void testToString() throws XRd4JException {
         String id = MessageHelper.generateId();
         ServiceRequest request = new ServiceRequest(consumer, producer, "12345");
         assertEquals("12345", request.toString());
         request = new ServiceRequest(consumer, producer, id);
         assertEquals(id, request.toString());
-        ServiceRequestTest.assertFalse(request.toString().equals(id + "1"));
+        assertFalse(request.toString().equals(id + "1"));
         assertEquals("4.0", request.getProtocolVersion());
         request.setProtocolVersion("5.0");
         assertEquals("5.0", request.getProtocolVersion());
@@ -76,7 +81,8 @@ public class ServiceRequestTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testEquals() throws XRd4JException {
+    @Test
+    void testEquals() throws XRd4JException {
         String id = MessageHelper.generateId();
         assertEquals(new ServiceRequest(consumer, producer, "12345"), new ServiceRequest(consumer, producer, "12345"));
         assertEquals(new ServiceRequest(consumer, producer, id), new ServiceRequest(consumer, producer, id));
@@ -87,8 +93,8 @@ public class ServiceRequestTest extends TestCase {
         assertEquals(req1.getSecurityServer(), req2.getSecurityServer());
         this.securityServer = new SecurityServer("FI", "GOV", "12345-7", "myserver");
         req2.setSecurityServer(securityServer);
-        ServiceRequestTest.assertFalse(req1.getSecurityServer().equals(req2.getSecurityServer()));
-        ServiceRequestTest.assertFalse(new ServiceRequest(consumer, producer, MessageHelper.generateId()).equals(new ServiceRequest(consumer, producer, MessageHelper.generateId())));
+        assertFalse(req1.getSecurityServer().equals(req2.getSecurityServer()));
+        assertFalse(new ServiceRequest(consumer, producer, MessageHelper.generateId()).equals(new ServiceRequest(consumer, producer, MessageHelper.generateId())));
     }
 
     /**
@@ -96,7 +102,8 @@ public class ServiceRequestTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testException1() throws XRd4JException {
+    @Test
+    void testException1() throws XRd4JException {
         try {
             ServiceRequest request = new ServiceRequest(null, producer, "12345");
             fail("Should not reach this");
@@ -110,7 +117,8 @@ public class ServiceRequestTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testException2() throws XRd4JException {
+    @Test
+    void testException2() throws XRd4JException {
         try {
             ServiceRequest request = new ServiceRequest(consumer, null, "12345");
             fail("Should not reach this");
@@ -124,7 +132,8 @@ public class ServiceRequestTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testException3() throws XRd4JException {
+    @Test
+    void testException3() throws XRd4JException {
         try {
             ServiceRequest request = new ServiceRequest(consumer, producer, null);
             fail("Should not reach this");
@@ -138,7 +147,8 @@ public class ServiceRequestTest extends TestCase {
      *
      * @throws XRd4JException if there's a XRd4J error
      */
-    public void testException4() throws XRd4JException {
+    @Test
+    void testException4() throws XRd4JException {
         try {
             ServiceRequest request = new ServiceRequest(consumer, producer, "");
             fail("Should not reach this");

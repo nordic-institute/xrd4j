@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -69,6 +69,7 @@ public final class ClientUtil {
      */
     public static void doTrustToCertificates() throws XRd4JException {
         // Create a trust manager that does not validate certificate chains
+        @SuppressWarnings("java:S4830") // Sonar rule: "Server certificates should be verified during SSL/TLS connections"
         TrustManager[] trustAllCerts = new TrustManager[]{
             new X509TrustManager() {
 
@@ -91,7 +92,7 @@ public final class ClientUtil {
 
         try {
             // Install the all-trusting trust manager
-            SSLContext sc = SSLContext.getInstance("SSL");
+            SSLContext sc = SSLContext.getInstance("TLSv1.2");
             sc.init(null, trustAllCerts, new SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
             HostnameVerifier hv = (String urlHostName, SSLSession session) -> {

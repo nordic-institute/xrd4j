@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -35,22 +35,28 @@ import org.niis.xrd4j.server.deserializer.CustomRequestDeserializer;
 import org.niis.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import org.niis.xrd4j.server.serializer.ServiceResponseSerializer;
 
-import java.util.List;
-import java.util.Properties;
-import java.util.Random;
-import javax.xml.soap.Node;
-import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPMessage;
+import jakarta.xml.soap.AttachmentPart;
+import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPEnvelope;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
+
 /**
- * This class implements two simple X-Road v6 compatible services: "getRandom"
- * and "helloService". Service descriptions are defined in "example.wsdl" file
- * that's located in WEB-INF/classes folder. The name of the WSDL file and the
- * namespace is configured in WEB-INF/classes/xrd-servlet.properties file.
+ * This class implements four simple X-Road 6 and X-Road 7 compatible services:
+ * "getRandom", "helloService", "listPeople" and "personDetails". Service descriptions
+ * are defined in "example-adapter.wsdl" file that's located in resources/ folder.
+ * The name of the WSDL file and the namespace is configured in resources/xrd-servlet.properties file.
  *
  * @author Petteri Kivimäki
  * @author Raido Kaju
@@ -66,7 +72,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
 
     @Override
     public void init() {
-        logger.debug("Starting to initialize Enpoint.");
+        logger.debug("Starting to initialize Endpoint.");
         this.props = PropertiesUtil.getInstance().load("/xrd-servlet.properties");
         this.namespaceSerialize = this.props.getProperty("namespace.serialize");
         this.namespaceDeserialize = this.props.getProperty("namespace.deserialize");
@@ -90,7 +96,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
     }
 
     @Override
-    protected ServiceResponse handleRequest(ServiceRequest request) throws SOAPException, XRd4JException {
+    protected ServiceResponse<?,?> handleRequest(ServiceRequest request) throws SOAPException, XRd4JException {
         ServiceResponseSerializer serializer;
         // Process services by service code
         if ("getRandom".equals(request.getProducer().getServiceCode())) {
@@ -101,12 +107,12 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             // need a request deserializer
             serializer = new ServiceResponseSerializerImpl();
             // Create a new ServiceResponse object
-            ServiceResponse<String, String> response = new ServiceResponse<>(request.getConsumer(), request.getProducer(), request.getId());
+            ServiceResponse<String, String> response = createResponse(request);
             // Set namespace of the SOAP response
             response.getProducer().setNamespaceUrl(this.namespaceSerialize);
             response.getProducer().setNamespacePrefix(this.prefix);
             // Set response data - a random number between 0 and 100
-            response.setResponseData(Integer.toString((int) new Random().nextInt(101)));
+            response.setResponseData(Integer.toString(new Random().nextInt(101)));
             // Serialize the response to SOAP
             serializer.serialize(response, request);
             // Return the response - AbstractAdapterServlet takes care of
@@ -124,7 +130,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             // Parse the request data from the request
             customDeserializer.deserialize(request, this.namespaceDeserialize);
             // Create a new ServiceResponse object
-            ServiceResponse<String, String> response = new ServiceResponse<>(request.getConsumer(), request.getProducer(), request.getId());
+            ServiceResponse<String, String> response = createResponse(request);
             // Set namespace of the SOAP response
             response.getProducer().setNamespaceUrl(this.namespaceSerialize);
             response.getProducer().setNamespacePrefix(this.prefix);
@@ -151,13 +157,8 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             // Create a new response serializer that serializes the response
             // to SOAP
             serializer = new ListPeopleResponseSerializer();
-            // Create a custom request deserializer that parses the request
-            // data from the SOAP request
-            CustomRequestDeserializer customDeserializer = new CustomRequestDeserializerImpl();
-            // Parse the request data from the request
-            customDeserializer.deserialize(request, this.namespaceDeserialize);
             // Create a new ServiceResponse object
-            ServiceResponse<String, List<Person>> response = new ServiceResponse<>(request.getConsumer(), request.getProducer(), request.getId());
+            ServiceResponse<String, List<Person>> response = createResponse(request);
             // Set namespace of the SOAP response
             response.getProducer().setNamespaceUrl(this.namespaceSerialize);
             response.getProducer().setNamespacePrefix(this.prefix);
@@ -175,14 +176,14 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             logger.info("Process \"personDetails\" service.");
             // Create a new response serializer that serializes the response
             // to SOAP
-            serializer = new PersonDetailsResponseSerializere();
+            serializer = new PersonDetailsResponseSerializer();
             // Create a custom request deserializer that parses the request
             // data from the SOAP request
             CustomRequestDeserializer customDeserializer = new PersonDetailsRequestDeserializer();
             // Parse the request data from the request
             customDeserializer.deserialize(request, this.namespaceDeserialize);
             // Create a new ServiceResponse object
-            ServiceResponse<String, Person> response = new ServiceResponse<>(request.getConsumer(), request.getProducer(), request.getId());
+            ServiceResponse<String, Person> response = createResponse(request);
             // Set namespace of the SOAP response
             response.getProducer().setNamespaceUrl(this.namespaceSerialize);
             response.getProducer().setNamespacePrefix(this.prefix);
@@ -206,24 +207,99 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             // Return the response - AbstractAdapterServlet takes care of
             // the rest
             return response;
+        } else if ("getAttachments".equals(request.getProducer().getServiceCode())) {
+            logger.info("Process \"getAttachments\" service.");
+            // Create a new response serializer that serializes the response
+            // to SOAP
+            serializer = new AttachmentsResponseSerializer();
+            // Create a custom request deserializer that parses the request
+            // data from the SOAP request
+            CustomRequestDeserializer customDeserializer = new GetAttachmentsRequestDeserializer();
+            // Parse the request data from the request
+            customDeserializer.deserialize(request, this.namespaceDeserialize);
+            // Create a new ServiceResponse object
+            ServiceResponse<String, Map<String,Integer>> response = createResponse(request);
+            // Set namespace of the SOAP response
+            response.getProducer().setNamespaceUrl(this.namespaceSerialize);
+            response.getProducer().setNamespacePrefix(this.prefix);
+            logger.debug("Do message prosessing...");
+
+            Map<String, Integer> attachments =  new LinkedHashMap<>();
+            List<Integer> requestedSizes = (List<Integer>) request.getRequestData();
+            for (int i = 0; i < requestedSizes.size(); i++) {
+                attachments.put(String.format("attachment_%d", i), requestedSizes.get(i));
+            }
+            response.setResponseData(attachments);
+
+            logger.debug("Message prosessing done!");
+            // Serialize the response to SOAP
+            serializer.serialize(response, request);
+            // add the attachment parts
+            for (Map.Entry<String, Integer> file: attachments.entrySet()) {
+                AttachmentPart attachmentPart = response.getSoapMessage().createAttachmentPart(generateCharacters(file.getValue()),
+                        "application/octet-stream");
+                attachmentPart.setContentId(file.getKey());
+                response.getSoapMessage().addAttachmentPart(attachmentPart);
+            }
+            return response;
+        } else if ("storeAttachments".equals(request.getProducer().getServiceCode())) {
+            logger.info("Process \"storeAttachments\" service.");
+            // Create a new response serializer that serializes the response
+            // to SOAP
+            serializer = new AttachmentsResponseSerializer();
+            // Create a new ServiceResponse object
+            ServiceResponse<String, Map<String, Integer>> response = createResponse(request);
+            // Set namespace of the SOAP response
+            response.getProducer().setNamespaceUrl(this.namespaceSerialize);
+            response.getProducer().setNamespacePrefix(this.prefix);
+            logger.debug("Do message prosessing...");
+
+            Map<String, Integer> attachments = new LinkedHashMap<>();
+            Iterator it = request.getSoapMessage().getAttachments();
+            if (it != null) {
+                while (it.hasNext()) {
+                    AttachmentPart attachment = (AttachmentPart) it.next();
+                    attachments.put(attachment.getContentId(), attachment.getSize());
+                }
+            }
+            response.setResponseData(attachments);
+
+            logger.debug("Message prosessing done!");
+            // Serialize the response to SOAP
+            serializer.serialize(response, request);
+            return response;
         }
         // No service matching the service code in the request was found -
         // and error is returned
         serializer = new ServiceResponseSerializerImpl();
-        ServiceResponse<String, String> response = new ServiceResponse();
+        ServiceResponse<String, String> response = new ServiceResponse<>();
         ErrorMessage error = new ErrorMessage("SOAP-ENV:Client", "Unknown service code.", null, null);
         response.setErrorMessage(error);
         serializer.serialize(response, request);
         return response;
     }
 
+    private <T1, T2> ServiceResponse<T1, T2> createResponse(ServiceRequest<?> request) throws XRd4JException {
+        return new ServiceResponse<>(request.getConsumer(), request.getProducer(), request.getId());
+    }
+
+    private String generateCharacters(Integer size) {
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            // Generate a random ASCII code of character between 'a' and 'z'
+            char randomChar = (char) ('a' + random.nextInt('z' - 'a' + 1));
+            sb.append(randomChar);
+        }
+        return sb.toString();
+    }
+
     /**
      * This class is responsible for serializing response data of getRandom
      * service responses.
      */
-    private class ServiceResponseSerializerImpl extends AbstractServiceResponseSerializer {
+    private static class ServiceResponseSerializerImpl extends AbstractServiceResponseSerializer {
 
-        @Override
         /**
          * Serializes the response data.
          *
@@ -233,6 +309,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
          * element is added
          * @param envelope SOAPMessage's SOAPEnvelope object
          */
+        @Override
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             // Add "data" element
             SOAPElement data = soapResponse.addChildElement(envelope.createName("data"));
@@ -245,9 +322,8 @@ public class ExampleAdapter extends AbstractAdapterServlet {
      * This class is responsible for serializing response data of helloService
      * service responses.
      */
-    private class HelloServiceResponseSerializer extends AbstractServiceResponseSerializer {
+    private static class HelloServiceResponseSerializer extends AbstractServiceResponseSerializer {
 
-        @Override
         /**
          * Serializes the response data.
          *
@@ -257,6 +333,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
          * element is added
          * @param envelope SOAPMessage's SOAPEnvelope object
          */
+        @Override
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             // Add "message" element
             SOAPElement data = soapResponse.addChildElement(envelope.createName("message"));
@@ -270,7 +347,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
      * service requests. The type declaration "<String>" defines the type of the
      * request data, which in this case is String.
      */
-    private class CustomRequestDeserializerImpl extends AbstractCustomRequestDeserializer<String> {
+    private static class CustomRequestDeserializerImpl extends AbstractCustomRequestDeserializer<String> {
 
         /**
          * Deserializes the "request" element.
@@ -302,9 +379,8 @@ public class ExampleAdapter extends AbstractAdapterServlet {
      * This class is responsible for serializing the response data of the listPeople
      * service.
      */
-    private class ListPeopleResponseSerializer extends AbstractServiceResponseSerializer {
+    private static class ListPeopleResponseSerializer extends AbstractServiceResponseSerializer {
 
-        @Override
         /**
          * Serializes the response data.
          *
@@ -314,6 +390,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
          * element is added
          * @param envelope SOAPMessage's SOAPEnvelope object
          */
+        @Override
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             // Add "message" element
             SOAPElement data = soapResponse.addChildElement(envelope.createName("people"));
@@ -348,9 +425,8 @@ public class ExampleAdapter extends AbstractAdapterServlet {
      * This class is responsible for serializing the response data of the personDetails
      * service.
      */
-    private class PersonDetailsResponseSerializere extends AbstractServiceResponseSerializer {
+    private static class PersonDetailsResponseSerializer extends AbstractServiceResponseSerializer {
 
-        @Override
         /**
          * Serializes the response data.
          *
@@ -360,6 +436,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
          * element is added
          * @param envelope SOAPMessage's SOAPEnvelope object
          */
+        @Override
         public void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
             // Add "message" element
             SOAPElement data = soapResponse.addChildElement(envelope.createName("person"));
@@ -412,7 +489,7 @@ public class ExampleAdapter extends AbstractAdapterServlet {
      * service request. The type declaration "<String>" defines the type of the
      * request data, which in this case is String.
      */
-    private class PersonDetailsRequestDeserializer extends AbstractCustomRequestDeserializer<String> {
+    private static class PersonDetailsRequestDeserializer extends AbstractCustomRequestDeserializer<String> {
 
         /**
          * Deserializes the "request" element.
@@ -439,4 +516,41 @@ public class ExampleAdapter extends AbstractAdapterServlet {
             return null;
         }
     }
+
+    private static class GetAttachmentsRequestDeserializer extends AbstractCustomRequestDeserializer<List<Integer>> {
+
+        @Override
+        protected List<Integer> deserializeRequest(Node requestNode, SOAPMessage message) throws SOAPException {
+            if (requestNode == null) {
+                logger.warn("\"requestNode\" is null. Null is returned.");
+                return null;
+            }
+            List<Integer> sizes = new ArrayList<>();
+            for (int i = 0; i < requestNode.getChildNodes().getLength(); i++) {
+                org.w3c.dom.Node node = requestNode.getChildNodes().item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE && "size".equals(node.getLocalName())) {
+                    sizes.add(Integer.parseInt(node.getTextContent()));
+                }
+            }
+            return sizes;
+        }
+    }
+
+    private static class AttachmentsResponseSerializer extends AbstractServiceResponseSerializer {
+
+        @Override
+        protected void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException {
+            Map<String, Integer> attachments = (Map<String, Integer>) response.getResponseData();
+            for (Map.Entry<String, Integer> file : attachments.entrySet()) {
+                SOAPElement fileElement = soapResponse.addChildElement(envelope.createName("attachment"));
+
+                SOAPElement name = fileElement.addChildElement(envelope.createName("name"));
+                name.addTextNode(file.getKey());
+
+                SOAPElement size = fileElement.addChildElement(envelope.createName("size"));
+                size.addTextNode(Long.toString(file.getValue()));
+            }
+        }
+    }
+
 }

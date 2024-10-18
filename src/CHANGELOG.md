@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.6.0 - 2024-10-18
+- Build migrated from Maven to Gradle 
+- Update dependencies from javax.* to jakarta.*
+- Java 17 and 21 support 
+- Added integration tests for the server module
+
+## 0.5.0-SNAPSHOT 2023-02-24
+- Add JDK 11 support
+- Update dependencies
+ 
 ## 0.4.0 - 2022-01-05
 - XRDDEV-1874 Release version 0.4.0
 

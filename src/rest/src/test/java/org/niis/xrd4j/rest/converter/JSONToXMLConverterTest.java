@@ -1,4 +1,4 @@
-/**
+/*
  * The MIT License
  * Copyright © 2018 Nordic Institute for Interoperability Solutions (NIIS)
  *
@@ -24,7 +24,8 @@ package org.niis.xrd4j.rest.converter;
 
 import org.niis.xrd4j.common.util.SOAPHelper;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -36,12 +37,15 @@ import javax.xml.xpath.XPathFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 /**
  * Test cases for JSONToXMLConverter class.
  *
  * @author Petteri Kivimäki
  */
-public class JSONToXMLConverterTest extends TestCase {
+class JSONToXMLConverterTest {
 
     private Converter converter;
 
@@ -50,16 +54,16 @@ public class JSONToXMLConverterTest extends TestCase {
      *
      * @throws Exception
      */
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @BeforeEach
+    void setUp() throws Exception {
         this.converter = new JSONToXMLConverter();
     }
 
     /**
      * Test converting single string element.
      */
-    public void testSingleStrElement() {
+    @Test
+    void testSingleStrElement() {
         String correctXml = "<key1>value1</key1>";
         String json = "{\"key1\":\"value1\"}";
         String xml = this.converter.convert(json);
@@ -69,7 +73,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test converting multiple string elements.
      */
-    public void testMultipleStrElements() {
+    @Test
+    void testMultipleStrElements() {
         List<String> elements = new ArrayList<>();
         elements.add("<key1>value1</key1>");
         elements.add("<key2>value2</key2>");
@@ -90,7 +95,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test converting single string element.
      */
-    public void testSingleIntElement() {
+    @Test
+    void testSingleIntElement() {
         String correctXml = "<key1>1</key1>";
         String json = "{\"key1\":1}";
         String xml = this.converter.convert(json);
@@ -100,7 +106,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test converting multiple string, int and boolean elements.
      */
-    public void testMultipleElements() {
+    @Test
+    void testMultipleElements() {
         List<String> elements = new ArrayList<>();
         elements.add("<key1>value1</key1>");
         elements.add("<key2>true</key2>");
@@ -121,7 +128,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test converting nested element.
      */
-    public void testNestedElement() throws XPathExpressionException {
+    @Test
+    void testNestedElement() throws XPathExpressionException {
         String json = "{\"request\":{\"key1\":\"value1\"}}";
         String xml = this.converter.convert(json);
         Document xmlConverted = SOAPHelper.xmlStrToDoc(xml);
@@ -133,7 +141,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test converting nested elements.
      */
-    public void testNestedElements1() throws XPathExpressionException {
+    @Test
+    void testNestedElements1() throws XPathExpressionException {
         String json = "{\"request\":{\"key1\":\"value1\",\"key2\":true,\"key3\":3}}";
         String xml = this.converter.convert(json);
         Document xmlConverted = SOAPHelper.xmlStrToDoc(xml);
@@ -147,7 +156,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test converting nested elements.
      */
-    public void testNestedElements2() throws XPathExpressionException {
+    @Test
+    void testNestedElements2() throws XPathExpressionException {
         String json = "{\"menu\": {\"id\": \"file\",\"value\": \"File\",\"popup\": {\"menuitem\": [{\"value\": \"New\", \"onclick\": \"CreateNewDoc()\"},{\"value\": \"Open\", \"onclick\": \"OpenDoc()\"},{\"value\": \"Close\", \"onclick\": \"CloseDoc()\"}]}}}";
         String xml = this.converter.convert(json);
 
@@ -177,7 +187,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test converting nested elements.
      */
-    public void testNestedElements3() {
+    @Test
+    void testNestedElements3() {
         List<String> elements = new ArrayList<>();
         elements.add("<id>49</id>");
         elements.add("<name_en>City of Espoo</name_en>");
@@ -202,7 +213,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test converting nested elements.
      */
-    public void testArray() throws XPathExpressionException {
+    @Test
+    void testArray() throws XPathExpressionException {
         List<String> elements = new ArrayList<>();
         elements.add("<id>49</id>");
         elements.add("<name_en>City of Espoo</name_en>");
@@ -236,7 +248,8 @@ public class JSONToXMLConverterTest extends TestCase {
      * Test key named array. This behavior could be considered a bug in
      * org.json.
      */
-    public void testNotNestingArrayTags() {
+    @Test
+    void testNotNestingArrayTags() {
         /*
          * When passing JSON with a key "array" and an array-type value, we would
          * require nested sets of <array /> tags, but org.json gives us only one level:
@@ -254,7 +267,8 @@ public class JSONToXMLConverterTest extends TestCase {
      * Test empty array in object is removed. This behavior could be considered
      * a bug in org.json.
      */
-    public void testEmptyArray() {
+    @Test
+    void testEmptyArray() {
         List<String> elements = new ArrayList<>();
         elements.add("<array>one</array>");
         elements.add("<array>two</array>");
@@ -280,7 +294,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test a deep structure comes through correctly.
      */
-    public void testDeepData() {
+    @Test
+    void testDeepData() {
         List<String> elements = new ArrayList<>();
         elements.add("<realm>1</realm>");
         elements.add("<realm>2</realm>");
@@ -308,7 +323,8 @@ public class JSONToXMLConverterTest extends TestCase {
     /**
      * Test converting JSON-LD to XML.
      */
-    public void testJSONLD1() {
+    @Test
+    void testJSONLD1() {
         List<String> elements = new ArrayList<>();
         elements.add("<__at__context>http://json-ld.org/contexts/person.jsonld</__at__context>");
         elements.add("<name>John Lennon</name>");
