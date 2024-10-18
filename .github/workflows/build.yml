@@ -74,3 +74,6 @@ jobs:
           reporter: java-junit
           list-suites: 'failed'
           list-tests: 'failed'
+      - name: Build example-adapter
+        working-directory: ./example-adapter
+        run: ./gradlew --include-build ../src build
