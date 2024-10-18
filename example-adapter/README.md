@@ -82,6 +82,12 @@ X-Road Example Adapter can be built using the provided Gradle wrapper. The follo
 ./gradlew clean build
 ```
 
+To build the project with locally built XRd4J library, the following command can be used:
+
+```bash
+./gradlew --include-build ../src build
+```
+
 When successfully built, the following artifacts are produced in the `build/libs` directory:
 
 * `example-adapter-x.x.x.war` : a deployable WAR file

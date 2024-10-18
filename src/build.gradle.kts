@@ -21,6 +21,7 @@ tasks.withType<Javadoc>() {
     outputs.dirs(file("$projectDir/../javadoc"))
     options.encoding = "UTF-8"
     options.destinationDirectory = file("$projectDir/../javadoc")
+    (options as StandardJavadocDocletOptions).addBooleanOption("Xdoclint:none", true)
 }
 
 dependencyCheck {

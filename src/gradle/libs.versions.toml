@@ -21,10 +21,12 @@ org-apache-logging-log4j-log4jCore = { module = "org.apache.logging.log4j:log4j-
 org-apache-logging-log4j-log4jSlf4j2Impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
 org-apache-james-mime4jCore = { module = "org.apache.james:apache-mime4j-core", version = "0.8.7" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
-org-apache-tomcat-embed-core = { group = "org.apache.tomcat.embed", name = "tomcat-embed-core", version = "10.1.30" }
+org-apache-tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "10.1.30" }
 org-assertj-assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 org-xmlunit-xmlunitAssertj3 = { module = "org.xmlunit:xmlunit-assertj3", version.ref = "xmlunit" }
 org-xmlunit-xmlunitPlaceholders = { module = "org.xmlunit:xmlunit-placeholders", version.ref = "xmlunit" }
+org-wiremock-wiremock = { module = "org.wiremock:wiremock", version = "3.9.1" }
+org-mockito-mockitoCore = { module = "org.mockito:mockito-core", version = "5.14.2" }
 
 licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version = "0.16.1" }
 dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version = "10.0.4" }

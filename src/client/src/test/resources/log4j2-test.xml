@@ -12,5 +12,8 @@
         <Logger name="org.niis.xrd4j.client" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
         </Logger>
+        <Logger name="org.niis.xrd4j.client.SOAPClientImpl" level="trace" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
     </Loggers>
 </Configuration>

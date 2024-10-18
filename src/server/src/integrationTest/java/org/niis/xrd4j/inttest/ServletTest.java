@@ -172,6 +172,39 @@ public class ServletTest {
 
 
     @Test
+    void userError() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .header("Content-Type", "text/xml")
+                .uri(getServerUri())
+                .POST(HttpRequest.BodyPublishers.ofFile(testData("user-error-request.xml")))
+                .build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertThat(response.statusCode()).isEqualTo(SC_OK);
+
+        assertSoapFaultClientError(response, "user-error");
+    }
+
+
+    @Test
+    void internalServerError() throws IOException, InterruptedException {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .header("Content-Type", "text/xml")
+                .uri(getServerUri())
+                .POST(HttpRequest.BodyPublishers.ofFile(testData("internal-server-error-request.xml")))
+                .build();
+
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        assertThat(response.statusCode()).isEqualTo(SC_OK);
+
+        assertSoapFaultClientError(response, "500 Internal Server Error");
+    }
+
+    @Test
     void invalidServiceCode() throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()

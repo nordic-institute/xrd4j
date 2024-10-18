@@ -51,6 +51,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.w3c.dom.Node.ELEMENT_NODE;
 import static org.w3c.dom.Node.TEXT_NODE;
 
@@ -67,8 +69,7 @@ import static org.w3c.dom.Node.TEXT_NODE;
  * @author Petteri Kivimäki
  */
 public final class SOAPHelper {
-
-    private static final String CHARSET = "UTF-8";
+    private static final Charset CHARSET = UTF_8;
     private static final Logger LOGGER = LoggerFactory.getLogger(SOAPHelper.class);
     private static final MessageFactory MSG_FACTORY;
 
@@ -132,7 +133,7 @@ public final class SOAPHelper {
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             message.writeTo(out);
-            return new String(out.toByteArray(), CHARSET);
+            return out.toString(CHARSET);
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
             return "";
@@ -150,8 +151,10 @@ public final class SOAPHelper {
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
             Transformer t = factory.newTransformer();
-            t.setOutputProperty(OutputKeys.ENCODING, CHARSET);
+            t.setOutputProperty(OutputKeys.ENCODING, CHARSET.toString());
             t.transform(new DOMSource(node), new StreamResult(sw));
             return sw.toString();
         } catch (Exception ex) {
@@ -410,7 +413,7 @@ public final class SOAPHelper {
      * @param attachments list of attachments to be searched
      * @return string value of the attachment or null
      */
-    public static String getStringAttachment(String contentId, Iterator attachments) {
+    public static String getStringAttachment(String contentId, Iterator<?> attachments) {
         if (attachments == null) {
             return null;
         }
@@ -454,10 +457,7 @@ public final class SOAPHelper {
         if (message == null) {
             return false;
         }
-        if (message.countAttachments() == 0) {
-            return false;
-        }
-        return true;
+        return message.countAttachments() != 0;
     }
 
     /**
@@ -507,35 +507,19 @@ public final class SOAPHelper {
     public static Document xmlStrToDoc(String xml) {
         LOGGER.debug("Convert XML string to XML document.");
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+        builderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+        builderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
         builderFactory.setNamespaceAware(true);
-        InputStream stream = null;
-        Document doc = null;
+        InputStream stream;
+        Document doc;
         try {
             stream = new ByteArrayInputStream(xml.getBytes());
             doc = builderFactory.newDocumentBuilder().parse(stream);
             LOGGER.debug("Converting XML string to XML document succeeded.");
         } catch (Exception e) {
-            // If exception starts with "Invalid byte", it means that ISO-8859-1
-            // character set is probably used. Try to convert the string to
-            // UTF-8.
-            if (e.getLocalizedMessage().startsWith("Invalid byte")) {
-                LOGGER.warn("Invalid characters detected.");
-                try {
-                    LOGGER.debug("Try to convert XML string from ISO-8859-1 to UTF-8.");
-                    stream = new ByteArrayInputStream(new String(xml.getBytes(), "ISO-8859-1").getBytes(CHARSET));
-                    doc = builderFactory.newDocumentBuilder().parse(stream);
-                    LOGGER.debug("Converting XML string from ISO-8859-1 to UTF-8 succeeded.");
-                } catch (Exception ex) {
-                    LOGGER.error(ex.getMessage());
-                    LOGGER.warn("Converting XML string to XML document failed.");
-                    LOGGER.warn("Converting XML string from ISO-8859-1 to UTF-8 failed.");
-                    return null;
-                }
-            } else {
-                LOGGER.error(e.getMessage());
-                LOGGER.warn("Converting XML string to XML document failed.");
-                return null;
-            }
+            LOGGER.error(e.getMessage());
+            LOGGER.warn("Converting XML string to XML document failed.");
+            return null;
         }
         return doc;
     }

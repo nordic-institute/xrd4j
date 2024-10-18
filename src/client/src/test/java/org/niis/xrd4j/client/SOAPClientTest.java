@@ -29,16 +29,23 @@ import org.niis.xrd4j.client.serializer.ServiceRequestSerializer;
 import org.niis.xrd4j.common.member.ConsumerMember;
 import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
+import org.niis.xrd4j.common.util.SOAPHelper;
 
 import jakarta.xml.soap.Node;
+import jakarta.xml.soap.SOAPConnection;
+import jakarta.xml.soap.SOAPConnectionFactory;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test cases for SOAPClientImpl class. Test cases cover only cases where SOAP
@@ -63,7 +70,7 @@ class SOAPClientTest {
         ProducerMember producer = new ProducerMember("FI", "COM", "MEMBER2", "subsystem", "getRandom", "v1");
         producer.setNamespacePrefix("ns1");
         producer.setNamespaceUrl("http://consumer.x-road.ee");
-        this.request = new ServiceRequest<String>(consumer, producer, "1234567890");
+        this.request = new ServiceRequest<>(consumer, producer, "1234567890");
         this.request.setUserId("EE1234567890");
         this.request.setRequestData("1234567890");
 
@@ -198,6 +205,28 @@ class SOAPClientTest {
      // OK
      }
      }*/
+
+
+    @Test
+    void testSendRequest() throws SOAPException {
+        var connectionFactory = mock(SOAPConnectionFactory.class);
+        var connection = mock(SOAPConnection.class);
+        when(connectionFactory.createConnection()).thenReturn(connection);
+        var response = SOAPHelper.toSOAP(
+                "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\">\n"
+                        + "  <SOAP-ENV:Body>\n"
+                        + "    <data>1234567890</data>\n"
+                        + "  </SOAP-ENV:Body>\n"
+                        + "</SOAP-ENV:Envelope>");
+        when(connection.call(any(), any())).thenReturn(response);
+
+        var client = new SOAPClientImpl(connectionFactory);
+        var receivedResponse = client.send(request.getSoapMessage(), "http://localhost:8080");
+
+        Assertions.assertThat(receivedResponse).isEqualTo(response);
+    }
+
+
     private final class TestRequestSerializer extends AbstractServiceRequestSerializer {
 
         protected void serializeRequest(ServiceRequest serviceRequest, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {

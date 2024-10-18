@@ -70,7 +70,16 @@ public class SOAPClientImpl implements SOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     public SOAPClientImpl() throws SOAPException {
-        this.connectionFactory = SOAPConnectionFactory.newInstance();
+        this(SOAPConnectionFactory.newInstance());
+    }
+
+    /**
+     * Constructs and initializes a new SOAPClientImpl.
+     *
+     * @param connectionFactory SOAPConnectionFactory object
+     */
+    SOAPClientImpl(SOAPConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
     }
 
     /**
@@ -93,14 +102,15 @@ public class SOAPClientImpl implements SOAPClient {
             LOGGER.error(ex.getMessage(), ex);
             throw new XRd4JRuntimeException(ex.getMessage());
         }
-        SOAPConnection connection = connectionFactory.createConnection();
-        LOGGER.debug(SEND_SOAP_TO, url);
-        LOGGER.trace("Outgoing SOAP request : \"{}\".", SOAPHelper.toString(request));
-        SOAPMessage response = connection.call(request, client);
-        LOGGER.debug("SOAP response received.");
-        LOGGER.trace("Incoming SOAP response : \"{}\".", SOAPHelper.toString(response));
-        connection.close();
-        return response;
+
+        try (SOAPConnection connection = connectionFactory.createConnection()) {
+            LOGGER.debug(SEND_SOAP_TO, url);
+            LOGGER.trace("Outgoing SOAP request : \"{}\".", SOAPHelper.toString(request));
+            SOAPMessage response = connection.call(request, client);
+            LOGGER.debug("SOAP response received.");
+            LOGGER.trace("Incoming SOAP response : \"{}\".", SOAPHelper.toString(response));
+            return response;
+        }
     }
 
     /**

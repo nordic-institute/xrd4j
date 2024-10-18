@@ -23,6 +23,7 @@
 package org.niis.xrd4j.inttest;
 
 import org.niis.xrd4j.common.exception.XRd4JException;
+import org.niis.xrd4j.common.message.ErrorMessage;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.message.ServiceResponse;
 import org.niis.xrd4j.server.AbstractAdapterServlet;
@@ -153,6 +154,11 @@ class ExampleServletImpl extends AbstractAdapterServlet {
             // Serialize the response to SOAP
             serializer.serialize(response, request);
             return response;
+        } else if ("userError".equals(request.getProducer().getServiceCode())) {
+            request.setErrorMessage(new ErrorMessage("SOAP-ENV:Client", "user-error"));
+            throw  new XRd4JException("Server error with user defined error message");
+        } else if ("internalServerError".equals(request.getProducer().getServiceCode())) {
+            throw  new XRd4JException("Server error with out error message");
         }
 
         return null;
