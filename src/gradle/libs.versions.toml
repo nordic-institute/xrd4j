@@ -19,7 +19,7 @@ org-json-json = { module = "org.json:json", version.ref = "org-json-json" }
 org-slf4j-slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 org-apache-logging-log4j-log4jCore = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 org-apache-logging-log4j-log4jSlf4j2Impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
-org-apache-james-mime4jCore = { module = "org.apache.james:apache-mime4j-core", version = "0.8.7" }
+org-apache-james-mime4jCore = { module = "org.apache.james:apache-mime4j-core", version = "0.8.10" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
 org-apache-tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "10.1.30" }
 org-assertj-assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertj" }
