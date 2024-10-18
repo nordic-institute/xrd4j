@@ -28,8 +28,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.3.4")
     implementation("org.apache.cxf:cxf-spring-boot-starter-jaxws:4.0.5")
 
-    implementation("org.niis.xrd4j:common:0.6.0-SNAPSHOT")
-    implementation("org.niis.xrd4j:server:0.6.0-SNAPSHOT")
+    implementation("org.niis.xrd4j:common:0.7.0-SNAPSHOT")
+    implementation("org.niis.xrd4j:server:0.7.0-SNAPSHOT")
 
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
 
@@ -40,7 +40,7 @@ dependencies {
 }
 
 group = "org.niis"
-version = "0.0.6-SNAPSHOT"
+version = "0.0.8-SNAPSHOT"
 description = "Example Adapter for X-Road"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
