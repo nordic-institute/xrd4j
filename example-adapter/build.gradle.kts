@@ -46,8 +46,12 @@ description = "Example Adapter for X-Road"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
+    publications {
+        create<MavenPublication>("maven") {
+            artifact(tasks.named<BootWar>("bootWar").get()) {
+                classifier = "boot"
+            }
+        }
     }
     repositories {
         maven {
