@@ -46,14 +46,22 @@ description = "Example Adapter for X-Road"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
+    publications {
+        create<MavenPublication>("maven") {
+            artifact(tasks.named<BootWar>("bootWar").get()) {
+                classifier = "boot"
+            }
+        }
     }
     repositories {
         maven {
             val releasesRepoUrl = uri("https://artifactory.niis.org/xroad-maven-releases/")
             val snapshotsRepoUrl = uri("https://artifactory.niis.org/xroad-maven-snapshots/")
             url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+            // 'publish' task expects xroadMavenRepositoryUsername xroadMavenRepositoryPassword gradle project
+            // properties to be present
+            name = "xroadMavenRepository"
+            credentials(PasswordCredentials::class)
         }
     }
 }
