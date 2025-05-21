@@ -24,6 +24,7 @@ package org.niis.xrd4j.common.util;
 
 import org.niis.xrd4j.common.message.AbstractMessage;
 
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import jakarta.xml.soap.AttachmentPart;
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.MimeHeaders;
@@ -32,8 +33,6 @@ import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
