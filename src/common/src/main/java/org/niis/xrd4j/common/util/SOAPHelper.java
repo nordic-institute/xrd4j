@@ -538,7 +538,7 @@ public final class SOAPHelper {
     }
 
     /**
-     * Move all the children under from SOAPElement to another SOAPElement. If
+     * Move all the children under from SOAPElement to under to SOAPElement. If
      * updateNamespaceAndPrefix is true and from elements do not have namespace
      * URI yet, to elements namespace URI and prefix are recursively copied to
      * them.
