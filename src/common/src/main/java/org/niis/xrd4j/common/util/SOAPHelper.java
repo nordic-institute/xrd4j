@@ -22,7 +22,6 @@
  */
 package org.niis.xrd4j.common.util;
 
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import org.niis.xrd4j.common.message.AbstractMessage;
 
 import jakarta.xml.soap.AttachmentPart;
@@ -33,6 +32,8 @@ import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
@@ -563,7 +564,7 @@ public final class SOAPHelper {
             child.setParentElement(to);
 
             // workaround to make it backwards compatible due to implementation changes in jakarta.xml.soap - implementation
-            if(child.getNamespaceURI() != null && child.getNamespaceURI().equals(to.getNamespaceURI())
+            if (child.getNamespaceURI() != null && child.getNamespaceURI().equals(to.getNamespaceURI())
                     && child.getPrefix() != null && child.getPrefix().equals(to.getPrefix())) {
                 // Remove default namespace of child element for backwards compatibility
                 ((SOAPElement) to.getFirstChild()).removeNamespaceDeclaration("");
@@ -580,7 +581,7 @@ public final class SOAPHelper {
      * @param namespace target namespace
      * @param prefix    target prefix
      */
-    public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) throws SOAPException{
+    public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) throws SOAPException {
         for (int i = 0; i < list.getLength(); i++) {
             Node node = (Node) list.item(i);
             if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
@@ -600,7 +601,7 @@ public final class SOAPHelper {
      * @return updated Node
      * @throws SOAPException if renaming xml node throws DOMException
      */
-    public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) throws SOAPException{
+    public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) throws SOAPException {
         try {
             if (!(node.getNodeType() == ELEMENT_NODE)) {
                 return node;
