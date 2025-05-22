@@ -552,6 +552,7 @@ public final class SOAPHelper {
      */
     public static void moveChildren(SOAPElement from, SOAPElement to, boolean updateNamespaceAndPrefix)
             throws SOAPException {
+        LOGGER.info("Moving children Elements from \"{}\" to \"{}\"", from, to);
         NodeList children = from.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node child = (Node) children.item(i);
@@ -563,7 +564,7 @@ public final class SOAPHelper {
             child.setParentElement(to);
 
             if (!(child instanceof ElementImpl)) {
-                LOGGER.info("Could not remove potentially wrong default namespace from childElement ${child}");
+                LOGGER.info("Could not remove potentially wrong default namespace from childElement \"{}\"", child);
                 continue;
             }
             // workaround for backwards compatible behaviour due to implementation changes in jakarta.xml.soap
