@@ -471,7 +471,7 @@ public final class SOAPHelper {
      */
     public static SOAPElement xmlStrToSOAPElement(String xml) {
         LOGGER.debug("Convert XML string to SOAPElement. XML : \"{}\"", xml);
-        // Try to conver XML string to XML Document
+        // Try to convert XML string to XML Document
         Document doc = SOAPHelper.xmlStrToDoc(xml);
         if (doc == null) {
             LOGGER.warn("Convertin XML string to SOAP element failed.");
@@ -562,11 +562,14 @@ public final class SOAPHelper {
 
             child.setParentElement(to);
 
-            // workaround to make it backwards compatible due to implementation changes in jakarta.xml.soap - implementation
-            if (child.getNamespaceURI() != null && child.getNamespaceURI().equals(to.getNamespaceURI())
-                    && child.getPrefix() != null && child.getPrefix().equals(to.getPrefix())) {
-                // Remove default namespace of child element for backwards compatibility
-                ((SOAPElement) to.getFirstChild()).removeNamespaceDeclaration("");
+            if (!(child instanceof ElementImpl)) {
+                LOGGER.info("Could not remove potentially wrong default namespace from childElement ${child}");
+                continue;
+            }
+            // workaround for backwards compatible behaviour due to implementation changes in jakarta.xml.soap
+            if (((ElementImpl) child).getNamespaceURI("") == null) {
+                // Remove default namespace of child, that we just added, for backwards compatibility
+                ((SOAPElement) to.getLastChild()).removeNamespaceDeclaration("");
             }
         }
     }

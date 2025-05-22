@@ -22,10 +22,15 @@
  */
 package org.niis.xrd4j.common.util;
 
+import jakarta.xml.soap.MessageFactory;
+import jakarta.xml.soap.Name;
 import jakarta.xml.soap.SOAPElement;
+import jakarta.xml.soap.SOAPEnvelope;
+import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.NodeList;
+import org.xmlunit.assertj3.XmlAssert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -400,5 +405,50 @@ class SOAPHelperTest {
         SOAPMessage msg = SOAPHelper.toSOAP(soapString);
 
         assertFalse(SOAPHelper.hasAttachments(msg));
+    }
+
+    @Test
+    void testMoveChildrenWithNS() throws SOAPException {
+        // Envelope to be copied from
+        SOAPEnvelope envelope = MessageFactory.newInstance().createMessage().getSOAPPart().getEnvelope();
+        Name elementName = envelope.createName("TestElement", Constants.NS_XRD_PREFIX, Constants.NS_ID_URL);
+        SOAPElement testElement = envelope.getBody().addChildElement(elementName);
+        //Default Namespace
+        SOAPElement child1 = testElement.addChildElement("child1", "", "default-ns");
+        child1.addChildElement("child1.1", "", "default-ns");
+        // No namespace
+        SOAPElement child2 = testElement.addChildElement("child2");
+        SOAPElement child21 = child2.addChildElement("child2.1");
+        child21.addChildElement("child2.1.1", Constants.NS_XRD_PREFIX, Constants.NS_ID_URL);
+        // Custom namespace, different than new parent
+        SOAPElement child3 = testElement.addChildElement("child3", "some-custom-prfx", "some-custom-ns");
+        child3.addChildElement("child3.1", "some-custom-prfx", "some-custom-ns");
+        // Same namespace as new parent
+        SOAPElement child4 = testElement.addChildElement("child4", "new-prfx", "new-ns");
+        child4.addChildElement("child4.1", "new-prfx", "new-ns");
+
+        // envelope to be copied to
+        SOAPEnvelope envelopeTo = MessageFactory.newInstance().createMessage().getSOAPPart().getEnvelope();
+        Name elementNameTo = envelopeTo.createName("ToElement", "new-prfx", "new-ns");
+        SOAPElement testElementTo = envelopeTo.getBody().addChildElement(elementNameTo);
+
+        SOAPHelper.moveChildren(testElement, testElementTo, true);
+
+        NodeList children = testElementTo.getChildNodes();
+
+        assertTrue(children.item(0).getFirstChild().getNamespaceURI() == "default-ns"
+                && children.item(0).getFirstChild().getPrefix() == null);
+        assertTrue(children.item(1).getFirstChild().getNamespaceURI() == "new-ns"
+                && children.item(1).getFirstChild().getPrefix().equals("new-prfx"));
+        assertTrue(children.item(2).getFirstChild().getNamespaceURI() == "some-custom-ns"
+                && children.item(2).getFirstChild().getNodeName().equals("some-custom-prfx:child3.1"));
+        assertTrue(children.item(3).getFirstChild().getNamespaceURI() == "new-ns"
+                && children.item(3).getFirstChild().getPrefix().equals("new-prfx"));
+
+        String toElement = SOAPHelper.toString(testElementTo);
+        XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns", "", "default-ns")).hasXPath("//new-prfx:ToElement/:child1/:child1.1").exist();
+        XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns")).hasXPath("//new-prfx:ToElement/new-prfx:child2/new-prfx:child2.1").exist();
+        XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns", "some-custom-prfx", "some-custom-ns")).hasXPath("//new-prfx:ToElement/some-custom-prfx:child3/some-custom-prfx:child3.1").exist();
+        XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns")).hasXPath("//new-prfx:ToElement/new-prfx:child4/new-prfx:child4.1").exist();
     }
 }
