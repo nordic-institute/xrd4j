@@ -436,14 +436,14 @@ class SOAPHelperTest {
 
         NodeList children = testElementTo.getChildNodes();
 
-        assertTrue(children.item(0).getFirstChild().getNamespaceURI() == "default-ns"
-                && children.item(0).getFirstChild().getPrefix() == null);
-        assertTrue(children.item(1).getFirstChild().getNamespaceURI() == "new-ns"
-                && children.item(1).getFirstChild().getPrefix().equals("new-prfx"));
-        assertTrue(children.item(2).getFirstChild().getNamespaceURI() == "some-custom-ns"
-                && children.item(2).getFirstChild().getNodeName().equals("some-custom-prfx:child3.1"));
-        assertTrue(children.item(3).getFirstChild().getNamespaceURI() == "new-ns"
-                && children.item(3).getFirstChild().getPrefix().equals("new-prfx"));
+        assertEquals(children.item(0).getFirstChild().getNamespaceURI(), "default-ns");
+        assertEquals(children.item(0).getFirstChild().getPrefix(), null);
+        assertEquals(children.item(1).getFirstChild().getNamespaceURI(), "new-ns");
+        assertEquals(children.item(1).getFirstChild().getPrefix(), "new-prfx");
+        assertEquals(children.item(2).getFirstChild().getNamespaceURI(), "some-custom-ns");
+        assertEquals(children.item(2).getFirstChild().getNodeName(), "some-custom-prfx:child3.1");
+        assertEquals(children.item(3).getFirstChild().getNamespaceURI(), "new-ns");
+        assertEquals(children.item(3).getFirstChild().getPrefix(), "new-prfx");
 
         String toElement = SOAPHelper.toString(testElementTo);
         XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns", "", "default-ns")).hasXPath("//new-prfx:ToElement/:child1/:child1.1").exist();
