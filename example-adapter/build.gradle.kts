@@ -28,8 +28,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.3.4")
     implementation("org.apache.cxf:cxf-spring-boot-starter-jaxws:4.0.5")
 
-    implementation("org.niis.xrd4j:common:0.7.0-SNAPSHOT")
-    implementation("org.niis.xrd4j:server:0.7.0-SNAPSHOT")
+    implementation("org.niis.xrd4j:common:0.7.0")
+    implementation("org.niis.xrd4j:server:0.7.0")
 
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
 
