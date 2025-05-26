@@ -24,6 +24,7 @@ package org.niis.xrd4j.common.util;
 
 import org.niis.xrd4j.common.message.AbstractMessage;
 
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import jakarta.xml.soap.AttachmentPart;
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.MimeHeaders;
@@ -34,6 +35,7 @@ import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -469,7 +471,7 @@ public final class SOAPHelper {
      */
     public static SOAPElement xmlStrToSOAPElement(String xml) {
         LOGGER.debug("Convert XML string to SOAPElement. XML : \"{}\"", xml);
-        // Try to conver XML string to XML Document
+        // Try to convert XML string to XML Document
         Document doc = SOAPHelper.xmlStrToDoc(xml);
         if (doc == null) {
             LOGGER.warn("Convertin XML string to SOAP element failed.");
@@ -548,7 +550,9 @@ public final class SOAPHelper {
      *                                 yet
      * @throws SOAPException if there's an error
      */
-    public static void moveChildren(SOAPElement from, SOAPElement to, boolean updateNamespaceAndPrefix) throws SOAPException {
+    public static void moveChildren(SOAPElement from, SOAPElement to, boolean updateNamespaceAndPrefix)
+            throws SOAPException {
+        LOGGER.trace("Moving children Elements from \"{}\" to \"{}\"", from, to);
         NodeList children = from.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node child = (Node) children.item(i);
@@ -556,7 +560,18 @@ public final class SOAPHelper {
                 child = updateNamespaceAndPrefix(child, to.getNamespaceURI(), to.getPrefix());
                 updateNamespaceAndPrefix(child.getChildNodes(), to.getNamespaceURI(), to.getPrefix());
             }
+
             child.setParentElement(to);
+
+            if (!(child instanceof ElementImpl)) {
+                LOGGER.trace("Could not remove potentially wrong default namespace from childElement \"{}\"", child);
+                continue;
+            }
+            // workaround for backwards compatible behaviour due to implementation changes in jakarta.xml.soap
+            if (((ElementImpl) child).getNamespaceURI("") == null) {
+                // Remove default namespace of child, that we just added, for backwards compatibility
+                ((SOAPElement) to.getLastChild()).removeNamespaceDeclaration("");
+            }
         }
     }
 
@@ -569,7 +584,7 @@ public final class SOAPHelper {
      * @param namespace target namespace
      * @param prefix    target prefix
      */
-    public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) {
+    public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) throws SOAPException {
         for (int i = 0; i < list.getLength(); i++) {
             Node node = (Node) list.item(i);
             if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
@@ -587,16 +602,23 @@ public final class SOAPHelper {
      * @param namespace target namespace
      * @param prefix    target prefix
      * @return updated Node
+     * @throws SOAPException if renaming xml node throws DOMException
      */
-    public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) {
-        if (node.getNodeType() == ELEMENT_NODE) {
-            if (prefix != null && !prefix.isEmpty()) {
-                node = (Node) node.getOwnerDocument().renameNode(node, namespace, prefix + ":" + node.getLocalName());
-            } else if (namespace != null && !namespace.isEmpty()) {
-                node = (Node) node.getOwnerDocument().renameNode(node, namespace, node.getLocalName());
+    public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) throws SOAPException {
+        try {
+            if (!(node.getNodeType() == ELEMENT_NODE)) {
+                return node;
             }
+            ElementImpl elementImpl = (ElementImpl) node;
+            if (prefix != null && !prefix.isEmpty()) {
+                node = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, prefix + ":" + node.getLocalName());
+            } else if (namespace != null && !namespace.isEmpty()) {
+                node = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, node.getLocalName());
+            }
+            return node;
+        } catch (DOMException e) {
+            throw new SOAPException("Unable to update namespace and prefix", e);
         }
-        return node;
     }
 
     /**
