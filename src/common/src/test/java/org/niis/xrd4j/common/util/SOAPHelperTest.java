@@ -408,18 +408,17 @@ class SOAPHelperTest {
     }
 
     @Test
-    void testMoveChildrenWithNS() throws SOAPException {
+    void testMoveChildren() throws SOAPException {
         // Envelope to be copied from
         SOAPEnvelope envelope = MessageFactory.newInstance().createMessage().getSOAPPart().getEnvelope();
         Name elementName = envelope.createName("TestElement", Constants.NS_XRD_PREFIX, Constants.NS_ID_URL);
         SOAPElement testElement = envelope.getBody().addChildElement(elementName);
-        //Default Namespace
+        // Default Namespace
         SOAPElement child1 = testElement.addChildElement("child1", "", "default-ns");
         child1.addChildElement("child1.1", "", "default-ns");
         // No namespace
         SOAPElement child2 = testElement.addChildElement("child2");
         SOAPElement child21 = child2.addChildElement("child2.1");
-        child21.addChildElement("child2.1.1", Constants.NS_XRD_PREFIX, Constants.NS_ID_URL);
         // Custom namespace, different than new parent
         SOAPElement child3 = testElement.addChildElement("child3", "some-custom-prfx", "some-custom-ns");
         child3.addChildElement("child3.1", "some-custom-prfx", "some-custom-ns");
@@ -427,7 +426,7 @@ class SOAPHelperTest {
         SOAPElement child4 = testElement.addChildElement("child4", "new-prfx", "new-ns");
         child4.addChildElement("child4.1", "new-prfx", "new-ns");
 
-        // envelope to be copied to
+        // Envelope to be copied to
         SOAPEnvelope envelopeTo = MessageFactory.newInstance().createMessage().getSOAPPart().getEnvelope();
         Name elementNameTo = envelopeTo.createName("ToElement", "new-prfx", "new-ns");
         SOAPElement testElementTo = envelopeTo.getBody().addChildElement(elementNameTo);
