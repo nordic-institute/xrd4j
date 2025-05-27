@@ -40,7 +40,7 @@ dependencies {
 }
 
 group = "org.niis"
-version = "0.0.8-SNAPSHOT"
+version = "0.0.8"
 description = "Example Adapter for X-Road"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
