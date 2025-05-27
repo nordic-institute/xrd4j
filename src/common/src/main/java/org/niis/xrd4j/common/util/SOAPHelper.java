@@ -34,7 +34,6 @@ import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -552,17 +551,13 @@ public final class SOAPHelper {
     public static void moveChildren(SOAPElement from, SOAPElement to, boolean updateNamespaceAndPrefix)
             throws SOAPException {
         LOGGER.trace("Moving children Elements from \"{}\" to \"{}\"", from, to);
-
         NodeList children = from.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
-
             Node child = (Node) children.item(i);
             Node updatedChild = child;
-
             if (updateNamespaceAndPrefix && (child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
                 updatedChild = updateNamespaceAndPrefix(child, to.getNamespaceURI(), to.getPrefix());
                 List<Node> updatedNodes = updateNamespaceAndPrefix(updatedChild.getChildNodes(), to.getNamespaceURI(), to.getPrefix());
-
                 for (int j = 0; j < updatedNodes.size(); j++) {
                     Node updatedNode = updatedNodes.get(j);
                     updatedChild.appendChild(updatedNode);
@@ -590,7 +585,6 @@ public final class SOAPHelper {
                 updatedNodes.add((Node) nodeList.item(i));
                 continue;
             }
-
             Node node = (Node) nodeList.item(i);
             if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
                 node = updateNamespaceAndPrefix(node, namespace, prefix);
@@ -629,8 +623,9 @@ public final class SOAPHelper {
                 updatedNode = soapElement.addNamespaceDeclaration(prefix, namespace).setElementQName(new QName(namespace, soapElement.getLocalName()));
             }
             return updatedNode;
-        } catch (DOMException e) {
-            throw new SOAPException("Unable to update namespace and prefix", e);
+        } catch (SOAPException e) {
+            LOGGER.error("Failed to update namespace and prefix of node", e);
+            throw new RuntimeException(e);
         }
     }
 
