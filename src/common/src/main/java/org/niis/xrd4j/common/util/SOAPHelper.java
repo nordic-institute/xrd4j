@@ -365,7 +365,7 @@ public final class SOAPHelper {
      * @param message Message that contains the ProviderMember which namespace
      * @return changed SOAPElement with added namespace URI and prefix of the ProviderMember
      */
-    public static SOAPElement addNamespace(SOAPElement node, AbstractMessage message) {
+    public static SOAPElement addNamespace(SOAPElement node, AbstractMessage message) throws SOAPException {
         if (node.getNodeType() == ELEMENT_NODE) {
             var soapEl = node;
 
@@ -374,16 +374,19 @@ public final class SOAPHelper {
                 var prefix = message.getProducer().getNamespacePrefix() != null ? message.getProducer().getNamespacePrefix() : "";
                 soapEl = soapEl.addNamespaceDeclaration(prefix, message.getProducer().getNamespaceUrl())
                         .setElementQName(soapEl.createQName(soapEl.getLocalName(), prefix));
+
+                Iterator<?> iterator = soapEl.getChildElements();
+                while (iterator.hasNext()) {
+                    Object n = iterator.next();
+                    if (n instanceof SOAPElement) {
+                        addNamespace((SOAPElement) n, message); // can throw SOAPException naturally
+                    }
+                }
             } catch (SOAPException e) {
                 LOGGER.error("Failed to add provider namespace", e);
-                throw new RuntimeException(e);
+                throw new SOAPException(e);
             }
 
-            soapEl.getChildElements().forEachRemaining(n -> {
-                if (n instanceof SOAPElement) {
-                    addNamespace((SOAPElement) n, message);
-                }
-            });
             return soapEl;
         }
         return node;
@@ -625,7 +628,7 @@ public final class SOAPHelper {
             return updatedNode;
         } catch (SOAPException e) {
             LOGGER.error("Failed to update namespace and prefix of node", e);
-            throw new RuntimeException(e);
+            throw new SOAPException(e);
         }
     }
 
