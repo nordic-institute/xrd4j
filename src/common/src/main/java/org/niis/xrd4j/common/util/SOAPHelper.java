@@ -364,6 +364,7 @@ public final class SOAPHelper {
      * @param node    Node to be modified
      * @param message Message that contains the ProviderMember which namespace
      * @return changed SOAPElement with added namespace URI and prefix of the ProviderMember
+     * @throws SOAPException if there's an error
      */
     public static SOAPElement addNamespace(SOAPElement node, AbstractMessage message) throws SOAPException {
         if (node.getNodeType() == ELEMENT_NODE) {
@@ -379,7 +380,7 @@ public final class SOAPHelper {
                 while (iterator.hasNext()) {
                     Object n = iterator.next();
                     if (n instanceof SOAPElement) {
-                        addNamespace((SOAPElement) n, message); // can throw SOAPException naturally
+                        addNamespace((SOAPElement) n, message); 
                     }
                 }
             } catch (SOAPException e) {
