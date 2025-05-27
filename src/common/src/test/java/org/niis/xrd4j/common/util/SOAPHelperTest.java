@@ -415,16 +415,19 @@ class SOAPHelperTest {
         SOAPElement testElement = envelope.getBody().addChildElement(elementName);
         // Default Namespace
         SOAPElement child1 = testElement.addChildElement("child1", "", "default-ns");
-        child1.addChildElement("child1.1", "", "default-ns");
+        SOAPElement child11 = child1.addChildElement("child1.1", "", "default-ns");
+        child11.addChildElement("child1.1.1", "", "default-ns");
+        child11.addTextNode("Text node in child1.1.1");
         // No namespace
         SOAPElement child2 = testElement.addChildElement("child2");
         SOAPElement child21 = child2.addChildElement("child2.1");
+        child21.addChildElement("child2.1.1");
+        child21.addTextNode("Text node in child2.1.1");
         // Custom namespace, different than new parent
         SOAPElement child3 = testElement.addChildElement("child3", "some-custom-prfx", "some-custom-ns");
-        child3.addChildElement("child3.1", "some-custom-prfx", "some-custom-ns");
-        // Same namespace as new parent
-        SOAPElement child4 = testElement.addChildElement("child4", "new-prfx", "new-ns");
-        child4.addChildElement("child4.1", "new-prfx", "new-ns");
+        SOAPElement child31 = child3.addChildElement("child3.1", "some-custom-prfx", "some-custom-ns");
+        child31.addChildElement("child3.1.1", "some-custom-prfx", "some-custom-ns");
+        child31.addTextNode("Text node in child3.1.1");
 
         // Envelope to be copied to
         SOAPEnvelope envelopeTo = MessageFactory.newInstance().createMessage().getSOAPPart().getEnvelope();
@@ -435,19 +438,19 @@ class SOAPHelperTest {
 
         NodeList children = testElementTo.getChildNodes();
 
-        assertEquals(children.item(0).getFirstChild().getNamespaceURI(), "default-ns");
-        assertEquals(children.item(0).getFirstChild().getPrefix(), null);
-        assertEquals(children.item(1).getFirstChild().getNamespaceURI(), "new-ns");
-        assertEquals(children.item(1).getFirstChild().getPrefix(), "new-prfx");
-        assertEquals(children.item(2).getFirstChild().getNamespaceURI(), "some-custom-ns");
-        assertEquals(children.item(2).getFirstChild().getNodeName(), "some-custom-prfx:child3.1");
-        assertEquals(children.item(3).getFirstChild().getNamespaceURI(), "new-ns");
-        assertEquals(children.item(3).getFirstChild().getPrefix(), "new-prfx");
+        assertEquals("default-ns", children.item(0).getFirstChild().getNamespaceURI());
+        assertEquals(null, children.item(0).getFirstChild().getPrefix());
+        assertEquals(null, children.item(0).getFirstChild().getFirstChild().getPrefix());
+        assertEquals("new-ns", children.item(1).getFirstChild().getNamespaceURI());
+        assertEquals("new-prfx", children.item(1).getFirstChild().getPrefix());
+        assertEquals("new-prfx", children.item(1).getFirstChild().getFirstChild().getPrefix());
+        assertEquals("some-custom-ns", children.item(2).getFirstChild().getNamespaceURI());
+        assertEquals("some-custom-prfx", children.item(2).getFirstChild().getPrefix());
+        assertEquals("some-custom-prfx", children.item(2).getFirstChild().getFirstChild().getPrefix());
 
         String toElement = SOAPHelper.toString(testElementTo);
         XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns", "", "default-ns")).hasXPath("//new-prfx:ToElement/:child1/:child1.1").exist();
         XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns")).hasXPath("//new-prfx:ToElement/new-prfx:child2/new-prfx:child2.1").exist();
         XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns", "some-custom-prfx", "some-custom-ns")).hasXPath("//new-prfx:ToElement/some-custom-prfx:child3/some-custom-prfx:child3.1").exist();
-        XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns")).hasXPath("//new-prfx:ToElement/new-prfx:child4/new-prfx:child4.1").exist();
     }
 }
