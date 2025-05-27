@@ -380,7 +380,7 @@ public final class SOAPHelper {
                 while (iterator.hasNext()) {
                     Object n = iterator.next();
                     if (n instanceof SOAPElement) {
-                        addNamespace((SOAPElement) n, message); 
+                        addNamespace((SOAPElement) n, message);
                     }
                 }
             } catch (SOAPException e) {
