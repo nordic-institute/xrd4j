@@ -24,7 +24,6 @@ package org.niis.xrd4j.common.util;
 
 import org.niis.xrd4j.common.message.AbstractMessage;
 
-import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
 import jakarta.xml.soap.AttachmentPart;
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.MimeHeaders;
@@ -35,7 +34,6 @@ import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -366,26 +364,23 @@ public final class SOAPHelper {
      * @param node    Node to be modified
      * @param message Message that contains the ProviderMember which namespace
      * @return changed SOAPElement with added namespace URI and prefix of the ProviderMember
+     * @throws SOAPException if there's an error
      */
-    public static SOAPElement addNamespace(SOAPElement node, AbstractMessage message) {
+    public static SOAPElement addNamespace(SOAPElement node, AbstractMessage message) throws SOAPException {
         if (node.getNodeType() == ELEMENT_NODE) {
             var soapEl = node;
+            soapEl = soapEl.setElementQName(new QName(soapEl.getLocalName()));
+            var prefix = message.getProducer().getNamespacePrefix() != null ? message.getProducer().getNamespacePrefix() : "";
+            soapEl = soapEl.addNamespaceDeclaration(prefix, message.getProducer().getNamespaceUrl())
+                    .setElementQName(soapEl.createQName(soapEl.getLocalName(), prefix));
 
-            try {
-                soapEl = soapEl.setElementQName(new QName(soapEl.getLocalName()));
-                var prefix = message.getProducer().getNamespacePrefix() != null ? message.getProducer().getNamespacePrefix() : "";
-                soapEl = soapEl.addNamespaceDeclaration(prefix, message.getProducer().getNamespaceUrl())
-                        .setElementQName(soapEl.createQName(soapEl.getLocalName(), prefix));
-            } catch (SOAPException e) {
-                LOGGER.error("Failed to add provider namespace", e);
-                throw new RuntimeException(e);
-            }
-
-            soapEl.getChildElements().forEachRemaining(n -> {
+            Iterator<?> iterator = soapEl.getChildElements();
+            while (iterator.hasNext()) {
+                Object n = iterator.next();
                 if (n instanceof SOAPElement) {
                     addNamespace((SOAPElement) n, message);
                 }
-            });
+            }
             return soapEl;
         }
         return node;
@@ -556,22 +551,16 @@ public final class SOAPHelper {
         NodeList children = from.getChildNodes();
         for (int i = 0; i < children.getLength(); i++) {
             Node child = (Node) children.item(i);
+            Node updatedChild = child;
             if (updateNamespaceAndPrefix && (child.getNamespaceURI() == null || child.getNamespaceURI().isEmpty())) {
-                child = updateNamespaceAndPrefix(child, to.getNamespaceURI(), to.getPrefix());
-                updateNamespaceAndPrefix(child.getChildNodes(), to.getNamespaceURI(), to.getPrefix());
+                updatedChild = updateNamespaceAndPrefix(child, to.getNamespaceURI(), to.getPrefix());
+                List<Node> updatedNodes = updateNamespaceAndPrefix(updatedChild.getChildNodes(), to.getNamespaceURI(), to.getPrefix());
+                for (int j = 0; j < updatedNodes.size(); j++) {
+                    Node updatedNode = updatedNodes.get(j);
+                    updatedChild.appendChild(updatedNode);
+                }
             }
-
-            child.setParentElement(to);
-
-            if (!(child instanceof ElementImpl)) {
-                LOGGER.trace("Could not remove potentially wrong default namespace from childElement \"{}\"", child);
-                continue;
-            }
-            // workaround for backwards compatible behaviour due to implementation changes in jakarta.xml.soap
-            if (((ElementImpl) child).getNamespaceURI("") == null) {
-                // Remove default namespace of child, that we just added, for backwards compatibility
-                ((SOAPElement) to.getLastChild()).removeNamespaceDeclaration("");
-            }
+            updatedChild.setParentElement(to);
         }
     }
 
@@ -580,45 +569,56 @@ public final class SOAPHelper {
      * node does not have namespace URI yet. The list is updated recursively, so
      * also the children of children (and so on) will be updated.
      *
-     * @param list      list of nodes to be updated
+     * @param nodeList  list of nodes to be updated
      * @param namespace target namespace
      * @param prefix    target prefix
+     * @return list of updated nodes
+     *
      */
-    public static void updateNamespaceAndPrefix(NodeList list, String namespace, String prefix) throws SOAPException {
-        for (int i = 0; i < list.getLength(); i++) {
-            Node node = (Node) list.item(i);
+    public static List<Node> updateNamespaceAndPrefix(NodeList nodeList, String namespace, String prefix) throws SOAPException {
+        List<Node> updatedNodes = new ArrayList<>();
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            if (!(nodeList.item(i) instanceof SOAPElement)) {
+                updatedNodes.add((Node) nodeList.item(i));
+                continue;
+            }
+            Node node = (Node) nodeList.item(i);
             if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
                 node = updateNamespaceAndPrefix(node, namespace, prefix);
             }
-            updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
+            List<Node> childNodeList = updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
+            if (childNodeList != null) {
+                for (int j = 0; j < childNodeList.size(); j++) {
+                    node.appendChild(childNodeList.get(j));
+                }
+            }
+            updatedNodes.add(node);
         }
+        return updatedNodes;
     }
 
     /**
      * Updates the namespace URI and prefix of the given node with the given
      * values. If prefix is null or empty, only namespace URI is updated.
      *
-     * @param node      Node to be updated
-     * @param namespace target namespace
-     * @param prefix    target prefix
-     * @return updated Node
+     * @param node   Node to be updated
+     * @param namespace     target namespace
+     * @param prefix        target prefix
+     * @return updated SOAPElement
      * @throws SOAPException if renaming xml node throws DOMException
      */
     public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) throws SOAPException {
-        try {
-            if (!(node.getNodeType() == ELEMENT_NODE)) {
-                return node;
-            }
-            ElementImpl elementImpl = (ElementImpl) node;
-            if (prefix != null && !prefix.isEmpty()) {
-                node = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, prefix + ":" + node.getLocalName());
-            } else if (namespace != null && !namespace.isEmpty()) {
-                node = (Node) node.getOwnerDocument().renameNode(elementImpl.getDomElement(), namespace, node.getLocalName());
-            }
+        if (!(node instanceof SOAPElement)) {
             return node;
-        } catch (DOMException e) {
-            throw new SOAPException("Unable to update namespace and prefix", e);
         }
+        SOAPElement soapElement = (SOAPElement) node;
+        Node updatedNode = node;
+        if (prefix != null && !prefix.isEmpty()) {
+            updatedNode = soapElement.addNamespaceDeclaration(prefix, namespace).setElementQName(new QName(namespace, soapElement.getLocalName(), prefix));
+        } else if (namespace != null && !namespace.isEmpty()) {
+            updatedNode = soapElement.addNamespaceDeclaration(prefix, namespace).setElementQName(new QName(namespace, soapElement.getLocalName()));
+        }
+        return updatedNode;
     }
 
     /**
