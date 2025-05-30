@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 -2025-05-26
+- XRDDEV-2911 Fix issue with moveChildren and updateNamespaceAndPrefix using Node incorrect implementation in certain cases 
+- XRDDEV-2911 Make moveChildren and updateNamespaceAndPrefix catch, wrap and throw DOMException in SOAPException to avoid overlooking the error
+
 ## 0.6.0 - 2024-10-18
 - Build migrated from Maven to Gradle 
 - Update dependencies from javax.* to jakarta.*

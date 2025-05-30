@@ -28,8 +28,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.3.4")
     implementation("org.apache.cxf:cxf-spring-boot-starter-jaxws:4.0.5")
 
-    implementation("org.niis.xrd4j:common:0.6.0")
-    implementation("org.niis.xrd4j:server:0.6.0")
+    implementation("org.niis.xrd4j:common:0.7.0")
+    implementation("org.niis.xrd4j:server:0.7.0")
 
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
 
@@ -40,20 +40,28 @@ dependencies {
 }
 
 group = "org.niis"
-version = "0.0.7"
+version = "0.0.8"
 description = "Example Adapter for X-Road"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 publishing {
-    publications.create<MavenPublication>("maven") {
-        from(components["java"])
+    publications {
+        create<MavenPublication>("maven") {
+            artifact(tasks.named<BootWar>("bootWar").get()) {
+                classifier = "boot"
+            }
+        }
     }
     repositories {
         maven {
             val releasesRepoUrl = uri("https://artifactory.niis.org/xroad-maven-releases/")
             val snapshotsRepoUrl = uri("https://artifactory.niis.org/xroad-maven-snapshots/")
             url = if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+            // 'publish' task expects xroadMavenRepositoryUsername xroadMavenRepositoryPassword gradle project
+            // properties to be present
+            name = "xroadMavenRepository"
+            credentials(PasswordCredentials::class)
         }
     }
 }

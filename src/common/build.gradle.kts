@@ -7,6 +7,8 @@ dependencies {
     api(libs.org.slf4j.slf4jApi)
 
     testImplementation(libs.bundles.testImplementation)
+    testImplementation(libs.org.assertj.assertjCore)
+    testImplementation(libs.org.xmlunit.xmlunitAssertj3)
 }
 
 pomSettings {
