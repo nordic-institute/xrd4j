@@ -24,6 +24,12 @@ package org.niis.xrd4j.common.util;
 
 import org.niis.xrd4j.common.message.AbstractMessage;
 
+import com.sun.xml.messaging.saaj.soap.impl.ElementImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
 import jakarta.xml.soap.AttachmentPart;
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.MimeHeaders;
@@ -32,10 +38,6 @@ import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
@@ -390,15 +392,35 @@ public final class SOAPHelper {
      * Removes the namespace from the given Node and all its children.
      *
      * @param node Node to be modified
+     * @return Node with changed namespace
+     * @throws SOAPException
      */
-    public static void removeNamespace(Node node) {
-        if (node.getNodeType() == ELEMENT_NODE) {
-            node.getOwnerDocument().renameNode(node, null, node.getLocalName());
+    public static Node removeNamespace(Node node) throws SOAPException {
+        if (!(node instanceof SOAPElement)) {
+            return node;
         }
-        NodeList list = node.getChildNodes();
-        for (int i = 0; i < list.getLength(); i++) {
-            SOAPHelper.removeNamespace((Node) list.item(i));
+        SOAPElement element = (SOAPElement) node;
+        SOAPElement updatedElement = element;
+
+        NodeList children = element.getChildNodes();
+
+        // Create a list of children to avoid conflicting modifications to original
+        List<Node> childrenList = new ArrayList<>();
+        for (int i = 0; i < children.getLength(); i++) {
+            childrenList.add((Node) children.item(i));
         }
+
+        for (int i = 0; i < childrenList.size(); i++) {
+            Node child = childrenList.get(i);
+            Node updatedChild = child;
+            updatedChild = removeNamespace(updatedChild);
+            updatedElement.appendChild(updatedChild);
+        }
+
+        updatedElement = element.setElementQName(new QName(null, element.getLocalName(), ""));
+        updatedElement.removeNamespaceDeclaration(node.getPrefix());
+
+        return updatedElement;
     }
 
     /**
@@ -560,7 +582,17 @@ public final class SOAPHelper {
                     updatedChild.appendChild(updatedNode);
                 }
             }
+
             updatedChild.setParentElement(to);
+
+            if (child instanceof ElementImpl) {
+                if (((ElementImpl) child).getNamespaceURI("") == null) {
+                    // Remove default namespace of child, that we just added, for backwards compatibility
+                    ((SOAPElement) to.getLastChild()).removeNamespaceDeclaration("");
+                }
+            } else {
+                LOGGER.trace("Child node is not an ElementImpl, cannot remove potentially wrong default namespace declaration: {}", child);
+            }
         }
     }
 
@@ -601,7 +633,7 @@ public final class SOAPHelper {
      * Updates the namespace URI and prefix of the given node with the given
      * values. If prefix is null or empty, only namespace URI is updated.
      *
-     * @param node   Node to be updated
+     * @param node          Node to be updated
      * @param namespace     target namespace
      * @param prefix        target prefix
      * @return updated SOAPElement
