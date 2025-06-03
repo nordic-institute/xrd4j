@@ -31,6 +31,7 @@ dependencies {
     implementation("org.niis.xrd4j:common:0.8.0-SNAPSHOT")
     implementation("org.niis.xrd4j:server:0.8.0-SNAPSHOT")
 
+
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
 
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:3.3.2")

@@ -32,6 +32,8 @@ import org.niis.xrd4j.server.deserializer.CustomRequestDeserializer;
 import org.niis.xrd4j.server.serializer.AbstractServiceResponseSerializer;
 import org.niis.xrd4j.server.serializer.ServiceResponseSerializer;
 
+import org.slf4j.Logger;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,7 +43,6 @@ import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
