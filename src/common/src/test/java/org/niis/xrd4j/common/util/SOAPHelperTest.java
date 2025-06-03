@@ -421,12 +421,13 @@ class SOAPHelperTest {
         child11.addChildElement("child1.1.1", "", "default-ns");
         child11.addChildElement("child1.1.2", "", "default-ns");
         child11.addTextNode("Text node in child1.1.1");
+      
         // No namespace
         SOAPElement child2 = testElement.addChildElement("child2");
         SOAPElement child21 = child2.addChildElement("child2.1");
-        child21.addChildElement("child2.1.1");
         child21.addChildElement("child2.1.2");
         child21.addTextNode("Text node in child2.1.1");
+      
         // Custom namespace, different than new parent
         SOAPElement child3 = testElement.addChildElement("child3", "some-custom-prfx", "some-custom-ns");
         SOAPElement child31 = child3.addChildElement("child3.1", "some-custom-prfx", "some-custom-ns");
@@ -455,7 +456,6 @@ class SOAPHelperTest {
         assertEquals("some-custom-prfx", children.item(2).getFirstChild().getPrefix());
         assertEquals("some-custom-prfx", children.item(2).getFirstChild().getFirstChild().getPrefix());
         assertEquals("some-custom-prfx", children.item(2).getFirstChild().getFirstChild().getNextSibling().getPrefix());
-
 
         String toElement = SOAPHelper.toString(testElementTo);
         XmlAssert.assertThat(toElement).withNamespaceContext(Map.of("new-prfx", "new-ns", "", "default-ns")).hasXPath("//new-prfx:ToElement/:child1/:child1.1").exist();
