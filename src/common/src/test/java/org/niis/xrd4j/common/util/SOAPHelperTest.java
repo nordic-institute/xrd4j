@@ -425,8 +425,9 @@ class SOAPHelperTest {
         // No namespace
         SOAPElement child2 = testElement.addChildElement("child2");
         SOAPElement child21 = child2.addChildElement("child2.1");
+        child21.addChildElement("child2.1.1");
         child21.addChildElement("child2.1.2");
-        child21.addTextNode("Text node in child2.1.1");
+        child21.addTextNode("Text node in child2.1.3");
       
         // Custom namespace, different than new parent
         SOAPElement child3 = testElement.addChildElement("child3", "some-custom-prfx", "some-custom-ns");
