@@ -23,12 +23,12 @@
 package org.niis.xrd4j.common.util;
 
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xmlunit.assertj3.XmlAssert;
 
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.Name;
+import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
@@ -420,21 +420,21 @@ class SOAPHelperTest {
         SOAPElement child11 = child1.addChildElement("child1.1", "", "default-ns");
         child11.addChildElement("child1.1.1", "", "default-ns");
         child11.addChildElement("child1.1.2", "", "default-ns");
-        child11.addTextNode("Text node in child1.1.1");
+        child11.addTextNode("Text node in child1.1");
       
         // No namespace
         SOAPElement child2 = testElement.addChildElement("child2");
         SOAPElement child21 = child2.addChildElement("child2.1");
         child21.addChildElement("child2.1.1");
         child21.addChildElement("child2.1.2");
-        child21.addTextNode("Text node in child2.1.3");
+        child21.addTextNode("Text node in child2.1");
       
         // Custom namespace, different than new parent
         SOAPElement child3 = testElement.addChildElement("child3", "some-custom-prfx", "some-custom-ns");
         SOAPElement child31 = child3.addChildElement("child3.1", "some-custom-prfx", "some-custom-ns");
         child31.addChildElement("child3.1.1", "some-custom-prfx", "some-custom-ns");
         child31.addChildElement("child3.1.2", "some-custom-prfx", "some-custom-ns");
-        child31.addTextNode("Text node in child3.1.1");
+        child31.addTextNode("Text node in child3.1");
 
         // Envelope to be copied to
         SOAPEnvelope envelopeTo = MessageFactory.newInstance().createMessage().getSOAPPart().getEnvelope();
@@ -477,12 +477,16 @@ class SOAPHelperTest {
         SOAPElement child111 = child11.addChildElement("child1.1.1", "", "default-ns");
         SOAPElement child12 = child1.addChildElement("child1.2", "custom-prfx", "custom-ns");
         SOAPElement child13 = child1.addChildElement("child1.3", "custom-prfx", "custom-ns");
+        SOAPElement child14 = child1.addTextNode("Text node in child1.4");
 
         SOAPElement child2 = testElement.addChildElement("child2", "", "default-ns");
 
-        Node newElement = SOAPHelper.removeNamespace(testElement);
+        Node testElementCopy = (Node) testElement.cloneNode(true);
+        Node newElement = SOAPHelper.removeNamespace(testElementCopy);
         String testElementStrNEW = SOAPHelper.toString((SOAPElement) newElement);
+        String testElementStr = SOAPHelper.toString(testElement);
 
+        // test correct changes in returned element
         assertEquals(null, (newElement.getFirstChild()).getNamespaceURI());
         assertEquals(null, (newElement.getFirstChild()).getPrefix());
 
@@ -498,5 +502,9 @@ class SOAPHelperTest {
 
         assertEquals(null, (newElement.getFirstChild().getNextSibling()).getNamespaceURI());
         assertEquals(null, (newElement.getFirstChild().getNextSibling()).getPrefix());
+
+        // test modification to the original element
+        assertEquals("default-ns", (testElement.getFirstChild().getNextSibling()).getNamespaceURI());
+        assertEquals(null, (testElement.getFirstChild().getNextSibling()).getPrefix());
     }
 }

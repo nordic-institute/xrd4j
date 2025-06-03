@@ -591,7 +591,7 @@ public final class SOAPHelper {
                     ((SOAPElement) to.getLastChild()).removeNamespaceDeclaration("");
                 }
             } else {
-                LOGGER.trace("Child node is not an ElementImpl, cannot remove potentially wrong default namespace declaration: {}", child);
+                LOGGER.warn("Child node is not an ElementImpl, cannot remove potentially wrong default namespace declaration: {}", child);
             }
         }
     }
