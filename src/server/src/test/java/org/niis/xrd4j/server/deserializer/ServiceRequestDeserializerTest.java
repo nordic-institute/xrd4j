@@ -27,9 +27,10 @@ import org.niis.xrd4j.common.member.ObjectType;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.util.SOAPHelper;
 
+import org.junit.jupiter.api.Test;
+
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;

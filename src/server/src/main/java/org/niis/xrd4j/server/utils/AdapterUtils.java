@@ -22,6 +22,9 @@
  */
 package org.niis.xrd4j.server.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.xml.soap.AttachmentPart;
@@ -29,8 +32,6 @@ import jakarta.xml.soap.MimeHeader;
 import jakarta.xml.soap.MimeHeaders;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Enumeration;
 import java.util.Iterator;
