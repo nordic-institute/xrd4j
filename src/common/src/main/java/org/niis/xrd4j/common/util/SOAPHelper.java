@@ -392,10 +392,10 @@ public final class SOAPHelper {
      * Removes the namespace from the given Node and all its children.
      *
      * @param node Node to be modified
-     * @return Node with changed namespace
+     * @return SOAPElement with changed namespace
      * @throws SOAPException
      */
-    public static Node removeNamespace(Node node) throws SOAPException {
+    public static SOAPElement removeNamespace(SOAPElement node) throws SOAPException {
         if (!(node instanceof SOAPElement)) {
             return node;
         }
@@ -413,7 +413,9 @@ public final class SOAPHelper {
         for (int i = 0; i < childrenList.size(); i++) {
             Node child = childrenList.get(i);
             Node updatedChild = child;
-            updatedChild = removeNamespace(updatedChild);
+            if (child instanceof SOAPElement) {
+                updatedChild = removeNamespace((SOAPElement) updatedChild);
+            }
             updatedElement.appendChild(updatedChild);
         }
 
@@ -615,8 +617,8 @@ public final class SOAPHelper {
                 continue;
             }
             Node node = (Node) nodeList.item(i);
-            if (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty()) {
-                node = updateNamespaceAndPrefix(node, namespace, prefix);
+            if (node instanceof SOAPElement && (node.getNamespaceURI() == null || node.getNamespaceURI().isEmpty())) {
+                node = updateNamespaceAndPrefix((SOAPElement) node, namespace, prefix);
             }
             List<Node> childNodeList = updateNamespaceAndPrefix(node.getChildNodes(), namespace, prefix);
             if (childNodeList != null) {
@@ -630,6 +632,24 @@ public final class SOAPHelper {
     }
 
     /**
+     * Wrapper method for updating namespace and prefix of a Node.
+     *
+     * @deprecated Use {@link SOAPHelper#updateNamespaceAndPrefix(SOAPElement, String, String)} instead.
+     * @param node          Node to be updated
+     * @param namespace     target namespace
+     * @param prefix        target prefix
+     * @return updated SOAPElement
+     * @throws SOAPException if renaming xml node throws DOMException
+     */
+    @Deprecated
+    public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) throws SOAPException {
+        if (!(node instanceof SOAPElement)) {
+            return node;
+        }
+        return updateNamespaceAndPrefix((SOAPElement) node, namespace, prefix);
+    }
+
+    /**
      * Updates the namespace URI and prefix of the given node with the given
      * values. If prefix is null or empty, only namespace URI is updated.
      *
@@ -639,16 +659,12 @@ public final class SOAPHelper {
      * @return updated SOAPElement
      * @throws SOAPException if renaming xml node throws DOMException
      */
-    public static Node updateNamespaceAndPrefix(Node node, String namespace, String prefix) throws SOAPException {
-        if (!(node instanceof SOAPElement)) {
-            return node;
-        }
-        SOAPElement soapElement = (SOAPElement) node;
+    public static Node updateNamespaceAndPrefix(SOAPElement node, String namespace, String prefix) throws SOAPException {
         Node updatedNode = node;
         if (prefix != null && !prefix.isEmpty()) {
-            updatedNode = soapElement.addNamespaceDeclaration(prefix, namespace).setElementQName(new QName(namespace, soapElement.getLocalName(), prefix));
+            updatedNode = node.addNamespaceDeclaration(prefix, namespace).setElementQName(new QName(namespace, node.getLocalName(), prefix));
         } else if (namespace != null && !namespace.isEmpty()) {
-            updatedNode = soapElement.addNamespaceDeclaration(prefix, namespace).setElementQName(new QName(namespace, soapElement.getLocalName()));
+            updatedNode = node.addNamespaceDeclaration(prefix, namespace).setElementQName(new QName(namespace, node.getLocalName()));
         }
         return updatedNode;
     }

@@ -28,7 +28,6 @@ import org.xmlunit.assertj3.XmlAssert;
 
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.Name;
-import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
@@ -477,31 +476,30 @@ class SOAPHelperTest {
         SOAPElement child111 = child11.addChildElement("child1.1.1", "", "default-ns");
         SOAPElement child12 = child1.addChildElement("child1.2", "custom-prfx", "custom-ns");
         SOAPElement child13 = child1.addChildElement("child1.3", "custom-prfx", "custom-ns");
-        SOAPElement child14 = child1.addTextNode("Text node in child1.4");
+        SOAPElement child14 = child1.addTextNode("Text node in child1");
 
         SOAPElement child2 = testElement.addChildElement("child2", "", "default-ns");
 
-        Node testElementCopy = (Node) testElement.cloneNode(true);
-        Node newElement = SOAPHelper.removeNamespace(testElementCopy);
-        String testElementStrNEW = SOAPHelper.toString((SOAPElement) newElement);
-        String testElementStr = SOAPHelper.toString(testElement);
+        SOAPElement testElementCopy = (SOAPElement) testElement.cloneNode(true);
+        SOAPElement updatedNode = SOAPHelper.removeNamespace(testElementCopy);
+        String testElementStr = SOAPHelper.toString(updatedNode);
 
         // test correct changes in returned element
-        assertEquals(null, (newElement.getFirstChild()).getNamespaceURI());
-        assertEquals(null, (newElement.getFirstChild()).getPrefix());
+        assertEquals(null, (updatedNode.getFirstChild()).getNamespaceURI());
+        assertEquals(null, (updatedNode.getFirstChild()).getPrefix());
 
-        assertEquals(null, (newElement.getFirstChild().getFirstChild()).getNamespaceURI());
-        assertEquals(null, (newElement.getFirstChild().getFirstChild()).getPrefix());
+        assertEquals(null, (updatedNode.getFirstChild().getFirstChild()).getNamespaceURI());
+        assertEquals(null, (updatedNode.getFirstChild().getFirstChild()).getPrefix());
 
-        assertEquals(null, (newElement.getFirstChild().getFirstChild().getFirstChild()).getNamespaceURI());
-        assertEquals(null, (newElement.getFirstChild().getFirstChild().getFirstChild()).getPrefix());
+        assertEquals(null, (updatedNode.getFirstChild().getFirstChild().getFirstChild()).getNamespaceURI());
+        assertEquals(null, (updatedNode.getFirstChild().getFirstChild().getFirstChild()).getPrefix());
 
-        assertEquals(null, (newElement.getFirstChild().getFirstChild().getNextSibling()).getNamespaceURI());
-        assertEquals(null, (newElement.getFirstChild().getFirstChild().getNextSibling()).getPrefix());
+        assertEquals(null, (updatedNode.getFirstChild().getFirstChild().getNextSibling()).getNamespaceURI());
+        assertEquals(null, (updatedNode.getFirstChild().getFirstChild().getNextSibling()).getPrefix());
 
 
-        assertEquals(null, (newElement.getFirstChild().getNextSibling()).getNamespaceURI());
-        assertEquals(null, (newElement.getFirstChild().getNextSibling()).getPrefix());
+        assertEquals(null, (updatedNode.getFirstChild().getNextSibling()).getNamespaceURI());
+        assertEquals(null, (updatedNode.getFirstChild().getNextSibling()).getPrefix());
 
         // test modification to the original element
         assertEquals("default-ns", (testElement.getFirstChild().getNextSibling()).getNamespaceURI());
