@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.7.0 -2025-05-26
+## 0.8.0 - 2025-06-03
+- XRDDEV-2911 Fix issue with SOAPHelper.removeNamespaces
+- **Breaking:** To use `removeNamespaces`, the provided element needs to be replaced by the returned element. Also, the input element of the function is modified. 
+This comes due changes in jakarta.xml.soap.
+
+## 0.7.0 - 2025-05-26
 - XRDDEV-2911 Fix issue with moveChildren and updateNamespaceAndPrefix using Node incorrect implementation in certain cases 
 - XRDDEV-2911 Make moveChildren and updateNamespaceAndPrefix catch, wrap and throw DOMException in SOAPException to avoid overlooking the error
 
