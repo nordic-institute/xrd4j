@@ -31,6 +31,7 @@ import org.niis.xrd4j.common.message.ServiceResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
 
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
@@ -94,6 +95,8 @@ public class LoadBalancedSOAPClientImpl implements LoadBalancedSOAPClient {
      * fails. Serialization and deserialization from/to SOAPMessage is done
      * inside the method.
      *
+     * @param <T1> runtime type of the request data
+     * @param <T2> runtime type of the response data
      * @param request the ServiceRequest object to be sent
      * @param serializer the ServiceRequestSerializer object that serializes the
      * request to SOAPMessage
@@ -104,8 +107,8 @@ public class LoadBalancedSOAPClientImpl implements LoadBalancedSOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse send(final ServiceRequest request, final ServiceRequestSerializer serializer,
-                                final ServiceResponseDeserializer deserializer) throws SOAPException {
+    public <T1, T2> ServiceResponse<T1, T2> send(final ServiceRequest<T1> request, final ServiceRequestSerializer<T1> serializer,
+                                final ServiceResponseDeserializer<T1, T2> deserializer) throws SOAPException {
         return this.soapClient.send(request, this.getTargetUrl(), serializer, deserializer);
     }
 
@@ -143,7 +146,7 @@ public class LoadBalancedSOAPClientImpl implements LoadBalancedSOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse listMethods(final ServiceRequest request) throws SOAPException {
+    public ServiceResponse<String, List<ProducerMember>> listMethods(final ServiceRequest<String> request) throws SOAPException {
         return this.soapClient.listMethods(request, this.getTargetUrl());
     }
 
@@ -158,7 +161,7 @@ public class LoadBalancedSOAPClientImpl implements LoadBalancedSOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse allowedMethods(final ServiceRequest request) throws SOAPException {
+    public ServiceResponse<String, List<ProducerMember>> allowedMethods(final ServiceRequest<String> request) throws SOAPException {
         return this.soapClient.allowedMethods(request, this.getTargetUrl());
     }
 
@@ -173,7 +176,7 @@ public class LoadBalancedSOAPClientImpl implements LoadBalancedSOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse getSecurityServerMetrics(final ServiceRequest request, final String url) throws SOAPException {
+    public ServiceResponse<String, NodeList> getSecurityServerMetrics(final ServiceRequest<String> request, final String url) throws SOAPException {
         return this.soapClient.getSecurityServerMetrics(request, this.getTargetUrl());
     }
 
