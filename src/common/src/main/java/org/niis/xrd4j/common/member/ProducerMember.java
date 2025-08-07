@@ -24,9 +24,11 @@ package org.niis.xrd4j.common.member;
 
 import org.niis.xrd4j.common.exception.XRd4JException;
 import org.niis.xrd4j.common.util.Constants;
+import org.niis.xrd4j.common.util.Pair;
 import org.niis.xrd4j.common.util.ValidationHelper;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * This class represent X-Road producer member that produces services to
@@ -63,7 +65,10 @@ public class ProducerMember extends AbstractMember implements Serializable {
      * @param xRoadInstance identifier of this X-Road instance
      * @param serviceCode unique service code
      * @throws XRd4JException if there's a XRd4J error
+     * @deprecated This constructor is deprecated and will be removed in future versions.
+     * X-Road no longer supports Central Services so this identifier does not make sense anymore.
      */
+    @Deprecated
     public ProducerMember(String xRoadInstance, String serviceCode) throws XRd4JException {
         super(xRoadInstance);
         this.serviceCode = serviceCode;
@@ -78,12 +83,14 @@ public class ProducerMember extends AbstractMember implements Serializable {
      * @param serviceCode code that uniquely identifies a service offered by
      * this member
      * @throws XRd4JException if there's a XRd4J error
+     * @deprecated This constructor is deprecated and will be removed in future versions.
+     * This creates too much ambiguity as we could have either no subsystem described or no service code described.
      */
+    @Deprecated
     public ProducerMember(String xRoadInstance, String memberClass, String memberCode, String serviceCode) throws XRd4JException {
         super(xRoadInstance, memberClass, memberCode);
         this.serviceCode = serviceCode;
         ValidationHelper.validateStrNotNullOrEmpty(serviceCode, Constants.NS_ID_ELEM_SERVICE_CODE);
-
     }
 
     /**
@@ -100,7 +107,10 @@ public class ProducerMember extends AbstractMember implements Serializable {
     public ProducerMember(String xRoadInstance, String memberClass, String memberCode, String subsystemCode, String serviceCode) throws XRd4JException {
         super(xRoadInstance, memberClass, memberCode, subsystemCode);
         this.serviceCode = serviceCode;
-        ValidationHelper.validateStrNotNullOrEmpty(serviceCode, Constants.NS_ID_ELEM_SERVICE_CODE);
+        ValidationHelper.validateAtLeastOneNotNullOrEmpty(
+                Arrays.asList(
+                        new Pair(Constants.NS_ID_ELEM_SERVICE_CODE, serviceCode),
+                        new Pair(Constants.NS_ID_ELEM_SUBSYSTEM_CODE, subsystemCode)));
     }
 
     /**
