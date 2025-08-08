@@ -40,7 +40,7 @@ import jakarta.xml.soap.SOAPException;
  *
  * @author Petteri Kivim'ki
  */
-public class DefaultServiceRequestSerializer extends AbstractServiceRequestSerializer {
+public class DefaultServiceRequestSerializer extends AbstractServiceRequestSerializer<String> {
 
     /**
      * Empty implementation.
@@ -53,7 +53,7 @@ public class DefaultServiceRequestSerializer extends AbstractServiceRequestSeria
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    protected void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
+    protected void serializeRequest(ServiceRequest<String> request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException {
         // This class can be used for serializing meta service calls that don't
         // have any request parameters.
     }

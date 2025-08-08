@@ -30,9 +30,11 @@ import jakarta.xml.soap.SOAPMessage;
  * This class defines an interface for deserializing SOAPMessage objects
  * to ServiceResponse objects.
  *
+ * @param <T1> runtime type of the request data
+ * @param <T2> runtime type of the response data
  * @author Petteri Kivimäki
  */
-public interface ServiceResponseDeserializer {
+public interface ServiceResponseDeserializer<T1, T2> {
 
     /**
      * Deserializes the given SOAPMessage object to ServiceResponse object.
@@ -40,7 +42,7 @@ public interface ServiceResponseDeserializer {
      * @return ServiceResponse object that represents the given
      * SOAPMessage object; if the operation fails, null is returned
      */
-    ServiceResponse deserialize(SOAPMessage message);
+    ServiceResponse<T1, T2> deserialize(SOAPMessage message);
 
     /**
      * Deserializes the given SOAPMessage object to ServiceResponse object.
@@ -52,7 +54,7 @@ public interface ServiceResponseDeserializer {
      * @return ServiceResponse object that represents the given
      * SOAPMessage object; if the operation fails, null is returned
      */
-    ServiceResponse deserialize(SOAPMessage message, String producerNamespaceURI);
+    ServiceResponse<T1, T2> deserialize(SOAPMessage message, String producerNamespaceURI);
 
     /**
      * Deserializes the given SOAPMessage object to ServiceResponse object.
@@ -65,5 +67,5 @@ public interface ServiceResponseDeserializer {
      * @return ServiceResponse object that represents the given
      * SOAPMessage object; if the operation fails, null is returned
      */
-    ServiceResponse deserialize(SOAPMessage message, String producerNamespaceURI, boolean processingWrappers);
+    ServiceResponse<T1, T2> deserialize(SOAPMessage message, String producerNamespaceURI, boolean processingWrappers);
 }

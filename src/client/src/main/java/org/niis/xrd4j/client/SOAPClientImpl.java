@@ -42,6 +42,7 @@ import org.niis.xrd4j.rest.client.RESTClientFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.NodeList;
 
 import jakarta.xml.soap.SOAPConnection;
 import jakarta.xml.soap.SOAPConnectionFactory;
@@ -120,6 +121,8 @@ public class SOAPClientImpl implements SOAPClient {
      * if sending the message fails. Serialization and deserialization from/to
      * SOAPMessage is done inside the method.
      *
+     * @param <T1> runtime type of the request data
+     * @param <T2> runtime type of the response data
      * @param request the ServiceRequest object to be sent
      * @param url URL that identifies where the message should be sent
      * @param serializer the ServiceRequestSerializer object that serializes the
@@ -131,9 +134,9 @@ public class SOAPClientImpl implements SOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse send(final ServiceRequest request, final String url,
-                                final ServiceRequestSerializer serializer,
-                                final ServiceResponseDeserializer deserializer) throws SOAPException {
+    public <T1, T2> ServiceResponse<T1, T2> send(final ServiceRequest<T1> request, final String url,
+                                final ServiceRequestSerializer<T1> serializer,
+                                final ServiceResponseDeserializer<T1, T2> deserializer) throws SOAPException {
         SOAPMessage soapRequest = serializer.serialize(request);
         LOGGER.info("Send ServiceRequest to \"{}\". Request id : \"{}\"", url, request.getId());
         LOGGER.debug("Consumer : {}", request.getConsumer().toString());
@@ -141,7 +144,7 @@ public class SOAPClientImpl implements SOAPClient {
         SOAPMessage soapResponse = this.send(soapRequest, url);
         String producerNamespaceURI = request.getProducer().getNamespaceUrl() == null
                 || request.getProducer().getNamespaceUrl().isEmpty() ? "*" : request.getProducer().getNamespaceUrl();
-        ServiceResponse response = deserializer.deserialize(soapResponse, producerNamespaceURI, request.isProcessingWrappers());
+        ServiceResponse<T1, T2> response = deserializer.deserialize(soapResponse, producerNamespaceURI, request.isProcessingWrappers());
         LOGGER.info("ServiceResponse received. Request id : \"{}\"", request.getId());
         return response;
     }
@@ -201,7 +204,7 @@ public class SOAPClientImpl implements SOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse listMethods(final ServiceRequest request, final String url) throws SOAPException {
+    public ServiceResponse<String, List<ProducerMember>> listMethods(final ServiceRequest<String> request, final String url) throws SOAPException {
         LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_LIST_METHODS);
         return this.listServices(request, url, Constants.META_SERVICE_LIST_METHODS);
     }
@@ -218,7 +221,7 @@ public class SOAPClientImpl implements SOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse allowedMethods(final ServiceRequest request, final String url) throws SOAPException {
+    public ServiceResponse<String, List<ProducerMember>> allowedMethods(final ServiceRequest<String> request, final String url) throws SOAPException {
         LOGGER.info(CALL_METASERVICE, Constants.META_SERVICE_ALLOWED_METHODS);
         return this.listServices(request, url, Constants.META_SERVICE_ALLOWED_METHODS);
     }
@@ -236,16 +239,17 @@ public class SOAPClientImpl implements SOAPClient {
      * @throws MalformedURLException MalformedURLException if no protocol is
      * specified, or an unknown protocol is found, or url is null
      */
-    private ServiceResponse listServices(final ServiceRequest request, final String url, final String serviceCode) throws SOAPException {
+    private ServiceResponse<String, List<ProducerMember>> listServices(final ServiceRequest<String> request, final String url, final String serviceCode)
+            throws SOAPException {
         // Set correct values for meta service call
         request.getProducer().setServiceCode(serviceCode);
         request.getProducer().setServiceVersion(null);
         request.getProducer().setNamespacePrefix(Constants.NS_XRD_PREFIX);
         request.getProducer().setNamespaceUrl(Constants.NS_XRD_URL);
         // Request serializer
-        ServiceRequestSerializer serializer = new DefaultServiceRequestSerializer();
+        ServiceRequestSerializer<String> serializer = new DefaultServiceRequestSerializer();
         // Response deserializer
-        ServiceResponseDeserializer deserializer = new ListServicesResponseDeserializer();
+        ServiceResponseDeserializer<String, List<ProducerMember>> deserializer = new ListServicesResponseDeserializer();
         // Return response
         return this.send(request, url, serializer, deserializer);
     }
@@ -261,7 +265,7 @@ public class SOAPClientImpl implements SOAPClient {
      * @throws SOAPException if there's a SOAP error
      */
     @Override
-    public ServiceResponse getSecurityServerMetrics(final ServiceRequest request, final String url) throws SOAPException {
+    public ServiceResponse<String, NodeList> getSecurityServerMetrics(final ServiceRequest<String> request, final String url) throws SOAPException {
         // Set correct values for meta service call
         request.getProducer().setSubsystemCode(null);
         request.getProducer().setServiceCode(Constants.ENV_MONITORING_GET_SECURITY_SERVER_METRICS);
@@ -269,9 +273,9 @@ public class SOAPClientImpl implements SOAPClient {
         request.getProducer().setNamespacePrefix(Constants.NS_ENV_MONITORING_PREFIX);
         request.getProducer().setNamespaceUrl(Constants.NS_ENV_MONITORING_URL);
         // Request serializer
-        ServiceRequestSerializer serializer = new DefaultServiceRequestSerializer();
+        ServiceRequestSerializer<String> serializer = new DefaultServiceRequestSerializer();
         // Response deserializer
-        ServiceResponseDeserializer deserializer = new GetSecurityServerMetricsResponseDeserializer();
+        ServiceResponseDeserializer<String, NodeList> deserializer = new GetSecurityServerMetricsResponseDeserializer();
         // Return response
         return this.send(request, url, serializer, deserializer);
     }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.0 - unreleased
+- Improved generics support on `SOAPClient` and `LoadBalancedSOAPCLient`
+- Marked constructors that should no longer be used as `@Deprecated` in `ProducerMember`
+
 ## 0.8.0 - 2025-06-03
 - XRDDEV-2911 Fix issue with SOAPHelper.removeNamespaces
 - **Breaking:** To use `removeNamespaces`, the provided element needs to be replaced by the returned element. Also, the input element of the function is modified. 

@@ -20,26 +20,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.niis.xrd4j.client.serializer;
-
-import org.niis.xrd4j.common.message.ServiceRequest;
-
-import jakarta.xml.soap.SOAPMessage;
+package org.niis.xrd4j.common.util;
 
 /**
- * This class defines an interface for serializing ServiceRequest objects
- * to SOAPMessage objects.
- *
- * @param <T> runtime type of the request data
- * @author Petteri Kivimäki
+ * A pair element containing a key and value as a String.
  */
-@FunctionalInterface
-public interface ServiceRequestSerializer<T> {
+public class Pair {
+    private String key;
+    private String value;
 
-    /**
-     * Serializes the given ServiceRequest object to SOAPMessage object.
-     * @param request ServiceRequest to be serialized
-     * @return SOAPMessage representing the given ServiceRequest
-     */
-    SOAPMessage serialize(ServiceRequest<T> request);
+    public Pair(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

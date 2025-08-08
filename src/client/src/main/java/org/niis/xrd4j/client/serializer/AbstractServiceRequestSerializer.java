@@ -46,9 +46,10 @@ import jakarta.xml.soap.SOAPMessage;
  * application specific request object to SOAP body's request element. This
  * class takes care of adding all the required SOAP headers.
  *
+ * @param <T> runtime type of the request data
  * @author Petteri Kivimäki
  */
-public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSerializer implements ServiceRequestSerializer {
+public abstract class AbstractServiceRequestSerializer<T> extends AbstractHeaderSerializer implements ServiceRequestSerializer<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractServiceRequestSerializer.class);
 
@@ -64,7 +65,7 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
      * @param envelope SOAPMessage's SOAPEnvelope object
      * @throws SOAPException if there's a SOAP error
      */
-    protected abstract void serializeRequest(ServiceRequest request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException;
+    protected abstract void serializeRequest(ServiceRequest<T> request, SOAPElement soapRequest, SOAPEnvelope envelope) throws SOAPException;
 
     /**
      * Serializes the given ServiceRequest to SOAPMessage.
@@ -74,7 +75,7 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
      * operation fails
      */
     @Override
-    public final SOAPMessage serialize(final ServiceRequest request) {
+    public final SOAPMessage serialize(final ServiceRequest<T> request) {
         try {
             LOGGER.debug("Serialize ServiceRequest message to SOAP.");
             MessageFactory myMsgFct = MessageFactory.newInstance();
@@ -104,7 +105,7 @@ public abstract class AbstractServiceRequestSerializer extends AbstractHeaderSer
      * @throws SOAPException if there's a SOAP error
      * @throws XRd4JException if there's a XRd4J error
      */
-    private void serializeBody(final ServiceRequest request) throws SOAPException, XRd4JException {
+    private void serializeBody(final ServiceRequest<T> request) throws SOAPException, XRd4JException {
         LOGGER.debug("Generate SOAP body.");
         LOGGER.debug("Use producer namespace \"{}\".", request.getProducer().getNamespaceUrl());
         // Body - Start
