@@ -31,7 +31,7 @@ import jakarta.xml.soap.SOAPMessage;
 /**
  * This class defines an interface for deserializing SOAPMessage objects to
  * ServiceRequest objects. In practise, the classes implementing this interface
- * take care of deserealizing SOAP header as SOAP body contains application
+ * take care of deserializing SOAP header as SOAP body contains application
  * specific content, and the type of the content is defined by the information
  * included in SOAP header. Therefore, SOAP header must be deserialized first,
  * and then use application and message specific deserializer for deserializing
@@ -40,9 +40,10 @@ import jakarta.xml.soap.SOAPMessage;
  * interface.
  *
  * @author Petteri Kivimäki
+ * @param <T> runtime type of the request data
  */
 @FunctionalInterface
-public interface ServiceRequestDeserializer {
+public interface ServiceRequestDeserializer<T> {
 
     /**
      * Deserializes the given SOAPMessage object to ServiceRequest object. Only
@@ -54,5 +55,5 @@ public interface ServiceRequestDeserializer {
      * @throws SOAPException if there's a SOAP error
      * @throws XRd4JException if there's a XRd4J error
      */
-    ServiceRequest deserialize(SOAPMessage message) throws XRd4JException, SOAPException;
+    ServiceRequest<T> deserialize(SOAPMessage message) throws XRd4JException, SOAPException;
 }

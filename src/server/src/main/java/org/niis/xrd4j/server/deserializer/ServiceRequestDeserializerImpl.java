@@ -53,8 +53,9 @@ import jakarta.xml.soap.SOAPPart;
  * class.
  *
  * @author Petteri Kivimäki
+ * @param <T> runtime type of the request data
  */
-public class ServiceRequestDeserializerImpl extends AbstractHeaderDeserializer implements ServiceRequestDeserializer {
+public class ServiceRequestDeserializerImpl<T> extends AbstractHeaderDeserializer implements ServiceRequestDeserializer<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ServiceRequestDeserializerImpl.class);
 
@@ -70,13 +71,13 @@ public class ServiceRequestDeserializerImpl extends AbstractHeaderDeserializer i
      * @throws XRd4JException if there's a XRd4J error
      */
     @Override
-    public final ServiceRequest deserialize(final SOAPMessage message) throws XRd4JException, SOAPException {
+    public final ServiceRequest<T> deserialize(final SOAPMessage message) throws XRd4JException, SOAPException {
         LOGGER.debug("Deserialize SOAP message.");
         SOAPPart mySPart = message.getSOAPPart();
         SOAPEnvelope envelope = mySPart.getEnvelope();
 
         // Desearialize header
-        ServiceRequest request = this.deserializeHeader(envelope.getHeader());
+        ServiceRequest<T> request = this.deserializeHeader(envelope.getHeader());
         request.setSoapMessage(message);
         
         LOGGER.debug("SOAP message header was succesfully deserialized.");
@@ -88,15 +89,14 @@ public class ServiceRequestDeserializerImpl extends AbstractHeaderDeserializer i
      *
      * @param header SOAP header to be deserialized
      * @return ServiceRequest object that contains the given SOAP header
-     * @throws SOAPException if there's a SOAP error
      * @throws XRd4JException if there's a XRd4J exception
      */
-    private ServiceRequest deserializeHeader(final SOAPHeader header) throws SOAPException, XRd4JException {
+    private ServiceRequest<T> deserializeHeader(final SOAPHeader header) throws XRd4JException {
         LOGGER.debug("Deserialize SOAP header.");
         // Check that SOAP header exists
         if (header == null || header.getChildNodes().getLength() == 0) {
             LOGGER.warn("No SOAP header or an empty SOAP header was found.");
-            return new ServiceRequest();
+            return new ServiceRequest<>();
         }
         // Client headers
         String id = super.deserializeId(header);
@@ -126,7 +126,7 @@ public class ServiceRequestDeserializerImpl extends AbstractHeaderDeserializer i
         } catch (XRd4JException ex) {
             LOGGER.warn("Deserializing \"SecurityServer\" failed.");
         }
-        ServiceRequest request = new ServiceRequest(consumer, producer, id);
+        ServiceRequest<T> request = new ServiceRequest<>(consumer, producer, id);
         request.setSecurityServer(securityServer);
         request.setUserId(userId);
         request.setIssue(issue);
