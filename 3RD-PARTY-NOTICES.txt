@@ -53,6 +53,7 @@ SUCH DAMAGE.
 
 ----
 
+Copyright 201L0-201L9 JetBrains s.r.o. and Kotlin Programming Language contributors
 Copyright (C) @API Guardian Team
 Copyright (C) Aaron Smuts
 Copyright (C) Adrian Nistor
@@ -147,9 +148,9 @@ Copyright (c) 2012-2020, 2022-2024 Jeremy Long
 Copyright 2022-2023 Jeremy Long
 Copyright (c) 2011 Jeroen van Erp <jeroen@javadude.nl>
 Copyright (C) JetBrains
-Copyright 2000-2024 JetBrains s.r.o.
+Copyright 2000-2021 JetBrains s.r.o.
 Copyright 2000-2024 JetBrains s.r.o. and Kotlin Programming Language contributors
-Copyright 2000-2023 JetBrains s.r.o. and contributors
+Copyright 2000-2021 JetBrains s.r.o. and contributors
 Copyright (C) Jochen Wiedmann
 Copyright (C) Joda.org
 Copyright (C) Joel Costigliola
@@ -1828,7 +1829,6 @@ That's all there is to it!
 ----
 
 Copyright (c) 1989, 1991 Free Software Foundation, Inc.
-Copyright (C) Oracle
 copyrighted by the Free Software Foundation
 
                     GNU GENERAL PUBLIC LICENSE
@@ -3580,6 +3580,8 @@ Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
 
 ----
+
+Copyright (c) 2015-2025 SonarSource info AT sonarsource DOT com
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -5356,7 +5358,6 @@ Copyright 2003-2010 Christian d'Heureuse, Inventec Informatik AG, Zurich, Switze
 Copyright (c) 2001-2002 Eric D. Friedman
 Copyright 2004-2022 H2 Group. Multiple-Licensed
 Copyright (c) 2001 Jason Baldridge
-Copyright (c) 2015-2024 SonarSource
 
 This library is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free
