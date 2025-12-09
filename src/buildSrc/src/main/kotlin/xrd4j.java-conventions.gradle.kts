@@ -110,6 +110,21 @@ license {
     strictCheck = true
 }
 
+tasks.named<com.hierynomus.gradle.license.tasks.LicenseCheck>("licenseMain") {
+    source = fileTree("src/main")
+}
+
+tasks.named<com.hierynomus.gradle.license.tasks.LicenseCheck>("licenseTest") {
+    source = fileTree("src/test")
+}
+
+tasks.named<com.hierynomus.gradle.license.tasks.LicenseFormat>("licenseFormatMain") {
+    source = fileTree("src/main")
+}
+
+tasks.named<com.hierynomus.gradle.license.tasks.LicenseFormat>("licenseFormatTest") {
+    source = fileTree("src/test")
+}
 
 tasks.withType(JacocoReport::class) {
     executionData(tasks.withType<Test>())
