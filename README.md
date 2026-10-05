@@ -11,7 +11,7 @@ and [Service Metadata Protocol](https://github.com/nordic-institute/X-Road/blob/
 The library takes care of serialization and deserialization of SOAP messages offering built-in support for standard
 X-Road SOAP headers; only processing of application specific request and response content remains to be implemented.
 
-The library is compatible with X-Road 7.
+The library is compatible with X-Road 7. It requires Java 21 or later.
 
 ## Table of Contents <!-- omit in toc -->
 

@@ -13,7 +13,7 @@ This document describes how a developer's workstation can be setup.
 ### Software Requirements
 
 * Linux / Windows / MacOS
-* Java 21 or later
+* JDK 21 (the build compiles with a Java 21 toolchain, so JDK 21 must be installed even if a later JDK is the default)
 * Gradle
 * Docker (*optional*)
 

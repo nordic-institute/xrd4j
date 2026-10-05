@@ -42,7 +42,7 @@ The Example Adapter is meant to illustrate the basic level usage of the XRd4J li
 ## Try It Out
 
 The fastest and easiest way to try out the application is by using the Spring Boot Gradle plugin. The only requirement
-is to have Java 21 or later installed on your machine.
+is to have JDK 21 installed on your machine.
 
 ```bash
 ./gradlew bootRun
@@ -62,7 +62,7 @@ http://localhost:8080/example-adapter/Endpoint?wsdl
 
 ## Software Requirements
 
-* Java 21 or later
+* Java 21 or later (building requires JDK 21)
 * Docker (*optional*)
 
 ## Development Environment
