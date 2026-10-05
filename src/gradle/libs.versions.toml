@@ -26,7 +26,7 @@ org-assertj-assertjCore = { module = "org.assertj:assertj-core", version.ref = "
 org-xmlunit-xmlunitAssertj3 = { module = "org.xmlunit:xmlunit-assertj3", version.ref = "xmlunit" }
 org-xmlunit-xmlunitPlaceholders = { module = "org.xmlunit:xmlunit-placeholders", version.ref = "xmlunit" }
 org-wiremock-wiremock = { module = "org.wiremock:wiremock", version = "3.9.1" }
-org-mockito-mockitoCore = { module = "org.mockito:mockito-core", version = "5.14.2" }
+org-mockito-mockitoCore = { module = "org.mockito:mockito-core", version = "5.24.0" }
 
 licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version = "0.16.1" }
 dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version = "12.2.2" }

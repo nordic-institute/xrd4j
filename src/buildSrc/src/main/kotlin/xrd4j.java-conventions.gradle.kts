@@ -94,9 +94,20 @@ tasks.withType<Jar>() {
     }
 }
 
+val testJavaVersion = providers.gradleProperty("testJavaVersion")
+
 tasks.withType<Test>() {
     useJUnitPlatform()
     // testLogging.showStandardStreams = true
+    if (testJavaVersion.isPresent) {
+        javaLauncher = javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(testJavaVersion.get())
+        }
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.15"
 }
 
 checkstyle {
