@@ -5,9 +5,9 @@ plugins {
     java
     war
     `maven-publish`
-    id("org.owasp.dependencycheck") version "10.0.4"
-    id("org.springframework.boot") version "3.3.4"
-    id("io.mateo.cxf-codegen") version "2.4.0"
+    id("org.owasp.dependencycheck") version "12.2.2"
+    id("org.springframework.boot") version "3.5.9"
+    id("io.mateo.cxf-codegen") version "2.5.0"
     id("com.github.hierynomus.license") version "0.16.1"
 }
 
@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web:3.3.4")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.5.9")
     implementation("org.apache.cxf:cxf-spring-boot-starter-jaxws:4.0.5")
 
     implementation("org.niis.xrd4j:common:0.9.0-SNAPSHOT")
@@ -34,8 +34,8 @@ dependencies {
 
     compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
 
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:3.3.2")
-    providedRuntime("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.26")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:3.5.9")
+    providedRuntime("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.50")
 
     cxfCodegen("org.apache.cxf:cxf-rt-transports-http:4.0.5")
 }
@@ -44,7 +44,7 @@ group = "org.niis"
 version = "0.0.10-SNAPSHOT"
 description = "Example Adapter for X-Road"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 publishing {
     publications {

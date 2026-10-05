@@ -13,7 +13,7 @@ This document describes how a developer's workstation can be setup.
 ### Software Requirements
 
 * Linux / Windows / MacOS
-* Java 17 or later
+* Java 21 or later
 * Gradle
 * Docker (*optional*)
 
