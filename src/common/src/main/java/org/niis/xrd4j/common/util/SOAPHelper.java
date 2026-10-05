@@ -534,7 +534,7 @@ public final class SOAPHelper {
         InputStream stream;
         Document doc;
         try {
-            stream = new ByteArrayInputStream(xml.getBytes());
+            stream = new ByteArrayInputStream(xml.getBytes(UTF_8));
             doc = builderFactory.newDocumentBuilder().parse(stream);
             LOGGER.debug("Converting XML string to XML document succeeded.");
         } catch (Exception e) {

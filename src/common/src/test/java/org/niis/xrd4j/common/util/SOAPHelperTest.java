@@ -23,6 +23,7 @@
 package org.niis.xrd4j.common.util;
 
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xmlunit.assertj3.XmlAssert;
 
@@ -40,6 +41,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -504,5 +506,16 @@ class SOAPHelperTest {
         // test modification to the original element
         assertEquals("default-ns", (testElement.getFirstChild().getNextSibling()).getNamespaceURI());
         assertEquals(null, (testElement.getFirstChild().getNextSibling()).getPrefix());
+    }
+
+    /**
+     * Test that a string with non-ASCII characters and no XML declaration is
+     * parsed as UTF-8, regardless of the default charset.
+     */
+    @Test
+    void testXmlStrToDocUsesUtf8() {
+        Document doc = SOAPHelper.xmlStrToDoc("<data>ÄäÅåÖö</data>");
+        assertNotNull(doc);
+        assertEquals("ÄäÅåÖö", doc.getDocumentElement().getTextContent());
     }
 }
