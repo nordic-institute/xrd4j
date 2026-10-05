@@ -14,7 +14,7 @@ repositories {
 group = "org.niis.xrd4j"
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(11)
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
     withSourcesJar()
 }
 
