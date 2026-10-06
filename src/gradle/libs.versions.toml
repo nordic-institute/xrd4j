@@ -2,11 +2,11 @@
 
 [versions]
 jakarta-servlet-servlet-api = "6.1.0"
-org-apache-httpcomponents-httpclient = "5.3.1"
-org-json-json = "20240303"
-slf4j = "2.0.13"
+org-apache-httpcomponents-httpclient = "5.6.4"
+org-json-json = "20260814"
+slf4j = "2.0.20"
 log4j = "2.23.1"
-saaj-impl = "3.0.4"
+saaj-impl = "3.0.6"
 junit-jupiter = "5.10.3"
 xmlunit = "2.10.0"
 assertj = "3.26.3"

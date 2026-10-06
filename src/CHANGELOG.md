@@ -3,6 +3,7 @@
 ## 0.9.0 - unreleased
 - **Breaking:** Java 21 is now the minimum supported Java version. Java 11 and 17 are no longer supported.
 - Added Java 25 support
+- Updated dependencies, including `httpclient5` 5.3.1 → 5.6.4 which the `rest` module exposes to consumers
 - Signature creation and verification in `CryptoHelper`, `SOAPHelper.xmlStrToDoc` and `ClientUtil.getResponseString` now always use UTF-8 instead of the platform default charset
 - Improved generics support on `SOAPClient` and `LoadBalancedSOAPClient`, including the request serializers and response deserializers they use
 - Improved generics support in the server module: `CustomRequestDeserializer`, `ServiceRequestDeserializer`, `ServiceResponseSerializer` and `AdapterUtils`
