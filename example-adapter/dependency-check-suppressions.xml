@@ -8,4 +8,11 @@
         <packageUrl regex="true">^pkg:maven/org\.eclipse\.angus/angus-\w+@.*$</packageUrl>
         <vulnerabilityName>CVE-2021-44549</vulnerabilityName>
     </suppress>
+    <suppress>
+        <notes><![CDATA[
+      Path limitation in XsltView; only fixed in Spring Framework 7. The adapter does not use XsltView.
+      ]]></notes>
+        <packageUrl regex="true">^pkg:maven/org\.springframework/spring-webmvc@.*$</packageUrl>
+        <cve>CVE-2026-47884</cve>
+    </suppress>
 </suppressions>
