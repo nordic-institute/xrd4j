@@ -50,13 +50,13 @@ is to have JDK 21 installed on your machine.
 
 After that the application is accessible at:
 
-```
+```text
 http://localhost:8080/example-adapter/Endpoint
 ```
 
 The WSDL description is accessible at:
 
-```
+```text
 http://localhost:8080/example-adapter/Endpoint?wsdl
 ```
 
@@ -142,13 +142,13 @@ See [Usage section](#usage) for further instructions.
 
 After installation the application is accessible at:
 
-```
+```text
 http://localhost:8080/example-adapter/Endpoint
 ```
 
 The WSDL description is accessible at:
 
-```
+```text
 http://localhost:8080/example-adapter/Endpoint?wsdl
 ```
 

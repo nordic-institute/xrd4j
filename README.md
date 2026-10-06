@@ -46,7 +46,7 @@ Repository [https://artifactory.niis.org/xroad-maven-releases](https://artifacto
 
 Add the NIIS Maven Repository to your Gradle build file:
 
-```
+```kotlin
 repositories {
     maven {
         url = uri("https://artifactory.niis.org/xroad-maven-releases")
@@ -56,7 +56,7 @@ repositories {
 
 For Maven POM-file, add the following inside the `<repositories>` tag:
 
-```XML
+```xml
 
 <repository>
     <id>niis-repo</id>
@@ -69,7 +69,7 @@ For Maven POM-file, add the following inside the `<repositories>` tag:
 
 Declare the following dependencies in your Gradle build file
 
-```
+```kotlin
 dependencies {
     // Module: common
     implementation("org.niis.xrd4j:common:${xrd4j.version}")
@@ -84,7 +84,7 @@ dependencies {
 
 or in Maven POM-file:
 
-```XML
+```xml
 <!-- Module: common-->
 <dependency>
     <groupId>org.niis.xrd4j</groupId>
@@ -121,7 +121,7 @@ in [https://artifactory.niis.org/xroad-maven-snapshots](https://artifactory.niis
 
 Include the snapshot repository in your Gradle build file
 
-```
+```kotlin
 repositories {    
     maven {
         url = uri("https://artifactory.niis.org/xroad-maven-snapshots")
@@ -131,7 +131,7 @@ repositories {
 
 or in Maven POM-file inside the `<repositories>` tag:
 
-```XML
+```xml
 
 <repository>
     <id>niis-snapshot-repo</id>
