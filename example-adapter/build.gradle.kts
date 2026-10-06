@@ -1,4 +1,5 @@
 import io.mateo.cxf.codegen.wsdl2java.Wsdl2Java
+import nl.javadude.gradle.plugins.license.License
 import org.springframework.boot.gradle.tasks.bundling.BootWar
 
 plugins {
@@ -43,6 +44,9 @@ dependencies {
     providedRuntime(xrd4j.org.apache.tomcat.embed.jasper)
 
     cxfCodegen(libs.org.apache.cxf.cxfRtTransportsHttp)
+
+    testImplementation(libs.org.springframework.boot.springBootStarterTest)
+    testImplementation(xrd4j.org.xmlunit.xmlunitAssertj3)
 }
 
 group = "org.niis"
@@ -80,6 +84,10 @@ tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
 }
 
+tasks.withType<Test>() {
+    useJUnitPlatform()
+}
+
 tasks.withType<Jar>() {
     from(rootProject.files("../LICENSE", "3RD-PARTY-NOTICES.txt")) {
         into("META-INF")
@@ -100,9 +108,17 @@ cxfCodegen {
 
 license {
     header = rootProject.file("../LICENSE")
-    include("src/**/*.java")
+    include("**/*.java")
     mapping("java", "SLASHSTAR_STYLE")
     strictCheck = true
+}
+
+tasks.named<License>("licenseMain") {
+    source = fileTree("src/main/java")
+}
+
+tasks.named<License>("licenseTest") {
+    source = fileTree("src/test/java")
 }
 
 tasks.register("wsdlSources", Wsdl2Java::class) {

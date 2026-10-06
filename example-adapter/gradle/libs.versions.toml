@@ -20,6 +20,7 @@ org-apache-cxf-cxfRtTransportsHttp = { module = "org.apache.cxf:cxf-rt-transport
 com-fasterxml-jackson-jacksonBom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
 org-niis-xrd4j-common = { module = "org.niis.xrd4j:common", version.ref = "xrd4j" }
 org-niis-xrd4j-server = { module = "org.niis.xrd4j:server", version.ref = "xrd4j" }
+org-springframework-boot-springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 
 [plugins]
 org-owasp-dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "org-owasp-dependencycheck" }
