@@ -106,12 +106,15 @@ tasks.withType<Test>() {
     }
 }
 
+// Precompiled script plugins have no type-safe accessor for the catalog
+val libs = the<VersionCatalogsExtension>().named("libs")
+
 jacoco {
-    toolVersion = "0.8.15"
+    toolVersion = libs.findVersion("jacoco").get().requiredVersion
 }
 
 checkstyle {
-    toolVersion = "10.18.1"
+    toolVersion = libs.findVersion("checkstyle").get().requiredVersion
 }
 
 license {
