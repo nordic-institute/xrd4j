@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import jakarta.xml.soap.AttachmentPart;
 import jakarta.xml.soap.MessageFactory;
@@ -52,6 +53,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -531,11 +533,10 @@ public final class SOAPHelper {
         builderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
         builderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
         builderFactory.setNamespaceAware(true);
-        InputStream stream;
         Document doc;
         try {
-            stream = new ByteArrayInputStream(xml.getBytes(UTF_8));
-            doc = builderFactory.newDocumentBuilder().parse(stream);
+            // Parse from a character stream so the encoding declaration, if any, is ignored
+            doc = builderFactory.newDocumentBuilder().parse(new InputSource(new StringReader(xml)));
             LOGGER.debug("Converting XML string to XML document succeeded.");
         } catch (Exception e) {
             LOGGER.error(e.getMessage());

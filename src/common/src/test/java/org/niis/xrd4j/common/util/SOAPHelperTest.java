@@ -518,4 +518,15 @@ class SOAPHelperTest {
         assertNotNull(doc);
         assertEquals("ÄäÅåÖö", doc.getDocumentElement().getTextContent());
     }
+
+    /**
+     * Test that the encoding declaration does not affect parsing: the input
+     * is already a Java string, so there are no bytes left to decode.
+     */
+    @Test
+    void testXmlStrToDocIgnoresEncodingDeclaration() {
+        Document doc = SOAPHelper.xmlStrToDoc("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><data>ÄäÅåÖö</data>");
+        assertNotNull(doc);
+        assertEquals("ÄäÅåÖö", doc.getDocumentElement().getTextContent());
+    }
 }
