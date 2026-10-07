@@ -70,6 +70,18 @@ class AbstractClientTest {
     }
 
     @Test
+    void getDecodesBodyWithDeclaredCharset(WireMockRuntimeInfo wm) {
+        stubFor(get(PATH).willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "text/plain; charset=ISO-8859-1")
+                .withBody(BODY.getBytes(StandardCharsets.ISO_8859_1))));
+
+        ClientResponse response = RESTClientFactory.createRESTClient("get").send(wm.getHttpBaseUrl() + PATH, null, null, null);
+
+        assertThat(response.getData()).isEqualTo(BODY);
+    }
+
+    @Test
     void postSendsBodyAndReturnsResponse(WireMockRuntimeInfo wm) {
         stubFor(post(PATH).willReturn(aResponse()
                 .withStatus(201)
