@@ -6,10 +6,10 @@ plugins {
     java
     war
     `maven-publish`
-    alias(libs.plugins.org.owasp.dependencycheck)
+    alias(xrd4j.plugins.org.owasp.dependencycheck)
     alias(libs.plugins.org.springframework.boot)
     alias(libs.plugins.io.mateo.cxf.codegen)
-    alias(libs.plugins.com.github.hierynomus.license)
+    alias(xrd4j.plugins.com.github.hierynomus.license)
 }
 
 repositories {

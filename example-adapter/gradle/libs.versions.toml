@@ -8,9 +8,7 @@ spring-boot = "3.5.16"
 cxf = "4.1.8"
 jackson = "2.21.7"
 xrd4j = "0.9.0-SNAPSHOT"
-org-owasp-dependencycheck = "12.2.2"
 io-mateo-cxf-codegen = "2.5.0"
-com-github-hierynomus-license = "0.16.1"
 
 [libraries]
 org-springframework-boot-springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
@@ -23,7 +21,5 @@ org-niis-xrd4j-server = { module = "org.niis.xrd4j:server", version.ref = "xrd4j
 org-springframework-boot-springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 
 [plugins]
-org-owasp-dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "org-owasp-dependencycheck" }
 org-springframework-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 io-mateo-cxf-codegen = { id = "io.mateo.cxf-codegen", version.ref = "io-mateo-cxf-codegen" }
-com-github-hierynomus-license = { id = "com.github.hierynomus.license", version.ref = "com-github-hierynomus-license" }

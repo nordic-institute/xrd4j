@@ -13,6 +13,8 @@ xmlunit = "2.14.0"
 assertj = "3.27.7"
 jacoco = "0.8.15"
 checkstyle = "10.18.1"
+com-github-hierynomus-license = "0.16.1"
+org-owasp-dependencycheck = "12.2.2"
 
 [libraries]
 com-sun-xml-messaging-saaj-saajImpl = { module = "com.sun.xml.messaging.saaj:saaj-impl", version.ref = "saaj-impl" }
@@ -33,10 +35,15 @@ org-xmlunit-xmlunitPlaceholders = { module = "org.xmlunit:xmlunit-placeholders",
 org-wiremock-wiremock = { module = "org.wiremock:wiremock", version = "3.13.2" }
 org-mockito-mockitoCore = { module = "org.mockito:mockito-core", version = "5.24.0" }
 
-licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version = "0.16.1" }
-dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version = "12.2.2" }
+licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version.ref = "com-github-hierynomus-license" }
+dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version.ref = "org-owasp-dependencycheck" }
 javadocAggregateGradlePlugin = { module = "io.freefair.gradle:maven-plugin", version = "9.8.0" }
 sonarqubeGradlePlugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version="7.5.0.8588" }
+
+[plugins]
+# Used by example-adapter; buildSrc applies the same plugins through the libraries above
+com-github-hierynomus-license = { id = "com.github.hierynomus.license", version.ref = "com-github-hierynomus-license" }
+org-owasp-dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "org-owasp-dependencycheck" }
 
 [bundles]
 testImplementation = [ "junit-jupiter", "org-slf4j-slf4jApi", "org-apache-logging-log4j-log4jSlf4j2Impl", "org-apache-logging-log4j-log4jCore" ]
