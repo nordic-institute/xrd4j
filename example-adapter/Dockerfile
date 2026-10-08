@@ -1,5 +1,5 @@
 # Base java:21
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 
 # Copy Example Adapter WAR to container
 COPY build/libs/example-adapter-*.*.*-boot.war example-adapter.war
