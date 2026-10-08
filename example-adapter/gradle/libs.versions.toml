@@ -4,11 +4,11 @@
 # imported by settings.gradle.kts as the "xrd4j" catalog.
 
 [versions]
-spring-boot = "3.5.16"
+spring-boot = "4.1.1"
 cxf = "4.1.8"
 jackson = "2.21.7"
 xrd4j = "0.9.0-SNAPSHOT"
-io-mateo-cxf-codegen = "2.5.0"
+io-mateo-cxf-codegen = "3.0.0"
 
 [libraries]
 org-springframework-boot-springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
