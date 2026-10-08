@@ -2,14 +2,19 @@
 
 [versions]
 jakarta-servlet-servlet-api = "6.1.0"
-org-apache-httpcomponents-httpclient = "5.3.1"
-org-json-json = "20240303"
-slf4j = "2.0.13"
-log4j = "2.23.1"
-saaj-impl = "3.0.4"
-junit-jupiter = "5.10.3"
-xmlunit = "2.10.0"
-assertj = "3.26.3"
+org-apache-httpcomponents-httpclient = "5.6.4"
+org-json-json = "20260814"
+slf4j = "2.0.20"
+log4j = "2.26.1"
+tomcat = "10.1.60"
+saaj-impl = "3.0.6"
+junit-jupiter = "5.14.4"
+xmlunit = "2.14.0"
+assertj = "3.27.7"
+jacoco = "0.8.15"
+checkstyle = "10.18.1"
+com-github-hierynomus-license = "0.16.1"
+org-owasp-dependencycheck = "12.2.2"
 
 [libraries]
 com-sun-xml-messaging-saaj-saajImpl = { module = "com.sun.xml.messaging.saaj:saaj-impl", version.ref = "saaj-impl" }
@@ -17,21 +22,28 @@ jakarta-servlet-servletApi = { module = "jakarta.servlet:jakarta.servlet-api", v
 org-apache-httpcomponents-httpclient = { module = "org.apache.httpcomponents.client5:httpclient5", version.ref = "org-apache-httpcomponents-httpclient" }
 org-json-json = { module = "org.json:json", version.ref = "org-json-json" }
 org-slf4j-slf4jApi = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+org-apache-logging-log4j-log4jApi = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
 org-apache-logging-log4j-log4jCore = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 org-apache-logging-log4j-log4jSlf4j2Impl = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j" }
-org-apache-james-mime4jCore = { module = "org.apache.james:apache-mime4j-core", version = "0.8.10" }
+org-apache-james-mime4jCore = { module = "org.apache.james:apache-mime4j-core", version = "0.8.15" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
-org-apache-tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version = "10.1.30" }
+org-apache-tomcat-embed-core = { module = "org.apache.tomcat.embed:tomcat-embed-core", version.ref = "tomcat" }
+org-apache-tomcat-embed-jasper = { module = "org.apache.tomcat.embed:tomcat-embed-jasper", version.ref = "tomcat" }
 org-assertj-assertjCore = { module = "org.assertj:assertj-core", version.ref = "assertj" }
 org-xmlunit-xmlunitAssertj3 = { module = "org.xmlunit:xmlunit-assertj3", version.ref = "xmlunit" }
 org-xmlunit-xmlunitPlaceholders = { module = "org.xmlunit:xmlunit-placeholders", version.ref = "xmlunit" }
-org-wiremock-wiremock = { module = "org.wiremock:wiremock", version = "3.9.1" }
-org-mockito-mockitoCore = { module = "org.mockito:mockito-core", version = "5.14.2" }
+org-wiremock-wiremock = { module = "org.wiremock:wiremock", version = "3.13.2" }
+org-mockito-mockitoCore = { module = "org.mockito:mockito-core", version = "5.24.0" }
 
-licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version = "0.16.1" }
-dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version = "10.0.4" }
-javadocAggregateGradlePlugin = { module = "io.freefair.gradle:maven-plugin", version = "8.10" }
-sonarqubeGradlePlugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version="6.2.0.5505" }
+licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version.ref = "com-github-hierynomus-license" }
+dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version.ref = "org-owasp-dependencycheck" }
+javadocAggregateGradlePlugin = { module = "io.freefair.gradle:maven-plugin", version = "9.8.0" }
+sonarqubeGradlePlugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version="7.5.0.8588" }
+
+[plugins]
+# Used by example-adapter; buildSrc applies the same plugins through the libraries above
+com-github-hierynomus-license = { id = "com.github.hierynomus.license", version.ref = "com-github-hierynomus-license" }
+org-owasp-dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "org-owasp-dependencycheck" }
 
 [bundles]
 testImplementation = [ "junit-jupiter", "org-slf4j-slf4jApi", "org-apache-logging-log4j-log4jSlf4j2Impl", "org-apache-logging-log4j-log4jCore" ]

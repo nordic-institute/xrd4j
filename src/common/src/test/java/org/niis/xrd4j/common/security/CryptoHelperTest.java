@@ -24,11 +24,14 @@ package org.niis.xrd4j.common.security;
 
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
+import java.security.Signature;
+import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -94,6 +97,25 @@ class CryptoHelperTest {
         } catch (Exception e) {
             fail(e.getMessage());
         }
+    }
+
+    /**
+     * Test that the signed bytes are the UTF-8 encoding of the data,
+     * regardless of the default charset.
+     */
+    @Test
+    void testSignatureUsesUtf8() throws Exception {
+        String data = "ÄäÅåÖö";
+        PrivateKey privateKey = CryptoHelper.getPrivateKey(PRIVATE_KEY_FILE, PRIVATE_KEY_FILE_PASS, PRIVATE_KEY_ALIAS, PRIVATE_KEY_PASS);
+        PublicKey publicKey = CryptoHelper.getPublicKey(PUBLIC_KEY_FILE, PUBLIC_KEY_FILE_PASS, PUBLIC_KEY_ALIAS);
+
+        Signature signature = Signature.getInstance("SHA512withRSA");
+        signature.initSign(privateKey);
+        signature.update(data.getBytes(StandardCharsets.UTF_8));
+        String expected = Base64.getEncoder().encodeToString(signature.sign());
+
+        assertEquals(expected, CryptoHelper.createSignature(privateKey, data, "SHA512withRSA"));
+        assertEquals(true, CryptoHelper.verifySignature(publicKey, data, expected, "SHA512withRSA"));
     }
 
     private boolean createAndverifySignature(String data) {

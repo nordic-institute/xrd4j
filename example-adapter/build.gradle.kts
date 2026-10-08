@@ -1,14 +1,15 @@
 import io.mateo.cxf.codegen.wsdl2java.Wsdl2Java
+import nl.javadude.gradle.plugins.license.License
 import org.springframework.boot.gradle.tasks.bundling.BootWar
 
 plugins {
     java
     war
     `maven-publish`
-    id("org.owasp.dependencycheck") version "10.0.4"
-    id("org.springframework.boot") version "3.3.4"
-    id("io.mateo.cxf-codegen") version "2.4.0"
-    id("com.github.hierynomus.license") version "0.16.1"
+    alias(xrd4j.plugins.org.owasp.dependencycheck)
+    alias(libs.plugins.org.springframework.boot)
+    alias(libs.plugins.io.mateo.cxf.codegen)
+    alias(xrd4j.plugins.com.github.hierynomus.license)
 }
 
 repositories {
@@ -25,26 +26,34 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web:3.3.4")
-    implementation("org.apache.cxf:cxf-spring-boot-starter-jaxws:4.0.5")
+    implementation(libs.org.springframework.boot.springBootStarterWeb)
+    implementation(libs.org.apache.cxf.cxfSpringBootStarterJaxws)
+    // Spring Boot 3.5 manages Jackson and Log4j patch versions with open CVEs
+    implementation(platform(libs.com.fasterxml.jackson.jacksonBom))
+    constraints {
+        implementation(xrd4j.org.apache.logging.log4j.log4jApi)
+    }
 
-    implementation("org.niis.xrd4j:common:0.9.0-SNAPSHOT")
-    implementation("org.niis.xrd4j:server:0.9.0-SNAPSHOT")
+    implementation(libs.org.niis.xrd4j.common)
+    implementation(libs.org.niis.xrd4j.server)
 
 
-    compileOnly("jakarta.servlet:jakarta.servlet-api:6.1.0")
+    compileOnly(xrd4j.jakarta.servlet.servletApi)
 
-    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:3.3.2")
-    providedRuntime("org.apache.tomcat.embed:tomcat-embed-jasper:10.1.26")
+    providedRuntime(libs.org.springframework.boot.springBootStarterTomcat)
+    providedRuntime(xrd4j.org.apache.tomcat.embed.jasper)
 
-    cxfCodegen("org.apache.cxf:cxf-rt-transports-http:4.0.5")
+    cxfCodegen(libs.org.apache.cxf.cxfRtTransportsHttp)
+
+    testImplementation(libs.org.springframework.boot.springBootStarterTest)
+    testImplementation(xrd4j.org.xmlunit.xmlunitAssertj3)
 }
 
 group = "org.niis"
 version = "0.0.10-SNAPSHOT"
 description = "Example Adapter for X-Road"
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 publishing {
     publications {
@@ -75,6 +84,10 @@ tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
 }
 
+tasks.withType<Test>() {
+    useJUnitPlatform()
+}
+
 tasks.withType<Jar>() {
     from(rootProject.files("../LICENSE", "3RD-PARTY-NOTICES.txt")) {
         into("META-INF")
@@ -90,14 +103,22 @@ tasks.named<BootWar>("bootWar") {
 }
 
 cxfCodegen {
-    cxfVersion = "4.0.5"
+    cxfVersion = libs.versions.cxf.get()
 }
 
 license {
     header = rootProject.file("../LICENSE")
-    include("src/**/*.java")
+    include("**/*.java")
     mapping("java", "SLASHSTAR_STYLE")
     strictCheck = true
+}
+
+tasks.named<License>("licenseMain") {
+    source = fileTree("src/main/java")
+}
+
+tasks.named<License>("licenseTest") {
+    source = fileTree("src/test/java")
 }
 
 tasks.register("wsdlSources", Wsdl2Java::class) {

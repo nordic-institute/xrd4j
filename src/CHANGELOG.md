@@ -1,8 +1,18 @@
 # Changelog
 
 ## 0.9.0 - unreleased
-- Improved generics support on `SOAPClient` and `LoadBalancedSOAPCLient`
+- **Breaking:** Java 21 is now the minimum supported Java version. Java 11 and 17 are no longer supported.
+- Added Java 25 support
+- Updated dependencies, including `httpclient5` 5.3.1 → 5.6.4 which the `rest` module exposes to consumers
+- Signature creation and verification in `CryptoHelper` now always use UTF-8 instead of the platform default charset
+- `SOAPHelper.xmlStrToDoc` now parses the string as characters, so the result no longer depends on the platform default charset or on the XML encoding declaration
+- `ClientUtil.getResponseString` now decodes the response using the charset declared in its `Content-Type` header, falling back to UTF-8 instead of the platform default charset
+- Improved generics support on `SOAPClient` and `LoadBalancedSOAPClient`, including the request serializers and response deserializers they use
+- Improved generics support in the server module: `CustomRequestDeserializer`, `ServiceRequestDeserializer`, `ServiceResponseSerializer` and `AdapterUtils`
+- Code using these types as raw types still compiles, but now produces unchecked warnings until type parameters are added
 - Marked constructors that should no longer be used as `@Deprecated` in `ProducerMember`
+- Relaxed validation in the `ProducerMember` constructor taking both subsystem code and service code: at least one of the two must be provided, where previously the service code was always required
+- Added `ValidationHelper.validateAtLeastOneNotNullOrEmpty` to `common`
 
 ## 0.8.0 - 2025-06-03
 - XRDDEV-2911 Fix issue with SOAPHelper.removeNamespaces

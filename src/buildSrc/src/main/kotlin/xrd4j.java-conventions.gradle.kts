@@ -14,7 +14,7 @@ repositories {
 group = "org.niis.xrd4j"
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(11)
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
     withSourcesJar()
 }
 
@@ -94,13 +94,27 @@ tasks.withType<Jar>() {
     }
 }
 
+val testJavaVersion = providers.gradleProperty("testJavaVersion")
+
 tasks.withType<Test>() {
     useJUnitPlatform()
     // testLogging.showStandardStreams = true
+    if (testJavaVersion.isPresent) {
+        javaLauncher = javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(testJavaVersion.get())
+        }
+    }
+}
+
+// Precompiled script plugins have no type-safe accessor for the catalog
+val libs = the<VersionCatalogsExtension>().named("libs")
+
+jacoco {
+    toolVersion = libs.findVersion("jacoco").get().requiredVersion
 }
 
 checkstyle {
-    toolVersion = "10.18.1"
+    toolVersion = libs.findVersion("checkstyle").get().requiredVersion
 }
 
 license {

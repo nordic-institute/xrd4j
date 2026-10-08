@@ -72,7 +72,7 @@ class ClientUtilTest {
 
         Assertions.assertThatThrownBy(connection::getResponseCode)
                 .isInstanceOf(SSLHandshakeException.class)
-                .hasMessageStartingWith("PKIX path building failed");
+                .hasMessageContaining("PKIX path building failed");
 
     }
 

@@ -1,0 +1,25 @@
+# https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
+#
+# Versions shared with the xrd4j library live in ../src/gradle/libs.versions.toml,
+# imported by settings.gradle.kts as the "xrd4j" catalog.
+
+[versions]
+spring-boot = "3.5.16"
+cxf = "4.1.8"
+jackson = "2.21.7"
+xrd4j = "0.9.0-SNAPSHOT"
+io-mateo-cxf-codegen = "2.5.0"
+
+[libraries]
+org-springframework-boot-springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+org-springframework-boot-springBootStarterTomcat = { module = "org.springframework.boot:spring-boot-starter-tomcat", version.ref = "spring-boot" }
+org-apache-cxf-cxfSpringBootStarterJaxws = { module = "org.apache.cxf:cxf-spring-boot-starter-jaxws", version.ref = "cxf" }
+org-apache-cxf-cxfRtTransportsHttp = { module = "org.apache.cxf:cxf-rt-transports-http", version.ref = "cxf" }
+com-fasterxml-jackson-jacksonBom = { module = "com.fasterxml.jackson:jackson-bom", version.ref = "jackson" }
+org-niis-xrd4j-common = { module = "org.niis.xrd4j:common", version.ref = "xrd4j" }
+org-niis-xrd4j-server = { module = "org.niis.xrd4j:server", version.ref = "xrd4j" }
+org-springframework-boot-springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
+
+[plugins]
+org-springframework-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+io-mateo-cxf-codegen = { id = "io.mateo.cxf-codegen", version.ref = "io-mateo-cxf-codegen" }

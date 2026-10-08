@@ -33,6 +33,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyStore;
@@ -166,7 +167,7 @@ public final class CryptoHelper {
         try {
             Signature signature = Signature.getInstance(algorithm);
             signature.initSign(key);
-            signature.update(data.getBytes());
+            signature.update(data.getBytes(StandardCharsets.UTF_8));
             byte[] signedBytes = signature.sign();
             return encodeBase64(signedBytes);
         } catch (SignatureException | InvalidKeyException | NoSuchAlgorithmException ex) {
@@ -202,7 +203,7 @@ public final class CryptoHelper {
         try {
             Signature signature = Signature.getInstance(algorithm);
             signature.initVerify(key);
-            signature.update(data.getBytes());
+            signature.update(data.getBytes(StandardCharsets.UTF_8));
             byte[] signedBytes = decodeBase64(signatureStr);
             return signature.verify(signedBytes);
         } catch (NoSuchAlgorithmException | InvalidKeyException | SignatureException ex) {

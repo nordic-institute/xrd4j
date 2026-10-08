@@ -9,6 +9,8 @@ dependencies {
 
     testImplementation(libs.bundles.testImplementation)
     testImplementation(project(":common"))
+    testImplementation(libs.org.wiremock.wiremock)
+    testImplementation(libs.org.assertj.assertjCore)
 }
 
 pomSettings {
