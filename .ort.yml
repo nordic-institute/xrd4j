@@ -17,6 +17,10 @@ excludes:
     reason: "DOCUMENTATION_OF"
     comment: "This directory contains documentation that's not distributed."
 
+  - pattern: "src/buildSrc/**"
+    reason: "BUILD_TOOL_OF"
+    comment: "Gradle buildSrc convention plugins and their dependency tree. Build tooling only."
+
   scopes:
   - pattern: "checkstyle"
     reason: "BUILD_DEPENDENCY_OF"
@@ -53,6 +57,14 @@ excludes:
   - pattern: "provided"
     reason: "RUNTIME_DEPENDENCY_OF"
     comment: "Packages that are provided by the runtime."
+
+  - pattern: "javadocClasspath"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: "Javadoc generation only; not distributed."
+
+  - pattern: "integrationTest.*"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Integration test dependencies."
 
 license_choices:
   repository_license_choices:
