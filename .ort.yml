@@ -17,6 +17,10 @@ excludes:
     reason: "DOCUMENTATION_OF"
     comment: "This directory contains documentation that's not distributed."
 
+  - pattern: "src/buildSrc/**"
+    reason: "BUILD_TOOL_OF"
+    comment: "Gradle buildSrc convention plugins and their dependency tree. Build tooling only."
+
   scopes:
   - pattern: "checkstyle"
     reason: "BUILD_DEPENDENCY_OF"
@@ -35,10 +39,6 @@ excludes:
     comment: "Packages for code coverage (testing) only."
 
   - pattern: "test.*"
-    reason: "TEST_DEPENDENCY_OF"
-    comment: "Packages for testing only."
-
-  - pattern: "integrationTest.*"
     reason: "TEST_DEPENDENCY_OF"
     comment: "Packages for testing only."
 
