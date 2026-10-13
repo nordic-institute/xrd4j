@@ -38,6 +38,10 @@ excludes:
     reason: "TEST_DEPENDENCY_OF"
     comment: "Packages for testing only."
 
+  - pattern: "integrationTest.*"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Packages for testing only."
+
   - pattern: "annotationProcessor"
     reason: "DEV_DEPENDENCY_OF"
     comment: "Packages for development only."
@@ -53,6 +57,32 @@ excludes:
   - pattern: "provided"
     reason: "RUNTIME_DEPENDENCY_OF"
     comment: "Packages that are provided by the runtime."
+
+  - pattern: "precompiledScriptPluginAccessorsGenerationClasspath"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: "Gradle Kotlin DSL internal classpath for generating type-safe
+      accessors for buildSrc precompiled script plugins. Build tooling only;
+      nothing in it is compiled into or distributed with the XRd4J artifacts."
+
+  - pattern: "compilePluginsBlocksPluginClasspathElements"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: "Gradle plugins-block resolution classpath. Build tooling only."
+
+  - pattern: "kotlin.*"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: "Kotlin compiler and tooling classpaths used to build buildSrc."
+
+  - pattern: "embeddedKotlin"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: "Kotlin runtime embedded in the Gradle distribution."
+
+  - pattern: "javadocClasspath"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: "Javadoc generation only; not distributed."
+
+  - pattern: "integrationTest.*"
+    reason: "TEST_DEPENDENCY_OF"
+    comment: "Integration test dependencies."
 
 license_choices:
   repository_license_choices:
