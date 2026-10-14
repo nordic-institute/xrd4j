@@ -88,8 +88,14 @@ tasks.withType<Javadoc>() {
     options.encoding = "UTF-8"
 }
 
-tasks.withType<Jar>() {
-    from(rootProject.files("../LICENSE", "../3RD-PARTY-NOTICES.txt")) {
+tasks.withType<Jar>().configureEach {
+    from(rootProject.files("../LICENSE")) {
+        into("META-INF")
+    }
+}
+
+tasks.named<Jar>("jar") {
+    from(rootProject.files("../3RD-PARTY-NOTICES.txt")) {
         into("META-INF")
     }
 }
