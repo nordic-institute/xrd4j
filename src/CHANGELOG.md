@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.0 - unreleased
+## 0.9.0 - 2026-10-13
 - **Breaking:** Java 21 is now the minimum supported Java version. Java 11 and 17 are no longer supported.
 - Added Java 25 support
 - Updated dependencies, including `httpclient5` 5.3.1 → 5.6.4 which the `rest` module exposes to consumers
