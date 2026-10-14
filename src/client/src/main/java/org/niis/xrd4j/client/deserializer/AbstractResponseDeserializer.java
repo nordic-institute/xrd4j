@@ -57,7 +57,7 @@ import java.util.Map;
  * @param <T2> runtime type of the response data
  * @author Petteri Kivimäki
  */
-public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeaderDeserializer implements ServiceResponseDeserializer {
+public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeaderDeserializer implements ServiceResponseDeserializer<T1, T2> {
 
     /**
      * This boolean value tells if the response is from X-Road meta service.
@@ -93,7 +93,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * object; if the operation fails, null is returned
      */
     @Override
-    public final ServiceResponse deserialize(final SOAPMessage message) {
+    public final ServiceResponse<T1, T2> deserialize(final SOAPMessage message) {
         return this.deserialize(message, "*");
     }
 
@@ -109,7 +109,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * object; if the operation fails, null is returned
      */
     @Override
-    public final ServiceResponse deserialize(final SOAPMessage message, final String producerNamespaceURI) {
+    public final ServiceResponse<T1, T2> deserialize(final SOAPMessage message, final String producerNamespaceURI) {
         return this.deserialize(message, producerNamespaceURI, Constants.DEFAULT_PROCESSING_WRAPPERS);
     }
 
@@ -127,14 +127,14 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * object; if the operation fails, null is returned
      */
     @Override
-    public final ServiceResponse deserialize(final SOAPMessage message, final String producerNamespaceURI, boolean processingWrappers) {
+    public final ServiceResponse<T1, T2> deserialize(final SOAPMessage message, final String producerNamespaceURI, boolean processingWrappers) {
         try {
             LOGGER.debug("Deserialize SOAP message. Producer namespace URI \"{}\".", producerNamespaceURI);
             SOAPPart mySPart = message.getSOAPPart();
             SOAPEnvelope envelope = mySPart.getEnvelope();
 
             // Deserialize header
-            ServiceResponse response = this.deserializeHeader(envelope.getHeader());
+            ServiceResponse<T1, T2> response = this.deserializeHeader(envelope.getHeader());
             response.setSoapMessage(message);
 
             // Setting "request" and "response" wrappers processing
@@ -163,13 +163,13 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * @throws SOAPException if there's a SOAP error
      * @throws XRd4JException if there's a XRd4J exception
      */
-    private ServiceResponse deserializeHeader(final SOAPHeader header) throws SOAPException, XRd4JException {
+    private ServiceResponse<T1, T2> deserializeHeader(final SOAPHeader header) throws SOAPException, XRd4JException {
 
         LOGGER.debug("Deserialize SOAP header.");
         // Check that SOAP header exists
         if (header == null || header.getChildNodes().getLength() == 0) {
             LOGGER.warn("No SOAP header or an empty SOAP header was found.");
-            return new ServiceResponse();
+            return new ServiceResponse<>();
         }
         // Client headers
         String id = super.deserializeId(header);
@@ -201,7 +201,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
         } catch (XRd4JException ex) {
             LOGGER.warn("Deserializing \"ProducerMember\" failed.");
         }
-        ServiceResponse response = new ServiceResponse(consumer, producer, id);
+        ServiceResponse<T1, T2> response = new ServiceResponse<>(consumer, producer, id);
         response.setSecurityServer(securityServer);
         response.setUserId(userId);
         response.setRequestHash(requestHash);
@@ -227,7 +227,8 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * @throws XRd4JMissingMemberException if there's an error related to
      * members
      */
-    private boolean deserializeBody(final ServiceResponse response, final String producerNamespaceURI) throws SOAPException, XRd4JMissingMemberException {
+    private boolean deserializeBody(final ServiceResponse<T1, T2> response, final String producerNamespaceURI)
+            throws SOAPException, XRd4JMissingMemberException {
         LOGGER.debug("Deserialize SOAP body.");
         // Nodes
         Node requestNode;
@@ -293,7 +294,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * false
      * @throws SOAPException if there's a SOAP error
      */
-    private boolean deserializeSOAPFault(final ServiceResponse response) throws SOAPException {
+    private boolean deserializeSOAPFault(final ServiceResponse<T1, T2> response) throws SOAPException {
         LOGGER.debug("Deserialize SOAP fault.");
         Map<String, String> fault;
         SOAPBody body = response.getSoapMessage().getSOAPBody();
@@ -341,7 +342,7 @@ public abstract class AbstractResponseDeserializer<T1, T2> extends AbstractHeade
      * Otherwise returns false.
      * @throws SOAPException if there's a SOAP error
      */
-    private boolean deserializeResponseError(final ServiceResponse response, final Node responseNode) throws SOAPException {
+    private boolean deserializeResponseError(final ServiceResponse<T1, T2> response, final Node responseNode) throws SOAPException {
         LOGGER.debug("Deserialize a non-technical SOAP error message.");
         if (this.isMetaServiceResponse) {
             LOGGER.debug("Response being processed is from X-Road meta service. Skip.");

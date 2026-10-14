@@ -11,13 +11,13 @@ The setup consists of 4 basic steps:
 
 Use `keytool` command to create a self-signed certificate. The below command creates a `mykeystore` keysore in the current working directory.
 
-```
+```bash
 keytool -genkey -alias mycert -keyalg RSA -keystore mykeystore
 ```
 
 During the keystore creation process, you need to assign a password and fill in the certificate’s detail.
 
-```
+```text
 > keytool -genkey -alias mycert -keyalg RSA -keystore mykeystore
 Enter keystore password:  password
 Re-enter new password: password
@@ -47,7 +47,7 @@ This will create a `mykeystore` file in the current working directory.
 
 It's possible to use `keytool` command to list the existing certificate's detail.
 
-```
+```text
 > keytool -list -keystore mykeystore
 Enter keystore password:
 
@@ -64,7 +64,7 @@ Certificate fingerprint (MD5): 52:13:B6:5F:59:28:98:D1:AE:41:E0:96:59:7E:1F:0B
 
 Open `$TOMCAT/conf/server.xml` file and find the following declaration.
 
-```
+```xml
 <!--
 <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
     maxThreads="150" scheme="https" secure="true"
@@ -74,7 +74,7 @@ Open `$TOMCAT/conf/server.xml` file and find the following declaration.
 
 Uncomment it and make the following changes.
 
-```
+```xml
 <Connector SSLEnabled="true" acceptCount="100" clientAuth="false"
     disableUploadTimeout="true" enableLookups="false" maxThreads="25"
     port="8443" keystoreFile="mykeystore" keystorePass="password"
@@ -96,7 +96,7 @@ Start Tomcat and try to access `https://localhost:8443`. The default `8080` port
 
 Current configuration allows connecting to applications with both HTTP and HTTPS. Restricting access to HTTPS only can be done by adding the following lines at the end of the ```web.xml``` file of an application.
 
-```
+```xml
 <security-constraint>
     <web-resource-collection>
         <web-resource-name>securedapp</web-resource-name>

@@ -24,6 +24,9 @@ package org.niis.xrd4j.common.util;
 
 import org.niis.xrd4j.common.exception.XRd4JException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * This class offers some helper methods for validation.
  *
@@ -71,5 +74,18 @@ public final class ValidationHelper {
     public static void validateStrNotNullOrEmpty(String str, String name) throws XRd4JException {
         ValidationHelper.validateNotNull(str, name);
         ValidationHelper.validateStrNotEmpty(str, name);
+    }
+
+    /**
+     * Checks that there is at least one non-null / non-empty value in the
+     * provided list.
+     * @param pairs A list of {@link Pair} objects to validate
+     * @throws XRd4JException if all pair values are null or empty
+     */
+    public static void validateAtLeastOneNotNullOrEmpty(List<Pair> pairs) throws XRd4JException {
+        if (pairs.stream().noneMatch(p -> p.getValue() != null && !p.getValue().isEmpty())) {
+            String keys = pairs.stream().map(Pair::getKey).collect(Collectors.joining(","));
+            throw new XRd4JException("At least one of " + keys + "must not be empty");
+        }
     }
 }

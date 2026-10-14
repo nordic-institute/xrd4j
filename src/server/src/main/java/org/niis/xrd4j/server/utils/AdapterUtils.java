@@ -60,11 +60,11 @@ public final class AdapterUtils {
      * @return MimeHeaders that were extracted from the HTTP request
      */
     public static MimeHeaders getHeaders(HttpServletRequest req) {
-        Enumeration enumeration = req.getHeaderNames();
+        Enumeration<String> enumeration = req.getHeaderNames();
         MimeHeaders headers = new MimeHeaders();
 
         while (enumeration.hasMoreElements()) {
-            String name = (String) enumeration.nextElement();
+            String name = enumeration.nextElement();
             String value = req.getHeader(name);
 
             StringTokenizer values = new StringTokenizer(value, ",");
@@ -82,8 +82,8 @@ public final class AdapterUtils {
      * @param res the Http servlet response
      */
     public static void putHeaders(MimeHeaders headers, HttpServletResponse res) {
-        for (Iterator it = headers.getAllHeaders(); it.hasNext();) {
-            MimeHeader header = (MimeHeader) it.next();
+        for (Iterator<MimeHeader> it = headers.getAllHeaders(); it.hasNext();) {
+            MimeHeader header = it.next();
             String[] values = headers.getHeader(header.getName());
             res.setHeader(header.getName(), buildHeaderValue(header, values));
         }
@@ -136,13 +136,13 @@ public final class AdapterUtils {
     public static String getAttachmentsInfo(SOAPMessage soapMessage) {
         try {
             int numOfAttachments = soapMessage.countAttachments();
-            Iterator attachments = soapMessage.getAttachments();
+            Iterator<AttachmentPart> attachments = soapMessage.getAttachments();
 
             StringBuilder buf = new StringBuilder("Number of attachments: ");
             buf.append(numOfAttachments);
             int count = 1;
             while (attachments.hasNext()) {
-                AttachmentPart attachment = (AttachmentPart) attachments.next();
+                AttachmentPart attachment = attachments.next();
                 buf.append(" | #").append(count);
                 buf.append(" | Content Location: ").append(attachment.getContentLocation());
                 buf.append(" | Content Id: ").append(attachment.getContentId());
@@ -158,10 +158,10 @@ public final class AdapterUtils {
     }
 
     /**
-     * Returns a string containg all the HTTP request headers and their values.
+     * Returns a string containing all the HTTP request headers and their values.
      *
      * @param req HTTP request
-     * @return String containg all the HTTP request headers and their values
+     * @return String containing all the HTTP request headers and their values
      */
     public static String getHeaderInfo(HttpServletRequest req) {
         StringBuilder builder = new StringBuilder("HTTP request headers :");

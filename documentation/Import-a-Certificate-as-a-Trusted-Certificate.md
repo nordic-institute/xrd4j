@@ -4,13 +4,15 @@ If HTTPS is used between the client and the Security Server, the public key cert
 
 The first step is to obtain the Security Server's public certificate. That can be done in a variety of ways, such as contacting the server admin and asking for it, using openssl to download it, or, since it's an HTTP server, connecting to it with any browser, viewing the page's security info, and saving a copy of the certificate. 
 
-```
+```text
 https://mysecurityserverver.com:4000/
 ```
 
-Now that you have the certificate saved in a file, you need to add it to your JVM's trust store. At ```$JAVA_HOME/jre/lib/security/``` for JDKs or ```$JAVA_HOME/lib/security``` for JREs, there's a file named `cacerts`, which comes with Java and contains the public certificates of the well-known Certifying Authorities. To import the new cert, run keytool as a user who has permission to write to `cacerts`:
+Now that you have the certificate saved in a file, you need to add it to your JVM's trust store. At `$JAVA_HOME/lib/security/`
+there's a file named `cacerts`, which comes with Java and contains the public certificates of the well-known Certifying Authorities.
+To import the new cert, run keytool as a user who has permission to write to `cacerts`:
 
-```
+```bash
 keytool -import -alias <some meaningful name> -file <the cert file> -keystore <path to cacerts file>
 ```
 
@@ -18,13 +20,13 @@ The default password is `changeit`.
 
 If you see the below error message after importing the certificate when trying to publish a connection from the client to the Security Server, the certificate wasn't imported correctly.
 
-```
+```text
 Caused by: javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
 ```
 
 **N.B.** Self signed or untrusted SSL certificates may cause some extra problems, that occur when the common name (CN) in the certificate doesn't match the host name of service URL, e.g. when IP address is used in service URL instead of host name.  If you see the following error message after adding the certificate into keystore when trying to publish a connection from the client to the Security Server, it's caused by this issue.
 
-```
+```text
 javax.net.ssl.SSLHandshakeException: java.security.cert.CertificateException: No subject alternative names matching IP address x.x.x.x found
 ```
 

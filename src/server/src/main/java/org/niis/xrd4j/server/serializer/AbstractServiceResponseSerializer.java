@@ -56,8 +56,10 @@ import java.util.stream.StreamSupport;
  * class takes care of adding all the required SOAP headers.
  *
  * @author Petteri Kivimäki
+ * @param <T1> runtime type of the request data
+ * @param <T2> runtime type of the response data
  */
-public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSerializer implements ServiceResponseSerializer {
+public abstract class AbstractServiceResponseSerializer<T1, T2> extends AbstractHeaderSerializer implements ServiceResponseSerializer<T1, T2> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractServiceResponseSerializer.class);
     
@@ -73,7 +75,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
      * @param envelope SOAPMessage's SOAPEnvelope object
      * @throws SOAPException if there's a SOAP error
      */
-    protected abstract void serializeResponse(ServiceResponse response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException;
+    protected abstract void serializeResponse(ServiceResponse<T1, T2> response, SOAPElement soapResponse, SOAPEnvelope envelope) throws SOAPException;
 
     /**
      * Serializes the given ServiceResponse object to SOAPMessage object.
@@ -84,7 +86,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
      * operation fails
      */
     @Override
-    public final SOAPMessage serialize(final ServiceResponse response, final ServiceRequest request) {
+    public final SOAPMessage serialize(final ServiceResponse<T1, T2> response, final ServiceRequest<T1> request) {
         try {
             // Response must process wrappers in the same way as in request.
             // Unit tests might use null request.
@@ -148,7 +150,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
      * the request element
      * @throws SOAPException if there's a SOAP error
      */
-    private void serializeBody(final ServiceResponse response, final SOAPMessage soapRequest) throws SOAPException, XRd4JException {
+    private void serializeBody(final ServiceResponse<T1, T2> response, final SOAPMessage soapRequest) throws SOAPException, XRd4JException {
         LOGGER.debug("Generate SOAP body.");
         if (response.isAddNamespaceToServiceResponse() || response.isAddNamespaceToRequest() || response.isAddNamespaceToResponse()) {
             if (response.getProducer().getNamespaceUrl() == null || response.getProducer().getNamespaceUrl().isEmpty()) {
@@ -177,7 +179,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
         LOGGER.debug("SOAP body was generated succesfully.");
     }
 
-    private SOAPElement processBody(final SOAPBodyElement body, final ServiceResponse response,
+    private SOAPElement processBody(final SOAPBodyElement body, final ServiceResponse<T1, T2> response,
                                     final SOAPMessage soapRequest, final SOAPEnvelope envelope) throws SOAPException {
         SOAPElement soapResponse;
         if (response.isProcessingWrappers()) {
@@ -193,7 +195,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
         return soapResponse;
     }
 
-    private void processRequestNode(final SOAPBodyElement body, final ServiceResponse response,
+    private void processRequestNode(final SOAPBodyElement body, final ServiceResponse<T1, T2> response,
                                     final SOAPMessage soapRequest, final SOAPEnvelope envelope) throws SOAPException {
         boolean requestFound = false;
         var list = childElementsByLocalName(soapRequest.getSOAPBody(), response.getProducer().getServiceCode());
@@ -223,7 +225,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
                 .collect(Collectors.toList());
     }
 
-    private boolean copyRequestNode(final SOAPElement node, final SOAPBodyElement body, final ServiceResponse response) {
+    private boolean copyRequestNode(final SOAPElement node, final SOAPBodyElement body, final ServiceResponse<T1, T2> response) {
         for (Iterator<Node> it = node.getChildElements(); it.hasNext();) {
             var childNode = it.next();
             if (childNode.getNodeType() == Node.ELEMENT_NODE
@@ -246,7 +248,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
         return false;
     }
 
-    private void processBodyContent(final SOAPElement soapResponse, final ServiceResponse response, final SOAPEnvelope envelope) throws SOAPException {
+    private void processBodyContent(final SOAPElement soapResponse, final ServiceResponse<T1, T2> response, final SOAPEnvelope envelope) throws SOAPException {
         // Check if there's a non-technical SOAP error
         var sr = soapResponse;
         if (response.hasError()) {
@@ -295,7 +297,7 @@ public abstract class AbstractServiceResponseSerializer extends AbstractHeaderSe
      * @param response ServiceResponse that contains the error
      * @throws SOAPException if there's a SOAP error
      */
-    private void serializeSOAPFault(final ServiceResponse response) throws SOAPException {
+    private void serializeSOAPFault(final ServiceResponse<T1, T2> response) throws SOAPException {
         LOGGER.debug("Generate SOAP Fault.");
         SOAPEnvelope envelope = response.getSoapMessage().getSOAPPart().getEnvelope();
         SOAPBody body = envelope.getBody();

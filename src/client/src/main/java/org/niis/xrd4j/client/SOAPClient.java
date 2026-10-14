@@ -29,6 +29,8 @@ import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.message.ServiceResponse;
 
+import org.w3c.dom.NodeList;
+
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 
@@ -61,9 +63,12 @@ public interface SOAPClient {
      * if sending the message fails. Serialization and deserialization from/to
      * SOAPMessage is done inside the method.
      *
+     * @param <T1> runtime type of the request data
+     * @param <T2> runtime type of the response data
      * @param request the ServiceRequest object to be sent
      * @param url URL that identifies where the message should be sent
      * @param serializer the ServiceRequestSerializer object that serializes the
+
      * request to SOAPMessage
      * @param deserializer the ServiceResponseDeserializer object that
      * deserializes SOAPMessage response to ServiceResponse
@@ -71,8 +76,8 @@ public interface SOAPClient {
      * that was sent.
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse send(ServiceRequest request, String url, ServiceRequestSerializer serializer,
-                         ServiceResponseDeserializer deserializer) throws SOAPException;
+    <T1, T2> ServiceResponse<T1, T2> send(ServiceRequest<T1> request, String url, ServiceRequestSerializer<T1> serializer,
+                         ServiceResponseDeserializer<T1, T2> deserializer) throws SOAPException;
 
     /**
      * Calls listClients meta service and retrieves list of all the potential
@@ -104,7 +109,7 @@ public interface SOAPClient {
      * @return ServiceResponse that holds a list of ProducerMember objects
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse listMethods(ServiceRequest request, String url) throws SOAPException;
+    ServiceResponse<String, List<ProducerMember>> listMethods(ServiceRequest<String> request, String url) throws SOAPException;
 
     /**
      * Calls allowedMethods meta service that lists all the services by a
@@ -117,7 +122,7 @@ public interface SOAPClient {
      * @return ServiceResponse that holds a list of ProducerMember objects
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse allowedMethods(ServiceRequest request, String url) throws SOAPException;
+    ServiceResponse<String, List<ProducerMember>> allowedMethods(ServiceRequest<String> request, String url) throws SOAPException;
 
     /**
      * Calls getSecurityServerMetrics monitoring service that returns a data set
@@ -129,5 +134,5 @@ public interface SOAPClient {
      * data
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse getSecurityServerMetrics(ServiceRequest request, String url) throws SOAPException;
+    ServiceResponse<String, NodeList> getSecurityServerMetrics(ServiceRequest<String> request, String url) throws SOAPException;
 }

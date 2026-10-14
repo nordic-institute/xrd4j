@@ -32,9 +32,11 @@ import jakarta.xml.soap.SOAPMessage;
  * to SOAPMessage objects.
  *
  * @author Petteri Kivimäki
+ * @param <T1> runtime type of the request data
+ * @param <T2> runtime type of the response data
  */
 @FunctionalInterface
-public interface ServiceResponseSerializer {
+public interface ServiceResponseSerializer<T1, T2> {
 
     /**
      * Serializes the given ServiceResponse object to SOAPMessage object.
@@ -42,5 +44,5 @@ public interface ServiceResponseSerializer {
      * @param request ServiceRequest that initiated the service call
      * @return SOAPMessage representing the given ServiceRequest
      */
-    SOAPMessage serialize(ServiceResponse response, ServiceRequest request);
+    SOAPMessage serialize(ServiceResponse<T1, T2> response, ServiceRequest<T1> request);
 }

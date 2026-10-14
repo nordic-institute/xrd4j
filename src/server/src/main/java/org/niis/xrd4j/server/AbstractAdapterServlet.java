@@ -162,7 +162,7 @@ public abstract class AbstractAdapterServlet extends HttpServlet {
 
         // Deserialize incoming SOAP message to ServiceRequest object
         if (soapResponse == null) {
-            // Convert SOAP request to servive request
+            // Convert SOAP request to service request
             ServiceRequest serviceRequest = this.fromSOAPToServiceRequest(soapRequest);
             // If conversion fails, return SOAP fault
             if (serviceRequest == null) {

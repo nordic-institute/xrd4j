@@ -28,7 +28,6 @@ import org.niis.xrd4j.rest.util.ClientUtil;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequest;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HttpHost;
@@ -104,31 +103,31 @@ public abstract class AbstractClient implements RESTClient {
 
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
 
-            //Send the request; It will immediately return the response in HttpResponse object
-            CloseableHttpResponse response = httpClient.execute(request);
-            // Get Content-Type header
-            Header[] contentTypeHeader = response.getHeaders("Content-Type");
-            String contentType = null;
-            // Check for null and empty
-            if (contentTypeHeader != null && contentTypeHeader.length > 0) {
-                contentType = contentTypeHeader[0].getValue();
-            }
-            // Get Status Code
-            int statusCode = response.getCode();
-            // Get reason phrase
-            String reasonPhrase = response.getReasonPhrase();
+            // Send the request; the client closes the response after the handler returns
+            ClientResponse clientResponse = httpClient.execute(request, response -> {
+                // Get Content-Type header
+                Header[] contentTypeHeader = response.getHeaders("Content-Type");
+                String contentType = null;
+                // Check for null and empty
+                if (contentTypeHeader != null && contentTypeHeader.length > 0) {
+                    contentType = contentTypeHeader[0].getValue();
+                }
+                // Get Status Code
+                int statusCode = response.getCode();
+                // Get reason phrase
+                String reasonPhrase = response.getReasonPhrase();
 
-            // Get response payload
-            String responseStr = ClientUtil.getResponseString(response.getEntity());
+                // Get response payload
+                String responseStr = ClientUtil.getResponseString(response.getEntity());
 
-            response.close();
-            httpClient.close();
-            LOGGER.debug("REST response content type: \"{}\".", contentType);
-            LOGGER.debug("REST response status code: \"{}\".", statusCode);
-            LOGGER.debug("REST response reason phrase: \"{}\".", reasonPhrase);
-            LOGGER.debug("REST response : \"{}\".", responseStr);
+                LOGGER.debug("REST response content type: \"{}\".", contentType);
+                LOGGER.debug("REST response status code: \"{}\".", statusCode);
+                LOGGER.debug("REST response reason phrase: \"{}\".", reasonPhrase);
+                LOGGER.debug("REST response : \"{}\".", responseStr);
+                return new ClientResponse(responseStr, contentType, statusCode, reasonPhrase);
+            });
             LOGGER.info("HTTP {} operation completed.", request.getMethod());
-            return new ClientResponse(responseStr, contentType, statusCode, reasonPhrase);
+            return clientResponse;
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
             LOGGER.warn("HTTP {} operation failed. An empty string is returned.", request.getMethod());

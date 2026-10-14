@@ -1,0 +1,46 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle"
+    directories:
+      - "/src"
+      - "/example-adapter"
+    schedule:
+      interval: "weekly"
+    groups:
+      java-major:
+        applies-to: version-updates
+        update-types:
+          - "major"
+      java-minor-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions-major:
+        applies-to: version-updates
+        update-types:
+          - "major"
+      actions-minor-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
+  - package-ecosystem: "docker"
+    directory: "/example-adapter"
+    schedule:
+      interval: "weekly"
+    groups:
+      docker-major:
+        applies-to: version-updates
+        update-types:
+          - "major"
+      docker-minor-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"

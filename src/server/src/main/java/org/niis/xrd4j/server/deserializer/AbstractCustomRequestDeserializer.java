@@ -50,7 +50,7 @@ import jakarta.xml.soap.SOAPPart;
  * @param <T> runtime type of the request data
  * @author Petteri Kivimäki
  */
-public abstract class AbstractCustomRequestDeserializer<T> implements CustomRequestDeserializer {
+public abstract class AbstractCustomRequestDeserializer<T> implements CustomRequestDeserializer<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractCustomRequestDeserializer.class);
 
@@ -72,7 +72,7 @@ public abstract class AbstractCustomRequestDeserializer<T> implements CustomRequ
      * @throws XRd4JException if there's a XRd4J error
      */
     @Override
-    public final void deserialize(final ServiceRequest request) throws SOAPException, XRd4JException {
+    public final void deserialize(final ServiceRequest<T> request) throws SOAPException, XRd4JException {
         this.deserialize(request, "*");
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractCustomRequestDeserializer<T> implements CustomRequ
      * @throws XRd4JException if there's a XRd4J error
      */
     @Override
-    public final void deserialize(final ServiceRequest request, final String producerNamespaceURI) throws SOAPException, XRd4JException {
+    public final void deserialize(final ServiceRequest<T> request, final String producerNamespaceURI) throws SOAPException, XRd4JException {
         LOGGER.debug("Deserialize SOAP body. Use \"{}\" namespace URI.", producerNamespaceURI);
 
         SOAPPart mySPart = request.getSoapMessage().getSOAPPart();

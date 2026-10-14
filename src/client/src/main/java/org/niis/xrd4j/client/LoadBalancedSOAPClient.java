@@ -29,6 +29,8 @@ import org.niis.xrd4j.common.member.ProducerMember;
 import org.niis.xrd4j.common.message.ServiceRequest;
 import org.niis.xrd4j.common.message.ServiceResponse;
 
+import org.w3c.dom.NodeList;
+
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 
@@ -70,8 +72,8 @@ public interface LoadBalancedSOAPClient {
      * that was sent.
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse send(ServiceRequest request, ServiceRequestSerializer serializer,
-                         ServiceResponseDeserializer deserializer) throws SOAPException;
+    <T1, T2> ServiceResponse<T1, T2> send(ServiceRequest<T1> request, ServiceRequestSerializer<T1> serializer,
+                         ServiceResponseDeserializer<T1, T2> deserializer) throws SOAPException;
 
     /**
      * Calls listClients meta service and retrieves list of all the potential
@@ -100,7 +102,7 @@ public interface LoadBalancedSOAPClient {
      * @return ServiceResponse that holds a list of ProducerMember objects
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse listMethods(ServiceRequest request) throws SOAPException;
+    ServiceResponse<String, List<ProducerMember>> listMethods(ServiceRequest<String> request) throws SOAPException;
 
     /**
      * Calls allowedMethods meta service that lists all the services by a
@@ -112,7 +114,7 @@ public interface LoadBalancedSOAPClient {
      * @return ServiceResponse that holds a list of ProducerMember objects
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse allowedMethods(ServiceRequest request) throws SOAPException;
+    ServiceResponse<String, List<ProducerMember>> allowedMethods(ServiceRequest<String> request) throws SOAPException;
 
     /**
      * Calls getSecurityServerMetrics monitoring service that returns a data set
@@ -124,6 +126,6 @@ public interface LoadBalancedSOAPClient {
      * data
      * @throws SOAPException if there's a SOAP error
      */
-    ServiceResponse getSecurityServerMetrics(ServiceRequest request, String url) throws SOAPException;
+    ServiceResponse<String, NodeList> getSecurityServerMetrics(ServiceRequest<String> request, String url) throws SOAPException;
 
 }

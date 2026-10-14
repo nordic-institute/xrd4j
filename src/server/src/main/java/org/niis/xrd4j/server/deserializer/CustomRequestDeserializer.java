@@ -34,8 +34,9 @@ import jakarta.xml.soap.SOAPException;
  * must be used first for deserializing SOAP header.
  *
  * @author Petteri Kivimäki
+ * @param <T> runtime type of the request data
  */
-public interface CustomRequestDeserializer {
+public interface CustomRequestDeserializer<T> {
 
     /**
      * Deserializes SOAP body's request element to application specific
@@ -44,7 +45,7 @@ public interface CustomRequestDeserializer {
      * @throws SOAPException if there's a SOAP error
      * @throws XRd4JException if there's a XRd4J error
      */
-    void deserialize(ServiceRequest request) throws SOAPException, XRd4JException;
+    void deserialize(ServiceRequest<T> request) throws SOAPException, XRd4JException;
 
     /**
      * Deserializes SOAP body's request element to application specific
@@ -56,5 +57,5 @@ public interface CustomRequestDeserializer {
      * @throws SOAPException if there's a SOAP error
      * @throws XRd4JException if there's a XRd4J error
      */
-    void deserialize(ServiceRequest request, String producerNamespaceURI) throws SOAPException, XRd4JException;
+    void deserialize(ServiceRequest<T> request, String producerNamespaceURI) throws SOAPException, XRd4JException;
 }

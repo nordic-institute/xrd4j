@@ -3,3 +3,11 @@
  */
 
 rootProject.name = "example-adapter"
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("xrd4j") {
+            from(files("../src/gradle/libs.versions.toml"))
+        }
+    }
+}

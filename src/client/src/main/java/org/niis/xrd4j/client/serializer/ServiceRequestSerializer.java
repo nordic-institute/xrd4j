@@ -30,15 +30,16 @@ import jakarta.xml.soap.SOAPMessage;
  * This class defines an interface for serializing ServiceRequest objects
  * to SOAPMessage objects.
  *
+ * @param <T> runtime type of the request data
  * @author Petteri Kivimäki
  */
 @FunctionalInterface
-public interface ServiceRequestSerializer {
+public interface ServiceRequestSerializer<T> {
 
     /**
      * Serializes the given ServiceRequest object to SOAPMessage object.
      * @param request ServiceRequest to be serialized
      * @return SOAPMessage representing the given ServiceRequest
      */
-    SOAPMessage serialize(ServiceRequest request);
+    SOAPMessage serialize(ServiceRequest<T> request);
 }

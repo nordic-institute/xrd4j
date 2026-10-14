@@ -22,6 +22,7 @@
  */
 package org.niis.xrd4j.rest.util;
 
+import org.apache.hc.core5.http.ContentType;
 import org.apache.hc.core5.http.HttpEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,8 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +52,9 @@ public final class ClientUtil {
     }
 
     /**
-     * Extracts the response string from the given HttpEntity.
+     * Extracts the response string from the given HttpEntity. The content is
+     * decoded using the charset declared in the entity's content type, or
+     * UTF-8 if no charset is declared.
      *
      * @param entity HttpEntity that contains the response
      * @return response String
@@ -57,7 +62,8 @@ public final class ClientUtil {
     public static String getResponseString(HttpEntity entity) {
         StringBuilder builder = new StringBuilder();
         if (entity != null) {
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+            Charset charset = ContentType.getCharset(ContentType.parseLenient(entity.getContentType()), StandardCharsets.UTF_8);
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(entity.getContent(), charset))) {
                 String inputLine;
                 while ((inputLine = in.readLine()) != null) {
                     builder.append(inputLine);
