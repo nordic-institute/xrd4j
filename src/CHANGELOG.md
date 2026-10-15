@@ -1,5 +1,7 @@
 # Changelog
 
+## 0.10.0 - unreleased
+
 ## 0.9.0 - 2026-10-13
 - **Breaking:** Java 21 is now the minimum supported Java version. Java 11 and 17 are no longer supported.
 - Added Java 25 support
