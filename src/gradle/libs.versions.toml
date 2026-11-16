@@ -2,7 +2,7 @@
 
 [versions]
 jakarta-servlet-servlet-api = "6.1.0"
-org-apache-httpcomponents-httpclient = "5.6.4"
+org-apache-httpcomponents-httpclient = "5.6.5"
 org-json-json = "20260814"
 slf4j = "2.0.20"
 log4j = "2.26.1"
@@ -37,7 +37,7 @@ org-mockito-mockitoCore = { module = "org.mockito:mockito-core", version = "5.24
 
 licenseGradlePlugin = { module = "gradle.plugin.com.hierynomus.gradle.plugins:license-gradle-plugin", version.ref = "com-github-hierynomus-license" }
 dependencyCheckGradlePlugin = { module = "org.owasp:dependency-check-gradle", version.ref = "org-owasp-dependencycheck" }
-javadocAggregateGradlePlugin = { module = "io.freefair.gradle:maven-plugin", version = "9.8.0" }
+javadocAggregateGradlePlugin = { module = "io.freefair.gradle:maven-plugin", version = "9.8.3" }
 sonarqubeGradlePlugin = { module = "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin", version="7.5.0.8588" }
 
 [plugins]
